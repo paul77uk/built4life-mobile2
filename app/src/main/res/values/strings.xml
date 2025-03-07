@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Built4Life</string>
+    <string name="workout_list_title">Workouts</string>
+    <string name="create_new_workout">Create Workout</string>
+    <string name="no_workouts_added">No Workouts Added</string>
+    <string name="save_workout">Save</string>
+    <string name="workout_title_req">Title required</string>
+    <string name="workout_title">Workout Title</string>
+    <string name="workout_description">Workout Description</string>
+    <string name="cancel">Cancel</string>
+    <string name="new_workout">Create Workout</string>
+    <string name="delete_workout">Delete</string>
+    <string name="edit_workout">Edit workout</string>
+    <string name="workout_pr">PR</string>
+    <string name="workout_details">Workout Details</string>
+    <string name="info">Info</string>
+    <string name="notes">Notes</string>
+    <string name="pr">PR</string>
+</resources>
