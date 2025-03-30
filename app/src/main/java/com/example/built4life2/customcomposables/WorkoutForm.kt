@@ -1,31 +1,24 @@
 package com.example.built4life2.customcomposables
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.built4life2.R
 import com.example.built4life2.data.Workout
+import com.example.built4life2.designsystem.component.button.B4LButton
+import com.example.built4life2.designsystem.component.button.ButtonType
 import com.example.built4life2.ui.viewmodels.WorkoutFormUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,73 +31,51 @@ fun WorkoutFormDialog(
     onValueChange: (Workout) -> Unit,
     isEdit: Boolean = false
 ) {
-    BasicAlertDialog(
+    AlertDialog(
+        title = {
+            Text(
+                if (isEdit) stringResource(R.string.edit_workout) else
+                    stringResource(R.string.new_workout),
+            )
+        },
+        text = {
+            WorkoutFormInput(
+                workoutDetails = workoutFormUiState.workout,
+                onValueChange = onValueChange,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+
+            )
+        },
+        dismissButton = {
+            B4LButton(
+                onClick = onDismiss,
+                text = "Cancel",
+                type = ButtonType.OUTLINE
+            )
+        },
+        confirmButton = {
+            B4LButton(
+                onClick = onSaveClick,
+                text = "Save",
+                enabled = workoutFormUiState.isEntryValid,
+            )
+        },
         onDismissRequest = onDismiss,
         modifier = modifier
             .clip(shape = RoundedCornerShape(5))
-            .background(Color.White)
-    ) {
-        LazyColumn(
-            modifier = modifier.padding(vertical = 16.dp),
-        ) {
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(
-                            if (isEdit) stringResource(R.string.edit_workout) else
-                                stringResource(R.string.new_workout),
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    },
-                    colors = ListItemDefaults.colors(
-                        containerColor = Color.White
-                    ),
-                    modifier = Modifier.clickable {
-
-                    }
-                )
-                WorkoutFormInput(
-                    workoutDetails = workoutFormUiState.workout,
-                    onValueChange = onValueChange,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Button(
-                    onClick = onDismiss,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Gray,
-                    ),
-                    shape = RoundedCornerShape(15),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 8.dp),
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
-                Button(
-                    onClick = onSaveClick,
-                    shape = RoundedCornerShape(15),
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    enabled = workoutFormUiState.isEntryValid,
-                ) {
-                    Text(stringResource(R.string.save_workout))
-                }
-            }
-        }
-    }
+    )
 }
 
 @Composable
 fun WorkoutFormInput(
     workoutDetails: Workout,
     modifier: Modifier = Modifier,
-    onValueChange: (Workout) -> Unit = {},
+    onValueChange: (Workout) -> Unit,
 ) {
     Column(
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         OutlinedTextField(
@@ -112,14 +83,12 @@ fun WorkoutFormInput(
             onValueChange = { onValueChange(workoutDetails.copy(title = it)) },
             label = { Text(stringResource(R.string.workout_title)) },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
         )
         OutlinedTextField(
             value = workoutDetails.description,
             onValueChange = { onValueChange(workoutDetails.copy(description = it)) },
             label = { Text(stringResource(R.string.workout_description)) },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
         )
         OutlinedTextField(
             value = workoutDetails.workoutDetails,
@@ -127,12 +96,6 @@ fun WorkoutFormInput(
             label = { Text(stringResource(R.string.workout_details)) },
             modifier = Modifier.fillMaxWidth(),
             minLines = 3,
-        )
-        OutlinedTextField(
-            value = workoutDetails.pr,
-            onValueChange = { onValueChange(workoutDetails.copy(pr = it)) },
-            label = { Text(stringResource(R.string.pr)) },
-            modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
             value = workoutDetails.info,

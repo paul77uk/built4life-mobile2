@@ -1,16 +1,25 @@
 [versions]
-agp = "8.8.2"
-kotlin = "2.1.0"
+agp = "8.9.1"
+kotlin = "2.1.10"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2025.02.00"
-navigationCompose = "2.8.8"
-ksp = "2.1.0-1.0.29"
+composeBom = "2025.03.01"
+navigationCompose = "2.8.9"
+ksp = "2.1.10-1.0.30"
 roomRuntime = "2.6.1"
+#koinBom = "4.0.1"
+#koinCore = "4.0.1"
+#koinAndroid = "4.0.1"
+#koinAndroidxCompose = "4.0.1"
+#koinAndroidxComposeNavigation = "4.0.1"
+#koinComposeViewmodel = "4.0.1"
+kotlinxSerializationJson = "1.8.0"
+#koinBomVersion = "4.0.1"
+coreSplashscreen = "1.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -31,10 +40,20 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+#koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom" }
+#koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koinCore" }
+#koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinAndroid" }
+#koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+#koin-androidx-compose-navigation = { group = "io.insert-koin", name = "koin-androidx-compose-navigation", version.ref = "koinAndroidxComposeNavigation" }
+#koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koinComposeViewmodel" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+#insert-koin-koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBomVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 

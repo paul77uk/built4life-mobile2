@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.built4life2.ui.screens.WorkoutListDestination
-import com.example.built4life2.ui.screens.WorkoutListScreen
+import com.example.built4life2.presentation.workout.WorkoutListDestination
+import com.example.built4life2.presentation.workout.WorkoutListScreen
 
 @Composable
 fun NavigationHost(

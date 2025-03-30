@@ -28,6 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.built4life2.R
 import com.example.built4life2.data.Workout
+import com.example.built4life2.designsystem.component.button.B4LButton
+import com.example.built4life2.designsystem.component.button.ButtonType
 
 @Composable
 fun WorkoutCard(
@@ -70,11 +72,10 @@ fun WorkoutCard(
 
                         Text(workout.workoutDetails, Modifier.padding(8.dp))
 
-                        if (workout.pr.isNotEmpty())
+                        if (workout.pr.isNotEmpty()) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-
                                 ) {
                                 Text(
                                     "PR: ",
@@ -94,6 +95,14 @@ fun WorkoutCard(
                                         ),
                                 )
                             }
+                        } else {
+                            B4LButton(
+                                onClick = onPrClick,
+                                text = "LOG SCORE",
+                                type = ButtonType.OUTLINE,
+                                modifier = Modifier.padding(8.dp).fillMaxWidth()
+                            )
+                        }
                     }
                 },
             )
