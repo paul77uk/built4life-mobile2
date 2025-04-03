@@ -132,11 +132,14 @@ fun WorkoutListScreen(
                                 Workout(
                                     title = "",
                                     description = "",
-                                    workoutDetails = "",
-                                    reps = "",
-                                    distance = "",
+                                    firstSetReps = "",
+                                    totalReps = "",
                                     weight = "",
-                                    info = "",
+                                    beginner = "",
+                                    novice = "",
+                                    intermediate = "",
+                                    advanced = "",
+                                    elite = "",
                                     notes = ""
                                 )
                             )
@@ -152,11 +155,14 @@ fun WorkoutListScreen(
                                     Workout(
                                         title = "",
                                         description = "",
-                                        workoutDetails = "",
-                                        reps = "",
-                                        distance = "",
+                                        firstSetReps = "",
+                                        totalReps = "",
                                         weight = "",
-                                        info = "",
+                                        beginner = "",
+                                        novice = "",
+                                        intermediate = "",
+                                        advanced = "",
+                                        elite = "",
                                         notes = ""
                                     )
                                 )
@@ -170,11 +176,14 @@ fun WorkoutListScreen(
                                     Workout(
                                         title = "",
                                         description = "",
-                                        workoutDetails = "",
-                                        reps = "",
-                                        distance = "",
+                                        firstSetReps = "",
+                                        totalReps = "",
                                         weight = "",
-                                        info = "",
+                                        beginner = "",
+                                        novice = "",
+                                        intermediate = "",
+                                        advanced = "",
+                                        elite = "",
                                         notes = ""
                                     )
                                 )
@@ -206,11 +215,14 @@ fun WorkoutListScreen(
                                     Workout(
                                         title = "",
                                         description = "",
-                                        workoutDetails = "",
-                                        reps = "",
-                                        distance = "",
+                                        firstSetReps = "",
+                                        totalReps = "",
                                         weight = "",
-                                        info = "",
+                                        beginner = "",
+                                        novice = "",
+                                        intermediate = "",
+                                        advanced = "",
+                                        elite = "",
                                         notes = ""
                                     )
                                 )
@@ -230,11 +242,14 @@ fun WorkoutListScreen(
                                         Workout(
                                             title = "",
                                             description = "",
-                                            workoutDetails = "",
-                                            reps = "",
-                                            distance = "",
+                                            firstSetReps = "",
+                                            totalReps = "",
                                             weight = "",
-                                            info = "",
+                                            beginner = "",
+                                            novice = "",
+                                            intermediate = "",
+                                            advanced = "",
+                                            elite = "",
                                             notes = ""
                                         )
                                     )
@@ -254,11 +269,14 @@ fun WorkoutListScreen(
                         workoutFormUiState.workout = Workout(
                             title = "",
                             description = "",
-                            workoutDetails = "",
-                            reps = "",
-                            distance = "",
+                            firstSetReps = "",
+                            totalReps = "",
                             weight = "",
-                            info = "",
+                            beginner = "",
+                            novice = "",
+                            intermediate = "",
+                            advanced = "",
+                            elite = "",
                             notes = ""
                         )
                     },

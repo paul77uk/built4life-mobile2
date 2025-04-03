@@ -1,6 +1,5 @@
 package com.example.built4life2.data
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -10,11 +9,13 @@ data class Workout(
     val id: Int = 0,
     val title: String,
     val description: String,
-    @ColumnInfo(name = "workout_details")
-    val workoutDetails: String,
-    val reps: String,
-    val distance: String,
+    val firstSetReps: String,
+    val totalReps: String,
     val weight: String,
-    val info: String,
+    val beginner: String,
+    val novice: String,
+    val intermediate: String,
+    val advanced: String,
+    val elite: String,
     val notes: String
 )

@@ -36,22 +36,24 @@ fun PRDialog(
                     Text("Enter a new PR for this workout.")
                 }
                 OutlinedTextField(
-                    label = { Text("Reps") },
-                    value = workoutDetails.reps,
-                    onValueChange = { onValueChange(workoutDetails.copy(reps = it)) },
+                    label = { Text("First Set Reps") },
+                    value = workoutDetails.firstSetReps,
+                    onValueChange = { onValueChange(workoutDetails.copy(firstSetReps = it)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
-                    label = { Text("Distance") },
-                    value = workoutDetails.distance,
-                    onValueChange = { onValueChange(workoutDetails.copy(distance = it)) },
+                    label = { Text("Total Reps") },
+                    value = workoutDetails.totalReps,
+                    onValueChange = { onValueChange(workoutDetails.copy(totalReps = it)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     label = { Text("Weight") },
                     value = workoutDetails.weight,
                     onValueChange = { onValueChange(workoutDetails.copy(weight = it)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth()
                 )
             }

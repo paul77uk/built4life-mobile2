@@ -244,7 +244,7 @@ fun PRComposable(
     workout: Workout,
     onPrClick: () -> Unit
 ) {
-    if (workout.reps.isNotEmpty() || workout.distance.isNotEmpty() || workout.weight.isNotEmpty()) {
+    if (workout.totalReps.isNotEmpty() && workout.weight.isNotEmpty() && workout.firstSetReps.isNotEmpty()) {
         HorizontalDivider()
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -256,34 +256,62 @@ fun PRComposable(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.padding(start = 16.dp)
             ) {
-                if (workout.reps.isNotEmpty()) {
+                if (workout.totalReps.isNotEmpty()) {
                     Text(
-                        text = "${workout.reps} REPS",
+                        text = "${workout.totalReps} TOTAL REPS",
                     )
                 }
-                if (workout.distance.isNotEmpty()) {
-                    Text(
-                        text = "${workout.distance} METRES",
-                    )
-                }
-                if (workout.weight.isNotEmpty()) {
-                    Text(
-                        text = "@${workout.weight} KG",
-                    )
-                }
+//                if (workout.distance.isNotEmpty()) {
+//                    Text(
+//                        text = "${workout.distance} METRES",
+//                    )
+//                }
+//                if (workout.weight.isNotEmpty()) {
+//                    Text(
+//                        text = "@${workout.weight} KG",
+//                    )
+//                }
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                IconButton(
-                    onClick = onPrClick,
-                ) {
-                    Icon(
-                        Icons.Default.Edit,
-                        contentDescription = "Edit Icon"
-                    )
+                val max =
+                    workout.weight.toInt() * workout.firstSetReps.toInt() * 0.0333 + workout.weight.toInt()
+                when (max.toInt()) {
+                    in 0..workout.novice.toInt() -> {
+                        Text(
+                            text = "BEGINNER",
+                        )
+                    }
+
+                    in workout.novice.toInt() + 1..workout.intermediate.toInt() -> {
+                        Text(
+                            text = "NOVICE",
+                        )
+                    }
+
+                    in workout.intermediate.toInt() + 1..workout.advanced.toInt() -> {
+                        Text(
+                            text = "INTERMEDIATE",
+                        )
+                    }
+
+                    in workout.advanced.toInt() + 1..workout.elite.toInt() -> {
+                        Text(
+                            text = "ADVANCED",
+                        )
+                    }
+                    else -> {
+                        Text(
+                            text = "Elite"
+                        )
+                    }
                 }
+
+            IconButton(
+                onClick = onPrClick,
+            ) {
+                Icon(
+                    Icons.Default.Edit,
+                    contentDescription = "Edit Icon"
+                )
             }
         }
     } else {

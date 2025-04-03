@@ -82,15 +82,17 @@ class WorkoutViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
 data class WorkoutListUiState(val workoutList: List<Workout> = listOf())
 data class WorkoutFormUiState(
     var workout: Workout = Workout(
-        id = 0,
         title = "",
         description = "",
-        workoutDetails = "",
-        reps = "",
-        distance = "",
+        firstSetReps = "",
+        totalReps = "",
         weight = "",
-        info = "",
-        notes = "",
+        beginner = "",
+        novice = "",
+        intermediate = "",
+        advanced = "",
+        elite = "",
+        notes = ""
     ),
     val isEntryValid: Boolean = false
 )

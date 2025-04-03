@@ -16,4 +16,9 @@
     <string name="info">Info</string>
     <string name="notes">Notes</string>
     <string name="pr">PR</string>
+    <string name="beginner_max_range">Beginner Max Range</string>
+    <string name="novice_max_range">Novice Max Range</string>
+    <string name="intermediate_max_range">Intermediate Max Range</string>
+    <string name="advanced_max_range">Advanced Max Range</string>
+    <string name="elite_max_range">Elite Max Range</string>
 </resources>

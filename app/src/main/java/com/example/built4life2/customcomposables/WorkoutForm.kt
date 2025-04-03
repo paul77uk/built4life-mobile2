@@ -91,18 +91,34 @@ fun WorkoutFormInput(
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
-            value = workoutDetails.workoutDetails,
-            onValueChange = { onValueChange(workoutDetails.copy(workoutDetails = it)) },
-            label = { Text(stringResource(R.string.workout_details)) },
+            value = workoutDetails.beginner,
+            onValueChange = { onValueChange(workoutDetails.copy(beginner = it)) },
+            label = { Text(stringResource(R.string.beginner_max_range)) },
             modifier = Modifier.fillMaxWidth(),
-            minLines = 3,
         )
         OutlinedTextField(
-            value = workoutDetails.info,
-            onValueChange = { onValueChange(workoutDetails.copy(info = it)) },
-            label = { Text(stringResource(R.string.info)) },
+            value = workoutDetails.novice,
+            onValueChange = { onValueChange(workoutDetails.copy(novice = it)) },
+            label = { Text(stringResource(R.string.novice_max_range)) },
             modifier = Modifier.fillMaxWidth(),
-            minLines = 3,
+        )
+        OutlinedTextField(
+            value = workoutDetails.intermediate,
+            onValueChange = { onValueChange(workoutDetails.copy(intermediate = it)) },
+            label = { Text(stringResource(R.string.intermediate_max_range)) },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        OutlinedTextField(
+            value = workoutDetails.advanced,
+            onValueChange = { onValueChange(workoutDetails.copy(advanced = it)) },
+            label = { Text(stringResource(R.string.advanced_max_range)) },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        OutlinedTextField(
+            value = workoutDetails.elite,
+            onValueChange = { onValueChange(workoutDetails.copy(elite = it)) },
+            label = { Text(stringResource(R.string.elite_max_range)) },
+            modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
             value = workoutDetails.notes,
