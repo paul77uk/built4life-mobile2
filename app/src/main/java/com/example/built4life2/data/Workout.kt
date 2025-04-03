@@ -12,7 +12,9 @@ data class Workout(
     val description: String,
     @ColumnInfo(name = "workout_details")
     val workoutDetails: String,
-    val pr: String,
+    val reps: String,
+    val distance: String,
+    val weight: String,
     val info: String,
     val notes: String
 )

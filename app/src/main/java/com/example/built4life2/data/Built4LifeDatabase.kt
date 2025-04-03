@@ -15,7 +15,7 @@ abstract class Built4LifeDatabase : RoomDatabase() {
         fun getDatabase(context: Context): Built4LifeDatabase {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, Built4LifeDatabase::class.java, "built4life_database")
-                    .createFromAsset("database/built4life_database.db")
+//                    .createFromAsset("database/built4life_database.db")
                     .build()
                     .also { Instance = it }
             }

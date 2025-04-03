@@ -74,7 +74,7 @@ class WorkoutViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
 
     private fun validateInput(workout: Workout = workoutFormUiState.workout): Boolean {
         return with(workout) {
-            title.isNotBlank() && description.isNotBlank()
+            title.isNotBlank()
         }
     }
 }
@@ -86,7 +86,9 @@ data class WorkoutFormUiState(
         title = "",
         description = "",
         workoutDetails = "",
-        pr = "",
+        reps = "",
+        distance = "",
+        weight = "",
         info = "",
         notes = "",
     ),

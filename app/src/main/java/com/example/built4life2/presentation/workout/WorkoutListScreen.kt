@@ -52,6 +52,7 @@ fun WorkoutListScreen(
     var searchText by remember { mutableStateOf("") }
     val workoutFormUiState = viewModel.workoutFormUiState
     val openDialog = remember { mutableStateOf(false) }
+    val openInfoDialog = remember { mutableStateOf(false) }
     val isEdit = remember { mutableStateOf(false) }
     val showDeleteConfirmation = remember { mutableStateOf(false) }
     val showPRDialog = remember { mutableStateOf(false) }
@@ -115,8 +116,11 @@ fun WorkoutListScreen(
                                 viewModel.updateUiState(workout)
                             }
                         },
-                        onInfoClick = {},
-                        onNotesClick = {}
+                        onInfoClick = {
+                            openInfoDialog.value = true
+                            workoutFormUiState.workout = workout
+                            viewModel.updateUiState(workout)
+                        },
                     )
                 }
             }
@@ -129,7 +133,9 @@ fun WorkoutListScreen(
                                     title = "",
                                     description = "",
                                     workoutDetails = "",
-                                    pr = "",
+                                    reps = "",
+                                    distance = "",
+                                    weight = "",
                                     info = "",
                                     notes = ""
                                 )
@@ -147,7 +153,9 @@ fun WorkoutListScreen(
                                         title = "",
                                         description = "",
                                         workoutDetails = "",
-                                        pr = "",
+                                        reps = "",
+                                        distance = "",
+                                        weight = "",
                                         info = "",
                                         notes = ""
                                     )
@@ -163,7 +171,9 @@ fun WorkoutListScreen(
                                         title = "",
                                         description = "",
                                         workoutDetails = "",
-                                        pr = "",
+                                        reps = "",
+                                        distance = "",
+                                        weight = "",
                                         info = "",
                                         notes = ""
                                     )
@@ -197,7 +207,9 @@ fun WorkoutListScreen(
                                         title = "",
                                         description = "",
                                         workoutDetails = "",
-                                        pr = "",
+                                        reps = "",
+                                        distance = "",
+                                        weight = "",
                                         info = "",
                                         notes = ""
                                     )
@@ -219,7 +231,9 @@ fun WorkoutListScreen(
                                             title = "",
                                             description = "",
                                             workoutDetails = "",
-                                            pr = "",
+                                            reps = "",
+                                            distance = "",
+                                            weight = "",
                                             info = "",
                                             notes = ""
                                         )
@@ -241,7 +255,9 @@ fun WorkoutListScreen(
                             title = "",
                             description = "",
                             workoutDetails = "",
-                            pr = "",
+                            reps = "",
+                            distance = "",
+                            weight = "",
                             info = "",
                             notes = ""
                         )
@@ -256,6 +272,43 @@ fun WorkoutListScreen(
                     }
                 )
             }
+            if (openInfoDialog.value) {
+                InfoDialog(
+                    description = workoutFormUiState.workout.description,
+                    onDismissRequest = {
+                        openInfoDialog.value = false
+                    },
+                )
+            }
         }
     }
+}
+
+@Composable
+fun InfoDialog(
+    modifier: Modifier = Modifier,
+    description: String,
+    onDismissRequest: () -> Unit,
+) {
+    AlertDialog(
+        title = { Text(text = "Description") },
+        text = {
+            if (description.isEmpty()) {
+                Text(text = "No description added")
+            }
+            Text(text = description)
+        },
+        onDismissRequest = onDismissRequest,
+        dismissButton = {
+            B4LButton(
+                onClick = onDismissRequest,
+                text = "Close",
+                type = ButtonType.OUTLINE
+            )
+        },
+        confirmButton = {
+
+        },
+        modifier = modifier
+    )
 }
