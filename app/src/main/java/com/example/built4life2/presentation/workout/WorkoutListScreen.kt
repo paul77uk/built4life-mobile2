@@ -1,7 +1,9 @@
 package com.example.built4life2.presentation.workout
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,8 +14,10 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,8 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.built4life2.R
 import com.example.built4life2.customcomposables.PRDialog
@@ -66,7 +73,17 @@ fun WorkoutListScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(WorkoutListDestination.titleRes)) }
+                title = {
+                    Text(
+                        stringResource(WorkoutListDestination.titleRes).uppercase(),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 24.sp
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Black,
+                    titleContentColor = Color.White
+                )
             )
         },
         floatingActionButton = {
@@ -84,14 +101,22 @@ fun WorkoutListScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceContainer
+                ),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             SearchField(
                 searchText = searchText,
-                onSearchTextChanged = onSearchTextChanged
+                onSearchTextChanged = onSearchTextChanged,
+                modifier = Modifier.background(
+                    color = Color.DarkGray
+                )
             )
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
                 items(items = workoutListState.workoutList, key = { it.id }) { workout ->
                     WorkoutCard(
                         workout = workout,
@@ -167,7 +192,7 @@ fun WorkoutListScreen(
                                     )
                                 )
                                 openDialog.value = false
-                                isEdit.value = false
+                                isEdit.value = true
                             }
                         } else
                             coroutineScope.launch {
@@ -285,8 +310,25 @@ fun WorkoutListScreen(
                     onClick = {
                         coroutineScope.launch {
                             viewModel.updateWorkout()
+                            viewModel.updateUiState(
+                                Workout(
+                                    title = "",
+                                    description = "",
+                                    firstSetReps = "",
+                                    totalReps = "",
+                                    weight = "",
+                                    beginner = "",
+                                    novice = "",
+                                    intermediate = "",
+                                    advanced = "",
+                                    elite = "",
+                                    notes = ""
+                                )
+                            )
+                            isEdit.value = true
+                            showPRDialog.value = false
                         }
-                        showPRDialog.value = false
+
                     }
                 )
             }

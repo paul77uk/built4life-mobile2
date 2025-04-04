@@ -93,31 +93,31 @@ fun WorkoutFormInput(
         OutlinedTextField(
             value = workoutDetails.beginner,
             onValueChange = { onValueChange(workoutDetails.copy(beginner = it)) },
-            label = { Text(stringResource(R.string.beginner_max_range)) },
+            label = { Text(stringResource(R.string.beginner_level)) },
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
             value = workoutDetails.novice,
             onValueChange = { onValueChange(workoutDetails.copy(novice = it)) },
-            label = { Text(stringResource(R.string.novice_max_range)) },
+            label = { Text(stringResource(R.string.novice_level)) },
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
             value = workoutDetails.intermediate,
             onValueChange = { onValueChange(workoutDetails.copy(intermediate = it)) },
-            label = { Text(stringResource(R.string.intermediate_max_range)) },
+            label = { Text(stringResource(R.string.intermediate_level)) },
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
             value = workoutDetails.advanced,
             onValueChange = { onValueChange(workoutDetails.copy(advanced = it)) },
-            label = { Text(stringResource(R.string.advanced_max_range)) },
+            label = { Text(stringResource(R.string.advanced_level)) },
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
             value = workoutDetails.elite,
             onValueChange = { onValueChange(workoutDetails.copy(elite = it)) },
-            label = { Text(stringResource(R.string.elite_max_range)) },
+            label = { Text(stringResource(R.string.elite_level)) },
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(

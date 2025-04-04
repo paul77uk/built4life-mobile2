@@ -19,6 +19,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.built4life2.data.Workout
 import com.example.built4life2.designsystem.component.button.B4LButton
 import com.example.built4life2.designsystem.component.button.ButtonType
@@ -57,11 +59,14 @@ fun WorkoutCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
             ) {
                 Text(
-                    workout.title,
+                    workout.title.uppercase(),
                     fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp,
                     modifier = Modifier.padding(start = 16.dp)
                 )
                 BasicDropdownMenu(
@@ -244,7 +249,7 @@ fun PRComposable(
     workout: Workout,
     onPrClick: () -> Unit
 ) {
-    if (workout.totalReps.isNotEmpty() && workout.weight.isNotEmpty() && workout.firstSetReps.isNotEmpty()) {
+    if (workout.totalReps.isNotEmpty() && workout.firstSetReps.isNotEmpty()) {
         HorizontalDivider()
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -254,12 +259,19 @@ fun PRComposable(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(start = 16.dp)
+                modifier = Modifier.padding(16.dp)
             ) {
-                if (workout.totalReps.isNotEmpty()) {
-                    Text(
-                        text = "${workout.totalReps} TOTAL REPS",
-                    )
+                if (workout.totalReps.isNotEmpty() && workout.firstSetReps.isNotEmpty()) {
+                    Column {
+                        PRRow(
+                            text1 = workout.firstSetReps,
+                            text2 = "UNBROKEN REPS"
+                        )
+                        PRRow(
+                            text1 = workout.totalReps,
+                            text2 = "TOTAL REPS"
+                        )
+                    }
                 }
 //                if (workout.distance.isNotEmpty()) {
 //                    Text(
@@ -272,38 +284,66 @@ fun PRComposable(
 //                    )
 //                }
             }
-                val max =
+            var weighted = true
+            val max: Double
+            if (workout.weight.isNotEmpty()) {
+                max =
                     workout.weight.toInt() * workout.firstSetReps.toInt() * 0.0333 + workout.weight.toInt()
+
+            } else {
+                max = workout.firstSetReps.toDouble()
+                weighted = false
+            }
+
+            if (workout.novice.isEmpty() || workout.intermediate.isEmpty() || workout.advanced.isEmpty() || workout.elite.isEmpty())
+                RepMax(
+                    repMax = workout.totalReps,
+                    level = "",
+                    weighted = weighted
+                )
+            else if (workout.totalReps.isNotEmpty()) {
                 when (max.toInt()) {
-                    in 0..workout.novice.toInt() -> {
-                        Text(
-                            text = "BEGINNER",
+                    in 0..<workout.novice.toInt() -> {
+                        RepMax(
+                            repMax = max.toInt().toString(),
+                            level = "BEGINNER",
+                            weighted = weighted
                         )
                     }
 
-                    in workout.novice.toInt() + 1..workout.intermediate.toInt() -> {
-                        Text(
-                            text = "NOVICE",
+                    in workout.novice.toInt()..<workout.intermediate.toInt() -> {
+                        RepMax(
+                            repMax = max.toInt().toString(),
+                            level = "NOVICE",
+                            weighted = weighted
                         )
                     }
 
-                    in workout.intermediate.toInt() + 1..workout.advanced.toInt() -> {
-                        Text(
-                            text = "INTERMEDIATE",
+                    in workout.intermediate.toInt()..<workout.advanced.toInt() -> {
+                        RepMax(
+                            repMax = max.toInt().toString(),
+                            level = "INTERMEDIATE",
+                            weighted = weighted
                         )
                     }
 
-                    in workout.advanced.toInt() + 1..workout.elite.toInt() -> {
-                        Text(
-                            text = "ADVANCED",
+                    in workout.advanced.toInt()..<workout.elite.toInt() -> {
+                        RepMax(
+                            repMax = max.toInt().toString(),
+                            level = "ADVANCED",
+                            weighted = weighted
                         )
                     }
+
                     else -> {
-                        Text(
-                            text = "Elite"
+                        RepMax(
+                            repMax = max.toInt().toString(),
+                            level = "ELITE",
+                            weighted = weighted
                         )
                     }
                 }
+            }
 
             IconButton(
                 onClick = onPrClick,
@@ -325,4 +365,56 @@ fun PRComposable(
         )
     }
 
+}
+
+@Composable
+fun PRRow(
+    modifier: Modifier = Modifier,
+    text1: String,
+    text2: String
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = text1,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp,
+        )
+        Text(
+            text = text2,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 10.sp,
+        )
+    }
+}
+
+@Composable
+fun RepMax(
+    modifier: Modifier = Modifier,
+    repMax: String,
+    level: String,
+    weighted: Boolean = true
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (weighted)
+            Text(
+                "1 REP MAX: $repMax KG",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp,
+                color = Color.Gray,
+            )
+        if (level.isNotEmpty())
+            Text(
+                level,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp,
+                color = Color.Gray,
+            )
+    }
 }
