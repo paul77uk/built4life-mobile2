@@ -1,4 +1,4 @@
-package com.example.built4life2.ui.viewmodels
+package com.example.built4life2.presentation.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

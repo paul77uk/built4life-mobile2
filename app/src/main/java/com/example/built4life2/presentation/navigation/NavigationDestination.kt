@@ -1,4 +1,4 @@
-package com.example.built4life2.ui.navigation
+package com.example.built4life2.presentation.navigation
 
 interface NavigationDestination {
     /**

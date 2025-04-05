@@ -1,4 +1,4 @@
-package com.example.built4life2.ui.navigation
+package com.example.built4life2.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.example.built4life2.data.Workout
 import com.example.built4life2.designsystem.component.button.B4LButton
 import com.example.built4life2.designsystem.component.button.ButtonType
+import com.example.built4life2.presentation.workout.component.StrengthLevelCard
 
 @Composable
 fun WorkoutCard(
@@ -66,7 +68,7 @@ fun WorkoutCard(
                 Text(
                     workout.title.uppercase(),
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp,
+                    fontSize = 14.sp,
                     modifier = Modifier.padding(start = 16.dp)
                 )
                 BasicDropdownMenu(
@@ -249,24 +251,37 @@ fun PRComposable(
     workout: Workout,
     onPrClick: () -> Unit
 ) {
+    HorizontalDivider()
     if (workout.totalReps.isNotEmpty() && workout.firstSetReps.isNotEmpty()) {
-        HorizontalDivider()
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(16.dp)
-            ) {
+//            Row(
+//                verticalAlignment = Alignment.CenterVertically,
+//                horizontalArrangement = Arrangement.spacedBy(24.dp),
+//                modifier = Modifier.padding(16.dp)
+//            ) {
                 if (workout.totalReps.isNotEmpty() && workout.firstSetReps.isNotEmpty()) {
-                    Column {
-                        PRRow(
-                            text1 = workout.firstSetReps,
-                            text2 = "UNBROKEN REPS"
-                        )
+                    Column(modifier = Modifier
+                        .padding(vertical = 16.dp)
+                        .padding(start = 16.dp)
+                        .weight(4f)) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ){
+                            PRRow(
+                                text1 = workout.firstSetReps,
+                                text2 = "REPS ${if (workout.weight.isNotEmpty()) "X" else ""}"
+                            )
+                            if (workout.weight.isNotEmpty())
+                            PRRow(
+                                text1 = workout.weight,
+                                text2 = "KG"
+                            )
+                        }
                         PRRow(
                             text1 = workout.totalReps,
                             text2 = "TOTAL REPS"
@@ -283,76 +298,89 @@ fun PRComposable(
 //                        text = "@${workout.weight} KG",
 //                    )
 //                }
-            }
-            var weighted = true
-            val max: Double
-            if (workout.weight.isNotEmpty()) {
-                max =
-                    workout.weight.toInt() * workout.firstSetReps.toInt() * 0.0333 + workout.weight.toInt()
 
-            } else {
-                max = workout.firstSetReps.toDouble()
-                weighted = false
-            }
+                var weighted = true
+                val max: Double
+                if (workout.weight.isNotEmpty()) {
+                    max =
+                        workout.weight.toInt() * workout.firstSetReps.toInt() * 0.0333 + workout.weight.toInt()
 
-            if (workout.novice.isEmpty() || workout.intermediate.isEmpty() || workout.advanced.isEmpty() || workout.elite.isEmpty())
-                RepMax(
-                    repMax = workout.totalReps,
-                    level = "",
-                    weighted = weighted
-                )
-            else if (workout.totalReps.isNotEmpty()) {
-                when (max.toInt()) {
-                    in 0..<workout.novice.toInt() -> {
-                        RepMax(
-                            repMax = max.toInt().toString(),
-                            level = "BEGINNER",
-                            weighted = weighted
-                        )
-                    }
+                } else {
+                    max = workout.firstSetReps.toDouble()
+                    weighted = false
+                }
 
-                    in workout.novice.toInt()..<workout.intermediate.toInt() -> {
-                        RepMax(
-                            repMax = max.toInt().toString(),
-                            level = "NOVICE",
-                            weighted = weighted
-                        )
-                    }
+           Row(
+               horizontalArrangement = Arrangement.Center,
+               verticalAlignment = Alignment.CenterVertically,
+               modifier = Modifier.weight(6f)
+           ) {
+                if (workout.novice.isEmpty() || workout.intermediate.isEmpty() || workout.advanced.isEmpty() || workout.elite.isEmpty())
+                    RepMax(
+                        repMax = workout.totalReps,
+                        level = "",
+                        weighted = weighted,
+                        eliteLevel = workout.elite
+                    )
+                else if (workout.totalReps.isNotEmpty()) {
+                    when (max.toInt()) {
+                        in 0..<workout.novice.toInt() -> {
+                            RepMax(
+                                repMax = max.toInt().toString(),
+                                level = "BEGINNER",
+                                weighted = weighted,
+                                eliteLevel = workout.elite
+                            )
+                        }
 
-                    in workout.intermediate.toInt()..<workout.advanced.toInt() -> {
-                        RepMax(
-                            repMax = max.toInt().toString(),
-                            level = "INTERMEDIATE",
-                            weighted = weighted
-                        )
-                    }
+                        in workout.novice.toInt()..<workout.intermediate.toInt() -> {
+                            RepMax(
+                                repMax = max.toInt().toString(),
+                                level = "NOVICE",
+                                weighted = weighted,
+                                eliteLevel = workout.elite
+                            )
+                        }
 
-                    in workout.advanced.toInt()..<workout.elite.toInt() -> {
-                        RepMax(
-                            repMax = max.toInt().toString(),
-                            level = "ADVANCED",
-                            weighted = weighted
-                        )
-                    }
+                        in workout.intermediate.toInt()..<workout.advanced.toInt() -> {
+                            RepMax(
+                                repMax = max.toInt().toString(),
+                                level = "INTERMEDIATE",
+                                weighted = weighted,
+                                eliteLevel = workout.elite
+                            )
+                        }
 
-                    else -> {
-                        RepMax(
-                            repMax = max.toInt().toString(),
-                            level = "ELITE",
-                            weighted = weighted
-                        )
+                        in workout.advanced.toInt()..<workout.elite.toInt() -> {
+                            RepMax(
+                                repMax = max.toInt().toString(),
+                                level = "ADVANCED",
+                                weighted = weighted,
+                                eliteLevel = workout.elite
+                            )
+                        }
+
+                        else -> {
+                            RepMax(
+                                repMax = max.toInt().toString(),
+                                level = "ELITE",
+                                weighted = weighted,
+                                eliteLevel = workout.elite
+                            )
+                        }
                     }
                 }
             }
 
-            IconButton(
-                onClick = onPrClick,
-            ) {
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = "Edit Icon"
-                )
-            }
+                IconButton(
+                    onClick = onPrClick,
+                ) {
+                    Icon(
+                        Icons.Default.Edit,
+                        contentDescription = "Edit Icon",
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
         }
     } else {
         B4LButton(
@@ -396,11 +424,12 @@ fun RepMax(
     modifier: Modifier = Modifier,
     repMax: String,
     level: String,
+    eliteLevel: String,
     weighted: Boolean = true
 ) {
     Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         if (weighted)
             Text(
@@ -410,6 +439,10 @@ fun RepMax(
                 color = Color.Gray,
             )
         if (level.isNotEmpty())
+            StrengthLevelCard(
+                repMax = repMax.toInt(),
+                eliteLevel = eliteLevel.toInt()
+            )
             Text(
                 level,
                 fontWeight = FontWeight.SemiBold,

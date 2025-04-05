@@ -1,11 +1,11 @@
-package com.example.built4life2.ui
+package com.example.built4life2.presentation
 
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.built4life2.Built4LifeApplication
-import com.example.built4life2.ui.viewmodels.WorkoutViewModel
+import com.example.built4life2.presentation.viewmodels.WorkoutViewModel
 
 object ViewModelProvider {
     val Factory = viewModelFactory {

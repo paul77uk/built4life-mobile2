@@ -19,7 +19,7 @@ import com.example.built4life2.R
 import com.example.built4life2.data.Workout
 import com.example.built4life2.designsystem.component.button.B4LButton
 import com.example.built4life2.designsystem.component.button.ButtonType
-import com.example.built4life2.ui.viewmodels.WorkoutFormUiState
+import com.example.built4life2.presentation.viewmodels.WorkoutFormUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

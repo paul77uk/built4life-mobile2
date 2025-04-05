@@ -40,9 +40,9 @@ import com.example.built4life2.customcomposables.WorkoutFormDialog
 import com.example.built4life2.data.Workout
 import com.example.built4life2.designsystem.component.button.B4LButton
 import com.example.built4life2.designsystem.component.button.ButtonType
-import com.example.built4life2.ui.ViewModelProvider
-import com.example.built4life2.ui.navigation.NavigationDestination
-import com.example.built4life2.ui.viewmodels.WorkoutViewModel
+import com.example.built4life2.presentation.ViewModelProvider
+import com.example.built4life2.presentation.navigation.NavigationDestination
+import com.example.built4life2.presentation.viewmodels.WorkoutViewModel
 import kotlinx.coroutines.launch
 
 object WorkoutListDestination : NavigationDestination {
@@ -111,7 +111,7 @@ fun WorkoutListScreen(
                 searchText = searchText,
                 onSearchTextChanged = onSearchTextChanged,
                 modifier = Modifier.background(
-                    color = Color.DarkGray
+                    color = Color(38, 36, 36, 255)
                 )
             )
             LazyColumn(
