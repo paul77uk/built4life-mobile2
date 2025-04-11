@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,8 +21,7 @@ fun StrengthLevelCard(
     val barProgress = if (eliteLevel > 0) repMax.toFloat() / eliteLevel else 0f
     ProgressBar(
         modifier = Modifier
-            .width(180.dp)
-            .height(15.dp),
+            .height(10.dp),
         barProgress = barProgress
     )
 }
@@ -53,6 +51,7 @@ private fun ProgressBar(
                 .clip(MaterialTheme.shapes.extraSmall)
                 .background(MaterialTheme.colorScheme.primary)
         )
+
     }
 
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -76,113 +77,13 @@ fun WorkoutCard(
                     onDeleteClick = onDeleteClick,
                     onInfoClick = onInfoClick,
                 )
-//                Row(
-//                    modifier = Modifier.weight(2f)
-//                ){
-//                    IconButton(
-//                        onClick = onEditClick,
-//                        modifier = Modifier.border(
-//                            width = 1.dp,
-//                            color = Color.LightGray,
-//                            shape = RoundedCornerShape(5.dp)
-//                        )
-//                    ) {
-//                        Icon(
-//                            Icons.Outlined.Edit,
-//                            contentDescription = "Edit Icon"
-//                        )
-//                    }
-//                    IconButton(
-//                        onClick = onDeleteClick,
-//                        modifier = Modifier.border(
-//                            width = 1.dp,
-//                            color = Color.LightGray,
-//                            shape = RoundedCornerShape(5.dp)
-//                        )
-//                    ) {
-//                        Icon(
-//                            Icons.Outlined.Delete,
-//                            contentDescription = "Delete Icon"
-//                        )
-//                    }
-//                }
             }
-
-
-//                supportingContent = {
-//
-//                    Column(
-//                        modifier = Modifier.fillMaxWidth(),
-//                        horizontalAlignment = Alignment.CenterHorizontally
-//                    ) {
-//                        Text(
-//                            workout.description,
-//                            color = Color.Gray,
-//                        )
-//
-//                        Text(workout.workoutDetails, Modifier.padding(8.dp))
-//
-//                    }
-//                },
-
-
-//            if (workout.description.isNotEmpty()) {
-//                HorizontalDivider()
-//                Text(
-//                    workout.description,
-//                    modifier = Modifier
-//                        .padding(22.dp)
-//                        .align(Alignment.CenterHorizontally)
-//                )
-//            }
-
             PRComposable(
                 workout = workout,
                 onPrClick = onPrClick
             )
 
-//            HorizontalDivider(
-//                color = Color.LightGray,
-//            )
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth(),
-//                horizontalArrangement = Arrangement.Center
-//            ) {
-//                IconButton(
-//                    onClick = onInfoClick,
-//                ) {
-//                    Icon(
-//                        Icons.Outlined.Info,
-//                        contentDescription = "PR Icon"
-//                    )
-//                }
-//                IconButton(
-//                    onClick = onNotesClick,
-//                ) {
-//                    Icon(
-//                        painter = painterResource(R.drawable.sharp_notes_24),
-//                        contentDescription = "Notes Icon"
-//                    )
-//                }
-//                IconButton(
-//                    onClick = onEditClick
-//
-//                ) {
-//                    Icon(
-//                        Icons.Outlined.Edit,
-//                        contentDescription = "Edit Icon"
-//                    )
-//                }
-//                IconButton(
-//                    onClick = onDeleteClick
-//                ) {
-//                    Icon(
-//                        Icons.Outlined.Delete,
-//                        contentDescription = "Delete Icon"
-//                    )
-//                }
-//            }
+
         }
     }
 }
@@ -256,8 +157,8 @@ fun PRComposable(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxWidth().padding(start= 16.dp, end = 10.dp)
         ) {
 //            Row(
 //                verticalAlignment = Alignment.CenterVertically,
@@ -266,9 +167,8 @@ fun PRComposable(
 //            ) {
                 if (workout.totalReps.isNotEmpty() && workout.firstSetReps.isNotEmpty()) {
                     Column(modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .padding(start = 16.dp)
-                        .weight(4f)) {
+                        .padding(end = 8.dp)
+                        ) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ){
@@ -311,9 +211,8 @@ fun PRComposable(
                 }
 
            Row(
-               horizontalArrangement = Arrangement.Center,
                verticalAlignment = Alignment.CenterVertically,
-               modifier = Modifier.weight(6f)
+               modifier = Modifier.weight(1f)
            ) {
                 if (workout.novice.isEmpty() || workout.intermediate.isEmpty() || workout.advanced.isEmpty() || workout.elite.isEmpty())
                     RepMax(
@@ -374,11 +273,12 @@ fun PRComposable(
 
                 IconButton(
                     onClick = onPrClick,
+                    modifier = Modifier.width(25.dp)
                 ) {
                     Icon(
                         Icons.Default.Edit,
                         contentDescription = "Edit Icon",
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp).fillMaxWidth()
                     )
                 }
         }
@@ -408,13 +308,13 @@ fun PRRow(
             text = text1,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
         )
         Text(
             text = text2,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 10.sp,
+            fontSize = 8.sp,
         )
     }
 }
@@ -435,7 +335,7 @@ fun RepMax(
             Text(
                 "1 REP MAX: $repMax KG",
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 12.sp,
+                fontSize = 8.sp,
                 color = Color.Gray,
             )
         if (level.isNotEmpty())
@@ -446,7 +346,7 @@ fun RepMax(
             Text(
                 level,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 12.sp,
+                fontSize = 8.sp,
                 color = Color.Gray,
             )
     }

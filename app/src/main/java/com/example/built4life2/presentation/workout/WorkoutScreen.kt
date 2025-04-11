@@ -3,31 +3,38 @@ package com.example.built4life2.presentation.workout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,18 +48,12 @@ import com.example.built4life2.data.Workout
 import com.example.built4life2.designsystem.component.button.B4LButton
 import com.example.built4life2.designsystem.component.button.ButtonType
 import com.example.built4life2.presentation.ViewModelProvider
-import com.example.built4life2.presentation.navigation.NavigationDestination
 import com.example.built4life2.presentation.viewmodels.WorkoutViewModel
 import kotlinx.coroutines.launch
 
-object WorkoutListDestination : NavigationDestination {
-    override val route = "home"
-    override val titleRes = R.string.workout_list_title
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun WorkoutListScreen(
+fun WorkoutScreen(
     viewModel: WorkoutViewModel = viewModel(factory = ViewModelProvider.Factory)
 ) {
     val workoutListState by viewModel.workoutListUiState.collectAsState()
@@ -71,14 +72,29 @@ fun WorkoutListScreen(
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets.systemBarsIgnoringVisibility,
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        stringResource(WorkoutListDestination.titleRes).uppercase(),
+                        "Workouts".uppercase(),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 24.sp
                     )
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            openDialog.value = true
+                            isEdit.value = false
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Add,
+                            contentDescription = "Add Workout",
+                            tint = Color.White,
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Black,
@@ -86,18 +102,37 @@ fun WorkoutListScreen(
                 )
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    openDialog.value = true
-                },
+        bottomBar = {
+            var selectedItem by remember { mutableIntStateOf(0) }
+            val items = listOf(
+                "Workouts" to R.drawable.dumbbell,
+                "Programs" to R.drawable.programs,
+
+            )
+            NavigationBar(
+                containerColor = Color.Black,
             ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.create_new_workout)
-                )
+                items.forEachIndexed { index, item ->
+                    NavigationBarItem(
+                        icon = { Icon(painterResource(item.second), contentDescription = item.first) },
+                        label = {
+                            Text(item.first)
+                        },
+                        selected = selectedItem == index,
+                        onClick = { selectedItem = index },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = Color.Black,
+                            selectedIconColor = Color.White,
+                            selectedTextColor = Color.White,
+                            unselectedIconColor = Color.Gray,
+                            unselectedTextColor = Color.Gray,
+                            disabledIconColor = Color.Gray,
+                            disabledTextColor = Color.Gray,
+                        )
+                    )
+                }
             }
-        },
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -107,13 +142,15 @@ fun WorkoutListScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+
             SearchField(
                 searchText = searchText,
                 onSearchTextChanged = onSearchTextChanged,
                 modifier = Modifier.background(
-                    color = Color(38, 36, 36, 255)
+                    color = Color.Black
                 )
             )
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
