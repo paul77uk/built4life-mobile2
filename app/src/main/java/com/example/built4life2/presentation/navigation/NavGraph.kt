@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.built4life2.presentation.favorite.FavoriteScreen
 import com.example.built4life2.presentation.workout.WorkoutScreen
 
 @Composable
@@ -18,9 +19,9 @@ fun NavGraph(
     NavHost(
         modifier = Modifier.padding(paddingValues).consumeWindowInsets(paddingValues),
         navController = navController,
-        startDestination = Route.WorkoutScreen
+        startDestination = Route.WorkoutScreen.route
     ) {
-        composable<Route.WorkoutScreen> {
+        composable(Route.WorkoutScreen.route) {
 //            val viewModel = koinViewModel<DashboardViewModel>()
 //            val state by viewModel.state.collectAsStateWithLifecycle()
             WorkoutScreen(
@@ -31,12 +32,12 @@ fun NavGraph(
 //                }
             )
         }
-    }
-}
-//        composable<Route.QuizScreen> {
+
+
+        composable(Route.FavoriteScreen.route) {
 //            val viewModel = koinViewModel<QuizViewModel>()
 //            val state by viewModel.state.collectAsStateWithLifecycle()
-//            QuizScreen(
+            FavoriteScreen(
 //                state = state,
 //                onAction = viewModel::onAction,
 //                event = viewModel.event,
@@ -48,8 +49,10 @@ fun NavGraph(
 //                        popUpTo<Route.QuizScreen> { inclusive = true }
 //                    }
 //                }
-//            )
-//        }
+            )
+        }
+    }
+}
 //        composable<Route.ResultScreen> {
 //            val viewModel = koinViewModel<ResultViewModel>()
 //            val state by viewModel.state.collectAsStateWithLifecycle()
