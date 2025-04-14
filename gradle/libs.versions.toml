@@ -20,6 +20,7 @@ roomRuntime = "2.7.0"
 kotlinxSerializationJson = "1.8.0"
 #koinBomVersion = "4.0.1"
 coreSplashscreen = "1.0.1"
+material = "1.12.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,6 +49,7 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 #koin-androidx-compose-navigation = { group = "io.insert-koin", name = "koin-androidx-compose-navigation", version.ref = "koinAndroidxComposeNavigation" }
 #koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koinComposeViewmodel" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 #insert-koin-koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBomVersion" }
 
 [plugins]

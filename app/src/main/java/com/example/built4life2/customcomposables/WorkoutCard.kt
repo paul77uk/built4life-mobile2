@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -48,6 +50,7 @@ fun WorkoutCard(
     onDeleteClick: () -> Unit,
     onPrClick: () -> Unit,
     onInfoClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
 ) {
     Surface(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -76,6 +79,8 @@ fun WorkoutCard(
                     onEditClick = onEditClick,
                     onDeleteClick = onDeleteClick,
                     onInfoClick = onInfoClick,
+                    onFavoriteClick = onFavoriteClick,
+                    isFavorite = workout.favorite
                 )
             }
             PRComposable(
@@ -93,7 +98,9 @@ fun BasicDropdownMenu(
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onInfoClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isFavorite: Boolean = false,
     enabled: Boolean = true,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -105,6 +112,7 @@ fun BasicDropdownMenu(
         MenuItem("Edit", Icons.Outlined.Edit),
         MenuItem("Delete", Icons.Outlined.Delete),
         MenuItem("Description", Icons.Outlined.Info),
+        MenuItem("Favorite", if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder),
     )
 
     Box(
@@ -137,6 +145,11 @@ fun BasicDropdownMenu(
 
                             "Description" -> {
                                 onInfoClick()
+                                expanded = false
+                            }
+
+                            "Favorite" -> {
+                                onFavoriteClick()
                                 expanded = false
                             }
                         }
@@ -216,7 +229,7 @@ fun PRComposable(
            ) {
                 if (workout.novice.isEmpty() || workout.intermediate.isEmpty() || workout.advanced.isEmpty() || workout.elite.isEmpty())
                     RepMax(
-                        repMax = workout.totalReps,
+                        repMax = max.toInt().toString(),
                         level = "",
                         weighted = weighted,
                         eliteLevel = workout.elite

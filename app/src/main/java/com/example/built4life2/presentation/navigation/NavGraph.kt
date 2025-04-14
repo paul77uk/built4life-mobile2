@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.built4life2.presentation.favorite.FavoriteScreen
 import com.example.built4life2.presentation.workout.WorkoutScreen
+import com.example.built4life2.presentation.favorite.FavoriteScreen
 
 @Composable
 fun NavGraph(

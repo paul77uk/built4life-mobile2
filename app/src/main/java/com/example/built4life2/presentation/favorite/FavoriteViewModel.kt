@@ -1,4 +1,4 @@
-package com.example.built4life2.presentation.viewmodels
+package com.example.built4life2.presentation.favorite
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class WorkoutViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
+class FavoriteViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
 
     private val searchQuery = MutableStateFlow("")
 
@@ -25,7 +25,7 @@ class WorkoutViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
     val workoutListUiState: StateFlow<WorkoutListUiState> = searchQuery
         .debounce(300)
         .flatMapLatest { query ->
-            workoutDao.getAllWorkouts()
+            workoutDao.getFavoriteWorkouts()
                 .map { workouts ->
                     if (query.isBlank()) {
                         WorkoutListUiState(workouts)
@@ -56,11 +56,11 @@ class WorkoutViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
         )
     }
 
-    suspend fun saveWorkout() {
-        if (validateInput()) {
-            workoutDao.insert(workoutFormUiState.workout)
-        }
-    }
+//    suspend fun saveWorkout() {
+//        if (validateInput()) {
+//            workoutDao.insert(workoutFormUiState.workout)
+//        }
+//    }
 
     suspend fun updateWorkout() {
         if (validateInput(workoutFormUiState.workout)) {

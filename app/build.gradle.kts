@@ -52,6 +52,7 @@ dependencies {
 //    implementation(libs.koin.androidx.compose.navigation)
 //    implementation(libs.koin.compose.viewmodel)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.material)
 //    implementation(libs.insert.koin.koin.bom)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.navigation.compose)

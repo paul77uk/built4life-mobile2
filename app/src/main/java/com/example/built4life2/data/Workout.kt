@@ -17,5 +17,6 @@ data class Workout(
     val intermediate: String,
     val advanced: String,
     val elite: String,
+    val favorite: Boolean = false,
     val notes: String
 )

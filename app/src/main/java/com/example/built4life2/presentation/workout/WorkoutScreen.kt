@@ -146,6 +146,13 @@ fun WorkoutScreen(
                             workoutFormUiState.workout = workout
                             viewModel.updateUiState(workout)
                         },
+                        onFavoriteClick = {
+                            coroutineScope.launch {
+                                workoutFormUiState.workout = workout
+                                viewModel.updateUiState(workout.copy(favorite = !workout.favorite))
+                                viewModel.updateWorkout()
+                            }
+                        }
                     )
                 }
             }
@@ -165,6 +172,7 @@ fun WorkoutScreen(
                                     intermediate = "",
                                     advanced = "",
                                     elite = "",
+                                    favorite = false,
                                     notes = ""
                                 )
                             )
@@ -188,6 +196,7 @@ fun WorkoutScreen(
                                         intermediate = "",
                                         advanced = "",
                                         elite = "",
+                                        favorite = false,
                                         notes = ""
                                     )
                                 )
@@ -209,6 +218,7 @@ fun WorkoutScreen(
                                         intermediate = "",
                                         advanced = "",
                                         elite = "",
+                                        favorite = false,
                                         notes = ""
                                     )
                                 )
@@ -248,6 +258,7 @@ fun WorkoutScreen(
                                         intermediate = "",
                                         advanced = "",
                                         elite = "",
+                                        favorite = false,
                                         notes = ""
                                     )
                                 )
@@ -275,6 +286,7 @@ fun WorkoutScreen(
                                             intermediate = "",
                                             advanced = "",
                                             elite = "",
+                                            favorite = false,
                                             notes = ""
                                         )
                                     )
@@ -302,6 +314,7 @@ fun WorkoutScreen(
                             intermediate = "",
                             advanced = "",
                             elite = "",
+                            favorite = false,
                             notes = ""
                         )
                     },
@@ -322,6 +335,7 @@ fun WorkoutScreen(
                                     intermediate = "",
                                     advanced = "",
                                     elite = "",
+                                    favorite = false,
                                     notes = ""
                                 )
                             )

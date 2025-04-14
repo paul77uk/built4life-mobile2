@@ -5,12 +5,16 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.built4life2.Built4LifeApplication
+import com.example.built4life2.presentation.favorite.FavoriteViewModel
 import com.example.built4life2.presentation.viewmodels.WorkoutViewModel
 
 object ViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             WorkoutViewModel(built4LifeApplication().container.workoutDao)
+        }
+        initializer {
+            FavoriteViewModel(built4LifeApplication().container.workoutDao)
         }
     }
 }

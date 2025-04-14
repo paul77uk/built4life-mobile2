@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,10 +21,10 @@ import com.example.built4life2.R
 import com.example.built4life2.data.Workout
 import com.example.built4life2.designsystem.component.button.B4LButton
 import com.example.built4life2.designsystem.component.button.ButtonType
-import com.example.built4life2.presentation.viewmodels.WorkoutFormUiState
+import com.example.built4life2.presentation.favorite.WorkoutFormUiState
 
 @Composable
-fun WorkoutFormDialog(
+fun FavoriteFormDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     onSaveClick: () -> Unit,
@@ -42,7 +41,7 @@ fun WorkoutFormDialog(
             )
         },
         text = {
-            WorkoutFormInput(
+            FavoriteFormInput(
                 workoutDetails = workoutFormUiState.workout,
                 onValueChange = onValueChange,
                 modifier = modifier
@@ -72,7 +71,7 @@ fun WorkoutFormDialog(
 }
 
 @Composable
-fun WorkoutFormInput(
+fun FavoriteFormInput(
     workoutDetails: Workout,
     modifier: Modifier = Modifier,
     onValueChange: (Workout) -> Unit,
