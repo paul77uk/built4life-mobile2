@@ -14,5 +14,25 @@ object NavBarItems {
             image = R.drawable.favorite,
             route = Route.FavoriteScreen.route
         ),
+//        BarItem(
+//            title = "Programs",
+//            image = R.drawable.programs,
+//            route = Route.ProgramScreen.route
+//        ),
+        BarItem(
+            title = "Daily",
+            image = R.drawable.date_range,
+            route = Route.DailyScreen.route
+        ),
+//        BarItem(
+//            title = "MONDAY",
+//            image = R.drawable.date_range,
+//            route = Route.MondayScreen.route
+//        ),
+//        BarItem(
+//            title = "TUESDAY",
+//            image = R.drawable.date_range,
+//            route = Route.TuesdayScreen.route
+//        ),
     )
 }

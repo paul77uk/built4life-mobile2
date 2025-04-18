@@ -21,14 +21,14 @@ import com.example.built4life2.R
 import com.example.built4life2.data.Workout
 import com.example.built4life2.designsystem.component.button.B4LButton
 import com.example.built4life2.designsystem.component.button.ButtonType
-import com.example.built4life2.presentation.favorite.WorkoutFormUiState
+import com.example.built4life2.presentation.favorite.FavoriteFormUiState
 
 @Composable
 fun FavoriteFormDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     onSaveClick: () -> Unit,
-    workoutFormUiState: WorkoutFormUiState,
+    workoutFormUiState: FavoriteFormUiState,
     onValueChange: (Workout) -> Unit,
     isEdit: Boolean = false,
 

@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -51,6 +52,7 @@ fun WorkoutCard(
     onPrClick: () -> Unit,
     onInfoClick: () -> Unit,
     onFavoriteClick: () -> Unit,
+    onDailyClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -80,7 +82,8 @@ fun WorkoutCard(
                     onDeleteClick = onDeleteClick,
                     onInfoClick = onInfoClick,
                     onFavoriteClick = onFavoriteClick,
-                    isFavorite = workout.favorite
+                    isFavorite = workout.favorite,
+                    onDailyClick = onDailyClick
                 )
             }
             PRComposable(
@@ -101,6 +104,7 @@ fun BasicDropdownMenu(
     onFavoriteClick: () -> Unit,
     modifier: Modifier = Modifier,
     isFavorite: Boolean = false,
+    onDailyClick: () -> Unit,
     enabled: Boolean = true,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -112,7 +116,11 @@ fun BasicDropdownMenu(
         MenuItem("Edit", Icons.Outlined.Edit),
         MenuItem("Delete", Icons.Outlined.Delete),
         MenuItem("Description", Icons.Outlined.Info),
-        MenuItem("Favorite", if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder),
+        MenuItem(
+            "Favorite",
+            if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
+        ),
+        MenuItem("Daily", Icons.Outlined.DateRange),
     )
 
     Box(
@@ -152,6 +160,12 @@ fun BasicDropdownMenu(
                                 onFavoriteClick()
                                 expanded = false
                             }
+
+                            "Daily" -> {
+                                onDailyClick()
+                                expanded = false
+                            }
+
                         }
                     }
                 )
@@ -166,41 +180,45 @@ fun PRComposable(
     onPrClick: () -> Unit
 ) {
     HorizontalDivider()
-    if (workout.totalReps.isNotEmpty() && workout.firstSetReps.isNotEmpty()) {
+    if (workout.firstSetReps.isNotEmpty()) {
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier.fillMaxWidth().padding(start= 16.dp, end = 10.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 10.dp)
         ) {
 //            Row(
 //                verticalAlignment = Alignment.CenterVertically,
 //                horizontalArrangement = Arrangement.spacedBy(24.dp),
 //                modifier = Modifier.padding(16.dp)
 //            ) {
-                if (workout.totalReps.isNotEmpty() && workout.firstSetReps.isNotEmpty()) {
-                    Column(modifier = Modifier
-                        .padding(end = 8.dp)
-                        ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ){
-                            PRRow(
-                                text1 = workout.firstSetReps,
-                                text2 = "REPS ${if (workout.weight.isNotEmpty()) "X" else ""}"
-                            )
-                            if (workout.weight.isNotEmpty())
+            if (workout.firstSetReps.isNotEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .padding(end = 8.dp).weight(2.6f)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        PRRow(
+                            text1 = workout.firstSetReps,
+                            text2 = "REPS ${if (workout.weight.isNotEmpty()) "X" else ""}"
+                        )
+                        if (workout.weight.isNotEmpty())
                             PRRow(
                                 text1 = workout.weight,
                                 text2 = "KG"
                             )
-                        }
-                        PRRow(
-                            text1 = workout.totalReps,
-                            text2 = "TOTAL REPS"
-                        )
                     }
+                    if (workout.totalReps.isNotEmpty())
+                    PRRow(
+                        text1 = workout.totalReps,
+                        text2 = "TOTAL REPS"
+                    )
                 }
+            }
 //                if (workout.distance.isNotEmpty()) {
 //                    Text(
 //                        text = "${workout.distance} METRES",
@@ -212,21 +230,21 @@ fun PRComposable(
 //                    )
 //                }
 
-                var weighted = true
-                val max: Double
-                if (workout.weight.isNotEmpty()) {
-                    max =
-                        workout.weight.toInt() * workout.firstSetReps.toInt() * 0.0333 + workout.weight.toInt()
+            var weighted = true
+            val max: Double
+            if (workout.weight.isNotEmpty()) {
+                max =
+                    workout.weight.toInt() * workout.firstSetReps.toInt() * 0.0333 + workout.weight.toInt()
 
-                } else {
-                    max = workout.firstSetReps.toDouble()
-                    weighted = false
-                }
+            } else {
+                max = workout.firstSetReps.toDouble()
+                weighted = false
+            }
 
-           Row(
-               verticalAlignment = Alignment.CenterVertically,
-               modifier = Modifier.weight(1f)
-           ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(2.9f)
+            ) {
                 if (workout.novice.isEmpty() || workout.intermediate.isEmpty() || workout.advanced.isEmpty() || workout.elite.isEmpty())
                     RepMax(
                         repMax = max.toInt().toString(),
@@ -234,7 +252,7 @@ fun PRComposable(
                         weighted = weighted,
                         eliteLevel = workout.elite
                     )
-                else if (workout.totalReps.isNotEmpty()) {
+                else if (workout.firstSetReps.isNotEmpty()) {
                     when (max.toInt()) {
                         in 0..<workout.novice.toInt() -> {
                             RepMax(
@@ -284,16 +302,18 @@ fun PRComposable(
                 }
             }
 
-                IconButton(
-                    onClick = onPrClick,
-                    modifier = Modifier.width(25.dp)
-                ) {
-                    Icon(
-                        Icons.Default.Edit,
-                        contentDescription = "Edit Icon",
-                        modifier = Modifier.size(20.dp).fillMaxWidth()
-                    )
-                }
+            IconButton(
+                onClick = onPrClick,
+                modifier = Modifier.width(25.dp)
+            ) {
+                Icon(
+                    Icons.Default.Edit,
+                    contentDescription = "Edit Icon",
+                    modifier = Modifier
+                        .size(20.dp)
+                        .fillMaxWidth()
+                )
+            }
         }
     } else {
         B4LButton(
@@ -342,7 +362,7 @@ fun RepMax(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         if (weighted)
             Text(
@@ -354,13 +374,13 @@ fun RepMax(
         if (level.isNotEmpty())
             StrengthLevelCard(
                 repMax = repMax.toInt(),
-                eliteLevel = eliteLevel.toInt()
+                eliteLevel = eliteLevel.toInt(),
             )
-            Text(
-                level,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 8.sp,
-                color = Color.Gray,
-            )
+        Text(
+            level,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 8.sp,
+            color = Color.Gray,
+        )
     }
 }

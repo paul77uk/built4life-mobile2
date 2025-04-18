@@ -99,7 +99,7 @@ fun FavoriteScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(items = workoutListState.workoutList, key = { it.id }) { workout ->
+                items(items = workoutListState.workoutList, key = { it.workoutId }) { workout ->
                     WorkoutCard(
                         workout = workout,
                         onEditClick = {
@@ -134,6 +134,10 @@ fun FavoriteScreen(
                                 viewModel.updateUiState(workout.copy(favorite = !workout.favorite))
                                 viewModel.updateWorkout()
                             }
+                        },
+                        onDailyClick = {
+                            workoutFormUiState.workout = workout
+                            viewModel.updateUiState(workout)
                         }
                     )
                 }

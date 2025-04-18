@@ -5,9 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Workout::class], version = 1)
+@Database(entities = [Workout::class, Program::class, Day::class], version = 1)
 abstract class Built4LifeDatabase : RoomDatabase() {
     abstract fun workoutDao(): WorkoutDao
+    abstract fun programDao(): ProgramDao
+    abstract fun dayDao(): DayDao
 
     companion object {
         @Volatile

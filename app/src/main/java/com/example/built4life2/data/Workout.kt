@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "workouts")
 data class Workout(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val workoutId: Int = 0,
     val title: String,
     val description: String,
     val firstSetReps: String,
@@ -18,5 +18,12 @@ data class Workout(
     val advanced: String,
     val elite: String,
     val favorite: Boolean = false,
+    val monday: Boolean = false,
+    val tuesday: Boolean = false,
+    val wednesday: Boolean = false,
+    val thursday: Boolean = false,
+    val friday: Boolean = false,
+    val saturday: Boolean = false,
+    val sunday: Boolean = false,
     val notes: String
 )

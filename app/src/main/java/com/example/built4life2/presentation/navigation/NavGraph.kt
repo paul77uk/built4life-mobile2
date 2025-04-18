@@ -8,8 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.built4life2.presentation.workout.WorkoutScreen
+import com.example.built4life2.presentation.daily.DailyScreen
 import com.example.built4life2.presentation.favorite.FavoriteScreen
+import com.example.built4life2.presentation.program.ProgramScreen
+import com.example.built4life2.presentation.workout.WorkoutScreen
 
 @Composable
 fun NavGraph(
@@ -17,7 +19,9 @@ fun NavGraph(
     paddingValues: PaddingValues
 ) {
     NavHost(
-        modifier = Modifier.padding(paddingValues).consumeWindowInsets(paddingValues),
+        modifier = Modifier
+            .padding(paddingValues)
+            .consumeWindowInsets(paddingValues),
         navController = navController,
         startDestination = Route.WorkoutScreen.route
     ) {
@@ -51,6 +55,27 @@ fun NavGraph(
 //                }
             )
         }
+
+        composable(Route.ProgramScreen.route) {
+            ProgramScreen()
+        }
+
+        composable(Route.DailyScreen.route) {
+            DailyScreen(navController = navController)
+        }
+
+//        composable(Route.MondayScreen.route) {
+//            MondayScreen()
+//        }
+//
+//        composable(Route.ThursdayScreen.route) {
+//            ThursdayScreen(navController = navController)
+//        }
+//
+//        composable(Route.FridayScreen.route) {
+//            FridayScreen()
+//        }
+
     }
 }
 //        composable<Route.ResultScreen> {

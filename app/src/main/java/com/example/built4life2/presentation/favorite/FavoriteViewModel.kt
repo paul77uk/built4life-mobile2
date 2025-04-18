@@ -22,35 +22,35 @@ class FavoriteViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    val workoutListUiState: StateFlow<WorkoutListUiState> = searchQuery
+    val workoutListUiState: StateFlow<FavoriteListUiState> = searchQuery
         .debounce(300)
         .flatMapLatest { query ->
             workoutDao.getFavoriteWorkouts()
                 .map { workouts ->
                     if (query.isBlank()) {
-                        WorkoutListUiState(workouts)
+                        FavoriteListUiState(workouts)
                     } else {
                         val filteredWorkouts = workouts.filter {
                             it.matchesQuery(query)
                         }
-                        WorkoutListUiState(filteredWorkouts)
+                        FavoriteListUiState(filteredWorkouts)
                     }
                 }
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = WorkoutListUiState()
+            initialValue = FavoriteListUiState()
         )
 
     fun searchWorkout(query: String) {
         searchQuery.value = query
     }
 
-    var workoutFormUiState by mutableStateOf(WorkoutFormUiState())
+    var workoutFormUiState by mutableStateOf(FavoriteFormUiState())
 
     fun updateUiState(workout: Workout) {
-        workoutFormUiState = WorkoutFormUiState(
+        workoutFormUiState = FavoriteFormUiState(
             workout = workout,
             isEntryValid = validateInput(workout)
         )
@@ -79,8 +79,8 @@ class FavoriteViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
     }
 }
 
-data class WorkoutListUiState(val workoutList: List<Workout> = listOf())
-data class WorkoutFormUiState(
+data class FavoriteListUiState(val workoutList: List<Workout> = listOf())
+data class FavoriteFormUiState(
     var workout: Workout = Workout(
         title = "",
         description = "",

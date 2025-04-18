@@ -25,7 +25,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchField(
-    searchText: String, onSearchTextChanged: (String) -> Unit,
+    searchText: String,
+    onSearchTextChanged: (String) -> Unit,
     modifier: Modifier
 ) {
     val controller = LocalSoftwareKeyboardController.current
