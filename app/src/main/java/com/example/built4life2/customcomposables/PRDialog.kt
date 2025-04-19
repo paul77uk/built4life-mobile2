@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.built4life2.data.Workout
-import com.example.built4life2.designsystem.component.button.B4LButton
-import com.example.built4life2.designsystem.component.button.ButtonType
+import com.example.built4life2.presentation.components.B4LButton
+import com.example.built4life2.presentation.components.ButtonType
 
 @Composable
 fun PRDialog(

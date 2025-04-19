@@ -26,33 +26,12 @@ fun NavGraph(
         startDestination = Route.WorkoutScreen.route
     ) {
         composable(Route.WorkoutScreen.route) {
-//            val viewModel = koinViewModel<DashboardViewModel>()
-//            val state by viewModel.state.collectAsStateWithLifecycle()
             WorkoutScreen(
-//                state = state,
-//                onAction = viewModel::onAction,
-//                onTopicCardClick = { topicCode ->
-//                    navController.navigate(Route.QuizScreen(topicCode))
-//                }
             )
         }
 
-
         composable(Route.FavoriteScreen.route) {
-//            val viewModel = koinViewModel<QuizViewModel>()
-//            val state by viewModel.state.collectAsStateWithLifecycle()
             FavoriteScreen(
-//                state = state,
-//                onAction = viewModel::onAction,
-//                event = viewModel.event,
-//                navigationToDashboardScreen = {
-//                    navController.navigateUp()
-//                },
-//                navigationToResultScreen = {
-//                    navController.navigate(Route.ResultScreen) {
-//                        popUpTo<Route.QuizScreen> { inclusive = true }
-//                    }
-//                }
             )
         }
 
@@ -64,47 +43,5 @@ fun NavGraph(
             DailyScreen(navController = navController)
         }
 
-//        composable(Route.MondayScreen.route) {
-//            MondayScreen()
-//        }
-//
-//        composable(Route.ThursdayScreen.route) {
-//            ThursdayScreen(navController = navController)
-//        }
-//
-//        composable(Route.FridayScreen.route) {
-//            FridayScreen()
-//        }
-
     }
 }
-//        composable<Route.ResultScreen> {
-//            val viewModel = koinViewModel<ResultViewModel>()
-//            val state by viewModel.state.collectAsStateWithLifecycle()
-//            ResultScreen(
-//                state = state,
-//                event = viewModel.event,
-//                onReportIconClick = { questionId ->
-//                    navController.navigate(Route.IssueReportScreen(questionId))
-//                },
-//                onStartNewQuiz = {
-//                    navController.navigate(Route.DashboardScreen) {
-//                        popUpTo<Route.ResultScreen> { inclusive = true }
-//                    }
-//                }
-//            )
-//        }
-//        composable<Route.IssueReportScreen> {
-//            val viewModel = koinViewModel<IssueReportViewModel>()
-//            val state by viewModel.state.collectAsStateWithLifecycle()
-//            IssueReportScreen(
-//                state = state,
-//                event = viewModel.event,
-//                onAction = viewModel::onAction,
-//                navigateBack = {
-//                    navController.navigateUp()
-//                }
-//            )
-//        }
-//    }
-//}

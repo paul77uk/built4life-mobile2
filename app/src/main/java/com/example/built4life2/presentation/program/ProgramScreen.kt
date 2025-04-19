@@ -30,8 +30,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.built4life2.data.Program
-import com.example.built4life2.designsystem.component.button.B4LButton
-import com.example.built4life2.designsystem.component.button.ButtonType
+import com.example.built4life2.presentation.components.B4LButton
+import com.example.built4life2.presentation.components.ButtonType
 import com.example.built4life2.presentation.ViewModelProvider
 import kotlinx.coroutines.launch
 

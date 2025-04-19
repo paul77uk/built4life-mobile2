@@ -35,10 +35,10 @@ import com.example.built4life2.customcomposables.PRDialog
 import com.example.built4life2.customcomposables.SearchField
 import com.example.built4life2.customcomposables.WorkoutCard
 import com.example.built4life2.data.Workout
-import com.example.built4life2.designsystem.component.button.B4LButton
-import com.example.built4life2.designsystem.component.button.ButtonType
 import com.example.built4life2.presentation.ViewModelProvider
-import com.example.built4life2.presentation.workout.InfoDialog
+import com.example.built4life2.presentation.components.B4LButton
+import com.example.built4life2.presentation.components.ButtonType
+import com.example.built4life2.presentation.components.InfoDialog
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -321,33 +321,4 @@ fun FavoriteScreen(
             }
         }
     }
-}
-
-@Composable
-fun InfoDialog(
-    modifier: Modifier = Modifier,
-    description: String,
-    onDismissRequest: () -> Unit,
-) {
-    AlertDialog(
-        title = { Text(text = "Description") },
-        text = {
-            if (description.isEmpty()) {
-                Text(text = "No description added")
-            }
-            Text(text = description)
-        },
-        onDismissRequest = onDismissRequest,
-        dismissButton = {
-            B4LButton(
-                onClick = onDismissRequest,
-                text = "Close",
-                type = ButtonType.OUTLINE
-            )
-        },
-        confirmButton = {
-
-        },
-        modifier = modifier
-    )
 }

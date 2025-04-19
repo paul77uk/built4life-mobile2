@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,9 +19,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.built4life2.R
 import com.example.built4life2.data.Workout
-import com.example.built4life2.designsystem.component.button.B4LButton
-import com.example.built4life2.designsystem.component.button.ButtonType
-import com.example.built4life2.presentation.viewmodels.WorkoutFormUiState
+import com.example.built4life2.presentation.components.B4LButton
+import com.example.built4life2.presentation.components.ButtonType
+import com.example.built4life2.presentation.workout.WorkoutFormUiState
 
 @Composable
 fun WorkoutFormDialog(

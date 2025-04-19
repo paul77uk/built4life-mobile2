@@ -14,7 +14,7 @@ import com.example.built4life2.presentation.saturday.SaturdayViewModel
 import com.example.built4life2.presentation.sunday.SundayViewModel
 import com.example.built4life2.presentation.thursday.ThursdayViewModel
 import com.example.built4life2.presentation.tuesday.TuesdayViewModel
-import com.example.built4life2.presentation.viewmodels.WorkoutViewModel
+import com.example.built4life2.presentation.workout.WorkoutViewModel
 import com.example.built4life2.presentation.wednesday.WednesdayViewModel
 
 object ViewModelProvider {

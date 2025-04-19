@@ -1,4 +1,4 @@
-package com.example.built4life2.designsystem.component.button
+package com.example.built4life2.presentation.components
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton

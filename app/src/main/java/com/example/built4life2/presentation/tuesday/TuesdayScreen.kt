@@ -31,8 +31,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.built4life2.customcomposables.PRDialog
 import com.example.built4life2.customcomposables.WorkoutCard
 import com.example.built4life2.data.Workout
-import com.example.built4life2.designsystem.component.button.B4LButton
-import com.example.built4life2.designsystem.component.button.ButtonType
+import com.example.built4life2.presentation.components.B4LButton
+import com.example.built4life2.presentation.components.ButtonType
 import com.example.built4life2.presentation.ViewModelProvider
 import com.example.built4life2.presentation.daily.WorkoutFormUiState
 import kotlinx.coroutines.launch

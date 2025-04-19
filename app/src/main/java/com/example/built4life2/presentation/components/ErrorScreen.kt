@@ -1,4 +1,4 @@
-package com.example.built4life2.presentation.common_component
+package com.example.built4life2.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

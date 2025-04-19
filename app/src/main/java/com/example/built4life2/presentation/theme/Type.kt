@@ -1,4 +1,4 @@
-package com.example.built4life2.designsystem.theme
+package com.example.built4life2.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

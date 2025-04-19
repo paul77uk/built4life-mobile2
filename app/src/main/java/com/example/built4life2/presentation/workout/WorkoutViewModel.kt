@@ -1,4 +1,4 @@
-package com.example.built4life2.presentation.viewmodels
+package com.example.built4life2.presentation.workout
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +53,32 @@ class WorkoutViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
         workoutFormUiState = WorkoutFormUiState(
             workout = workout,
             isEntryValid = validateInput(workout)
+        )
+    }
+
+    fun refreshUiState() {
+        workoutFormUiState = WorkoutFormUiState(
+            workout = Workout(
+                title = "",
+                description = "",
+                firstSetReps = "",
+                totalReps = "",
+                weight = "",
+                beginner = "",
+                novice = "",
+                intermediate = "",
+                advanced = "",
+                elite = "",
+                favorite = false,
+                monday = false,
+                tuesday = false,
+                wednesday = false,
+                thursday = false,
+                friday = false,
+                saturday = false,
+                notes = "",
+            ),
+            isEntryValid = false
         )
     }
 
