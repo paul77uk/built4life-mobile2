@@ -29,36 +29,42 @@ class DailyViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
                     started = SharingStarted.WhileSubscribed(5_000L),
                     initialValue = WorkoutListUiState()
                 )
+
             "TUESDAY" -> workoutDao.getTuesdayWorkouts().map { WorkoutListUiState(it) }
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5_000L),
                     initialValue = WorkoutListUiState()
                 )
-          "WEDNESDAY" -> workoutDao.getWednesdayWorkouts().map { WorkoutListUiState(it) }
+
+            "WEDNESDAY" -> workoutDao.getWednesdayWorkouts().map { WorkoutListUiState(it) }
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5_000L),
                     initialValue = WorkoutListUiState()
                 )
+
             "THURSDAY" -> workoutDao.getThursdayWorkouts().map { WorkoutListUiState(it) }
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5_000L),
                     initialValue = WorkoutListUiState()
                 )
+
             "FRIDAY" -> workoutDao.getFridayWorkouts().map { WorkoutListUiState(it) }
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5_000L),
                     initialValue = WorkoutListUiState()
                 )
+
             "SATURDAY" -> workoutDao.getSaturdayWorkouts().map { WorkoutListUiState(it) }
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5_000L),
                     initialValue = WorkoutListUiState()
                 )
+
             "SUNDAY" -> workoutDao.getSundayWorkouts().map { WorkoutListUiState(it) }
                 .stateIn(
                     scope = viewModelScope,
@@ -76,8 +82,16 @@ class DailyViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
             }
         }
 
-
     var workoutFormUiState by mutableStateOf(WorkoutFormUiState())
+
+    fun getSundayWorkouts(): StateFlow<WorkoutListUiState> {
+        return workoutDao.getSundayWorkouts().map { WorkoutListUiState(it) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000L),
+                initialValue = WorkoutListUiState()
+            )
+    }
 
     fun updateUiState(workout: Workout) {
         workoutFormUiState = WorkoutFormUiState(

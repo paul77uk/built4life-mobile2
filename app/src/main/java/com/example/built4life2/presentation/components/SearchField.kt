@@ -1,4 +1,4 @@
-package com.example.built4life2.customcomposables
+package com.example.built4life2.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

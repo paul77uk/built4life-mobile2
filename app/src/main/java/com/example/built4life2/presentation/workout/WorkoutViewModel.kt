@@ -105,31 +105,6 @@ class WorkoutViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
     }
 }
 
-data class WorkoutListUiState(val workoutList: List<Workout> = listOf())
-data class WorkoutFormUiState(
-    var workout: Workout = Workout(
-        title = "",
-        description = "",
-        firstSetReps = "",
-        totalReps = "",
-        weight = "",
-        beginner = "",
-        novice = "",
-        intermediate = "",
-        advanced = "",
-        elite = "",
-        favorite = false,
-        monday = false,
-        tuesday = false,
-        wednesday = false,
-        thursday = false,
-        friday = false,
-        saturday = false,
-        notes = "",
-    ),
-    val isEntryValid: Boolean = false
-)
-
 fun Workout.matchesQuery(query: String): Boolean {
     return title.contains(query, ignoreCase = true) || description.contains(
         query,

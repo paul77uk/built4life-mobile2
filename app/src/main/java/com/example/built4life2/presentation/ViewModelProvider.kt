@@ -6,16 +6,17 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.built4life2.Built4LifeApplication
 import com.example.built4life2.presentation.daily.DailyViewModel
+import com.example.built4life2.presentation.daily.days.friday.FridayViewModel
+import com.example.built4life2.presentation.daily.days.monday.MondayViewModel
+import com.example.built4life2.presentation.daily.days.saturday.SaturdayViewModel
+import com.example.built4life2.presentation.daily.days.sunday.SundayViewModel
+import com.example.built4life2.presentation.daily.days.thursday.ThursdayViewModel
+import com.example.built4life2.presentation.daily.days.tuesday.TuesdayViewModel
+import com.example.built4life2.presentation.daily.days.wednesday.WednesdayViewModel
 import com.example.built4life2.presentation.favorite.FavoriteViewModel
-import com.example.built4life2.presentation.friday.FridayViewModel
-import com.example.built4life2.presentation.monday.MondayViewModel
 import com.example.built4life2.presentation.program.ProgramViewModel
-import com.example.built4life2.presentation.saturday.SaturdayViewModel
-import com.example.built4life2.presentation.sunday.SundayViewModel
-import com.example.built4life2.presentation.thursday.ThursdayViewModel
-import com.example.built4life2.presentation.tuesday.TuesdayViewModel
 import com.example.built4life2.presentation.workout.WorkoutViewModel
-import com.example.built4life2.presentation.wednesday.WednesdayViewModel
+
 
 object ViewModelProvider {
     val Factory = viewModelFactory {

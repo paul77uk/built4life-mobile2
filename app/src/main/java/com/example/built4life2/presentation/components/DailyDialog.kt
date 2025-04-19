@@ -1,12 +1,16 @@
 package com.example.built4life2.presentation.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.built4life2.data.Workout
 import com.example.built4life2.presentation.workout.WorkoutFormUiState
 
@@ -49,58 +53,63 @@ fun DailyForm(
     workoutDetails: Workout,
     onValueChange: (Workout) -> Unit,
 ) {
-    Column {
-        Row {
-            Text("Monday")
-            Checkbox(
-                checked = workoutDetails.monday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(monday = it)) }
-            )
-        }
-        Row {
-            Text("Tuesday")
-            Checkbox(
-                checked = workoutDetails.tuesday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(tuesday = it)) }
-            )
-        }
-        Row {
-            Text("Wednesday")
-            Checkbox(
-                checked = workoutDetails.wednesday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(wednesday = it)) }
-            )
-        }
-        Row {
-            Text("Thursday")
-            Checkbox(
-                checked = workoutDetails.thursday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(thursday = it)) }
-            )
-        }
+    Column(
+        modifier = Modifier
+    ) {
+        DayCheckBox(
+            text = "Monday",
+            checked = workoutDetails.monday,
+            onCheckedChange = { onValueChange(workoutDetails.copy(monday = it)) }
+        )
+        DayCheckBox(
+            text = "Tuesday",
+            checked = workoutDetails.tuesday,
+            onCheckedChange = { onValueChange(workoutDetails.copy(tuesday = it)) }
+        )
+        DayCheckBox(
+            text = "Wednesday",
+            checked = workoutDetails.wednesday,
+            onCheckedChange = { onValueChange(workoutDetails.copy(wednesday = it)) }
+        )
+        DayCheckBox(
+            text = "Thursday",
+            checked = workoutDetails.thursday,
+            onCheckedChange = { onValueChange(workoutDetails.copy(thursday = it)) }
+        )
+        DayCheckBox(
+            text = "Friday",
+            checked = workoutDetails.friday,
+            onCheckedChange = { onValueChange(workoutDetails.copy(friday = it)) }
+        )
+        DayCheckBox(
+            text = "Saturday",
+            checked = workoutDetails.saturday,
+            onCheckedChange = { onValueChange(workoutDetails.copy(saturday = it)) }
+        )
+        DayCheckBox(
+            text = "Sunday",
+            checked = workoutDetails.sunday,
+            onCheckedChange = { onValueChange(workoutDetails.copy(sunday = it)) }
+        )
+    }
+}
 
-        Row {
-            Text("Friday")
-            Checkbox(
-                checked = workoutDetails.friday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(friday = it)) }
-            )
-        }
-
-        Row {
-            Text("Saturday")
-            Checkbox(
-                checked = workoutDetails.saturday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(saturday = it)) }
-            )
-        }
-
-        Row {
-            Text("Sunday")
-            Checkbox(
-                checked = workoutDetails.sunday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(sunday = it)) }
-            )
-        }
+@Composable
+fun DayCheckBox(
+    modifier: Modifier = Modifier,
+    text: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.width(120.dp)
+    ) {
+        Text(text)
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange
+        )
     }
 }

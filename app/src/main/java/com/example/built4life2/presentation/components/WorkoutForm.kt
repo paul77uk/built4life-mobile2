@@ -1,4 +1,4 @@
-package com.example.built4life2.customcomposables
+package com.example.built4life2.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,8 +19,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.built4life2.R
 import com.example.built4life2.data.Workout
-import com.example.built4life2.presentation.components.B4LButton
-import com.example.built4life2.presentation.components.ButtonType
 import com.example.built4life2.presentation.workout.WorkoutFormUiState
 
 @Composable

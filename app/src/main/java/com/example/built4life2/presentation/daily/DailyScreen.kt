@@ -37,13 +37,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.built4life2.presentation.ViewModelProvider
-import com.example.built4life2.presentation.friday.FridayScreen
-import com.example.built4life2.presentation.monday.MondayScreen
-import com.example.built4life2.presentation.saturday.SaturdayScreen
-import com.example.built4life2.presentation.sunday.SundayScreen
-import com.example.built4life2.presentation.thursday.ThursdayScreen
-import com.example.built4life2.presentation.tuesday.TuesdayScreen
-import com.example.built4life2.presentation.wednesday.WednesdayScreen
+import com.example.built4life2.presentation.daily.days.friday.FridayScreen
+import com.example.built4life2.presentation.daily.days.monday.MondayScreen
+import com.example.built4life2.presentation.daily.days.saturday.SaturdayScreen
+import com.example.built4life2.presentation.daily.days.sunday.SundayScreen
+import com.example.built4life2.presentation.daily.days.thursday.ThursdayScreen
+import com.example.built4life2.presentation.daily.days.tuesday.TuesdayScreen
+import com.example.built4life2.presentation.daily.days.wednesday.WednesdayScreen
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 

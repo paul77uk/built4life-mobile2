@@ -1,4 +1,4 @@
-package com.example.built4life2.customcomposables
+package com.example.built4life2.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -40,8 +40,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.built4life2.data.Workout
-import com.example.built4life2.presentation.components.B4LButton
-import com.example.built4life2.presentation.components.ButtonType
 import com.example.built4life2.presentation.workout.component.StrengthLevelCard
 
 @Composable

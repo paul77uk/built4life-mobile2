@@ -26,10 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.built4life2.customcomposables.PRDialog
-import com.example.built4life2.customcomposables.SearchField
-import com.example.built4life2.customcomposables.WorkoutCard
-import com.example.built4life2.customcomposables.WorkoutFormDialog
+import com.example.built4life2.presentation.components.PRDialog
+import com.example.built4life2.presentation.components.SearchField
+import com.example.built4life2.presentation.components.WorkoutCard
+import com.example.built4life2.presentation.components.WorkoutFormDialog
 import com.example.built4life2.presentation.ViewModelProvider
 import com.example.built4life2.presentation.components.B4LAppBar
 import com.example.built4life2.presentation.components.B4LButton

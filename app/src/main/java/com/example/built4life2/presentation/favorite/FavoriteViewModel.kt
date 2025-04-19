@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.built4life2.data.Workout
 import com.example.built4life2.data.WorkoutDao
+import com.example.built4life2.presentation.workout.WorkoutFormUiState
+import com.example.built4life2.presentation.workout.WorkoutListUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,37 +24,63 @@ class FavoriteViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    val workoutListUiState: StateFlow<FavoriteListUiState> = searchQuery
+    val workoutListUiState: StateFlow<WorkoutListUiState> = searchQuery
         .debounce(300)
         .flatMapLatest { query ->
             workoutDao.getFavoriteWorkouts()
                 .map { workouts ->
                     if (query.isBlank()) {
-                        FavoriteListUiState(workouts)
+                        WorkoutListUiState(workouts)
                     } else {
                         val filteredWorkouts = workouts.filter {
                             it.matchesQuery(query)
                         }
-                        FavoriteListUiState(filteredWorkouts)
+                        WorkoutListUiState(filteredWorkouts)
                     }
                 }
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = FavoriteListUiState()
+            initialValue = WorkoutListUiState()
         )
 
     fun searchWorkout(query: String) {
         searchQuery.value = query
     }
 
-    var workoutFormUiState by mutableStateOf(FavoriteFormUiState())
+    var workoutFormUiState by mutableStateOf(WorkoutFormUiState())
 
     fun updateUiState(workout: Workout) {
-        workoutFormUiState = FavoriteFormUiState(
+        workoutFormUiState = WorkoutFormUiState(
             workout = workout,
             isEntryValid = validateInput(workout)
+        )
+    }
+
+    fun refreshUiState() {
+        workoutFormUiState = WorkoutFormUiState(
+            workout = Workout(
+                title = "",
+                description = "",
+                firstSetReps = "",
+                totalReps = "",
+                weight = "",
+                beginner = "",
+                novice = "",
+                intermediate = "",
+                advanced = "",
+                elite = "",
+                favorite = false,
+                monday = false,
+                tuesday = false,
+                wednesday = false,
+                thursday = false,
+                friday = false,
+                saturday = false,
+                notes = "",
+            ),
+            isEntryValid = false
         )
     }
 
@@ -78,25 +106,25 @@ class FavoriteViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
         }
     }
 }
-
-data class FavoriteListUiState(val workoutList: List<Workout> = listOf())
-data class FavoriteFormUiState(
-    var workout: Workout = Workout(
-        title = "",
-        description = "",
-        firstSetReps = "",
-        totalReps = "",
-        weight = "",
-        beginner = "",
-        novice = "",
-        intermediate = "",
-        advanced = "",
-        elite = "",
-        favorite = false,
-        notes = "",
-    ),
-    val isEntryValid: Boolean = false
-)
+//
+//data class FavoriteListUiState(val workoutList: List<Workout> = listOf())
+//data class FavoriteFormUiState(
+//    var workout: Workout = Workout(
+//        title = "",
+//        description = "",
+//        firstSetReps = "",
+//        totalReps = "",
+//        weight = "",
+//        beginner = "",
+//        novice = "",
+//        intermediate = "",
+//        advanced = "",
+//        elite = "",
+//        favorite = false,
+//        notes = "",
+//    ),
+//    val isEntryValid: Boolean = false
+//)
 
 fun Workout.matchesQuery(query: String): Boolean {
     return title.contains(query, ignoreCase = true) || description.contains(

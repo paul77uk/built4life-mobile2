@@ -1,4 +1,4 @@
-package com.example.built4life2.presentation.wednesday
+package com.example.built4life2.presentation.daily.days.monday
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,8 +28,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.built4life2.customcomposables.PRDialog
-import com.example.built4life2.customcomposables.WorkoutCard
+import com.example.built4life2.presentation.components.PRDialog
+import com.example.built4life2.presentation.components.WorkoutCard
 import com.example.built4life2.data.Workout
 import com.example.built4life2.presentation.components.B4LButton
 import com.example.built4life2.presentation.components.ButtonType
@@ -39,8 +39,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun WednesdayScreen(
-    viewModel: WednesdayViewModel = viewModel(factory = ViewModelProvider.Factory)
+fun MondayScreen(
+    viewModel: MondayViewModel = viewModel(factory = ViewModelProvider.Factory)
 ) {
     val workoutListState by viewModel.workoutListUiState.collectAsState()
     val workoutFormUiState = viewModel.workoutFormUiState

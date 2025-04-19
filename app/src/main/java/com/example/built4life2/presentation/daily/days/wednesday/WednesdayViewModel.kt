@@ -1,4 +1,4 @@
-package com.example.built4life2.presentation.monday
+package com.example.built4life2.presentation.daily.days.wednesday
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,17 +12,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class MondayViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
-
-
+class WednesdayViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
 
     val workoutListUiState: StateFlow<WorkoutListUiState> =
-        workoutDao.getMondayWorkouts().map { WorkoutListUiState(it) }
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5_000L),
-                    initialValue = WorkoutListUiState()
-                )
+        workoutDao.getWednesdayWorkouts().map { WorkoutListUiState(it) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000L),
+                initialValue = WorkoutListUiState()
+            )
 
 
     var workoutFormUiState by mutableStateOf(WorkoutFormUiState())

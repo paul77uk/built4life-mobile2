@@ -30,15 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.built4life2.customcomposables.FavoriteFormDialog
-import com.example.built4life2.customcomposables.PRDialog
-import com.example.built4life2.customcomposables.SearchField
-import com.example.built4life2.customcomposables.WorkoutCard
-import com.example.built4life2.data.Workout
 import com.example.built4life2.presentation.ViewModelProvider
 import com.example.built4life2.presentation.components.B4LButton
 import com.example.built4life2.presentation.components.ButtonType
+import com.example.built4life2.presentation.components.DailyDialog
 import com.example.built4life2.presentation.components.InfoDialog
+import com.example.built4life2.presentation.components.PRDialog
+import com.example.built4life2.presentation.components.SearchField
+import com.example.built4life2.presentation.components.WorkoutCard
+import com.example.built4life2.presentation.components.WorkoutFormDialog
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -54,6 +54,7 @@ fun FavoriteScreen(
     val isEdit = remember { mutableStateOf(false) }
     val showDeleteConfirmation = remember { mutableStateOf(false) }
     val showPRDialog = remember { mutableStateOf(false) }
+    val showDailyDialog = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     val onSearchTextChanged: (String) -> Unit = { query ->
@@ -136,6 +137,7 @@ fun FavoriteScreen(
                             }
                         },
                         onDailyClick = {
+                            showDailyDialog.value = true
                             workoutFormUiState.workout = workout
                             viewModel.updateUiState(workout)
                         }
@@ -143,25 +145,10 @@ fun FavoriteScreen(
                 }
             }
             if (openDialog.value) {
-                FavoriteFormDialog(
+                WorkoutFormDialog(
                     onDismiss = {
                         coroutineScope.launch {
-                            viewModel.updateUiState(
-                                Workout(
-                                    title = "",
-                                    description = "",
-                                    firstSetReps = "",
-                                    totalReps = "",
-                                    weight = "",
-                                    beginner = "",
-                                    novice = "",
-                                    intermediate = "",
-                                    advanced = "",
-                                    elite = "",
-                                    favorite = false,
-                                    notes = ""
-                                )
-                            )
+                            viewModel.refreshUiState()
                             openDialog.value = false
                             isEdit.value = false
                         }
@@ -170,22 +157,7 @@ fun FavoriteScreen(
                         if (isEdit.value) {
                             coroutineScope.launch {
                                 viewModel.updateWorkout()
-                                viewModel.updateUiState(
-                                    Workout(
-                                        title = "",
-                                        description = "",
-                                        firstSetReps = "",
-                                        totalReps = "",
-                                        weight = "",
-                                        beginner = "",
-                                        novice = "",
-                                        intermediate = "",
-                                        advanced = "",
-                                        elite = "",
-                                        favorite = false,
-                                        notes = ""
-                                    )
-                                )
+                                viewModel.refreshUiState()
                                 openDialog.value = false
                                 isEdit.value = true
                             }
@@ -211,22 +183,7 @@ fun FavoriteScreen(
                     dismissButton = {
                         B4LButton(
                             onClick = {
-                                viewModel.updateUiState(
-                                    Workout(
-                                        title = "",
-                                        description = "",
-                                        firstSetReps = "",
-                                        totalReps = "",
-                                        weight = "",
-                                        beginner = "",
-                                        novice = "",
-                                        intermediate = "",
-                                        advanced = "",
-                                        elite = "",
-                                        favorite = false,
-                                        notes = ""
-                                    )
-                                )
+                                viewModel.refreshUiState()
                                 showDeleteConfirmation.value = false
                                 isEdit.value = false
                             },
@@ -239,22 +196,7 @@ fun FavoriteScreen(
                             onClick = {
                                 coroutineScope.launch {
                                     viewModel.deleteWorkout()
-                                    viewModel.updateUiState(
-                                        Workout(
-                                            title = "",
-                                            description = "",
-                                            firstSetReps = "",
-                                            totalReps = "",
-                                            weight = "",
-                                            beginner = "",
-                                            novice = "",
-                                            intermediate = "",
-                                            advanced = "",
-                                            elite = "",
-                                            favorite = false,
-                                            notes = ""
-                                        )
-                                    )
+                                    viewModel.refreshUiState()
                                     isEdit.value = false
                                     showDeleteConfirmation.value = false
                                 }
@@ -268,42 +210,14 @@ fun FavoriteScreen(
                 PRDialog(
                     onDismissRequest = {
                         showPRDialog.value = false
-                        workoutFormUiState.workout = Workout(
-                            title = "",
-                            description = "",
-                            firstSetReps = "",
-                            totalReps = "",
-                            weight = "",
-                            beginner = "",
-                            novice = "",
-                            intermediate = "",
-                            advanced = "",
-                            elite = "",
-                            favorite = false,
-                            notes = ""
-                        )
+                        viewModel.refreshUiState()
                     },
                     onValueChange = viewModel::updateUiState,
                     workoutDetails = workoutFormUiState.workout,
                     onClick = {
                         coroutineScope.launch {
                             viewModel.updateWorkout()
-                            viewModel.updateUiState(
-                                Workout(
-                                    title = "",
-                                    description = "",
-                                    firstSetReps = "",
-                                    totalReps = "",
-                                    weight = "",
-                                    beginner = "",
-                                    novice = "",
-                                    intermediate = "",
-                                    advanced = "",
-                                    elite = "",
-                                    favorite = false,
-                                    notes = ""
-                                )
-                            )
+                            viewModel.refreshUiState()
                             isEdit.value = true
                             showPRDialog.value = false
                         }
@@ -317,6 +231,22 @@ fun FavoriteScreen(
                     onDismissRequest = {
                         openInfoDialog.value = false
                     },
+                )
+            }
+            if (showDailyDialog.value) {
+                DailyDialog(
+                    onDismissRequest = {
+                        showDailyDialog.value = false
+                    },
+                    workoutFormUiState = workoutFormUiState,
+                    onValueChange = viewModel::updateUiState,
+                    onConfirm = {
+                        coroutineScope.launch {
+                            viewModel.updateWorkout()
+                            showDailyDialog.value = false
+                            viewModel.refreshUiState()
+                        }
+                    }
                 )
             }
         }
