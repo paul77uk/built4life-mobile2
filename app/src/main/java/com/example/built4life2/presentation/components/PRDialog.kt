@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import com.example.built4life2.data.Workout
 
 @Composable
@@ -36,22 +37,40 @@ fun PRDialog(
                 OutlinedTextField(
                     label = { Text("First Set Reps") },
                     value = workoutDetails.firstSetReps,
-                    onValueChange = { onValueChange(workoutDetails.copy(firstSetReps = it)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = {
+                        if (it.isDigitsOnly()) onValueChange(
+                            workoutDetails.copy(
+                                firstSetReps = it
+                            )
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     label = { Text("Total Reps") },
                     value = workoutDetails.totalReps,
-                    onValueChange = { onValueChange(workoutDetails.copy(totalReps = it)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = {
+                        if (it.isDigitsOnly()) onValueChange(
+                            workoutDetails.copy(
+                                totalReps = it
+                            )
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     label = { Text("Weight") },
                     value = workoutDetails.weight,
-                    onValueChange = { onValueChange(workoutDetails.copy(weight = it)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = {
+                        if (it.isDigitsOnly()) onValueChange(
+                            workoutDetails.copy(
+                                weight = it
+                            )
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                     modifier = Modifier.fillMaxWidth()
                 )
             }

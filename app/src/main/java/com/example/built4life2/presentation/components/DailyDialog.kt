@@ -23,7 +23,6 @@ fun DailyDialog(
     onConfirm: () -> Unit
 ) {
     AlertDialog(
-        title = { Text(text = "Description") },
         text = {
             DailyForm(
                 workoutDetails = workoutFormUiState.workout,

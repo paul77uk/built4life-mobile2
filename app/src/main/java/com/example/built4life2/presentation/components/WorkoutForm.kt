@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import com.example.built4life2.R
 import com.example.built4life2.data.Workout
 import com.example.built4life2.presentation.workout.WorkoutFormUiState
@@ -94,47 +96,62 @@ fun WorkoutFormInput(
         )
         OutlinedTextField(
             value = workoutDetails.beginner,
-            onValueChange = { onValueChange(workoutDetails.copy(beginner = it)) },
+            onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(beginner = it)) },
             label = { Text(stringResource(R.string.beginner_level)) },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.NumberPassword
+            ),
         )
         OutlinedTextField(
             value = workoutDetails.novice,
-            onValueChange = { onValueChange(workoutDetails.copy(novice = it)) },
+            onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(novice = it)) },
             label = { Text(stringResource(R.string.novice_level)) },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.NumberPassword
+            ),
         )
         OutlinedTextField(
             value = workoutDetails.intermediate,
-            onValueChange = { onValueChange(workoutDetails.copy(intermediate = it)) },
+            onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(intermediate = it)) },
             label = { Text(stringResource(R.string.intermediate_level)) },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.NumberPassword
+            ),
         )
         OutlinedTextField(
             value = workoutDetails.advanced,
-            onValueChange = { onValueChange(workoutDetails.copy(advanced = it)) },
+            onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(advanced = it)) },
             label = { Text(stringResource(R.string.advanced_level)) },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.NumberPassword
+            ),
         )
         OutlinedTextField(
             value = workoutDetails.elite,
-            onValueChange = { onValueChange(workoutDetails.copy(elite = it)) },
+            onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(elite = it)) },
             label = { Text(stringResource(R.string.elite_level)) },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.NumberPassword
+            ),
         )
-        OutlinedTextField(
-            value = workoutDetails.notes,
-            onValueChange = { onValueChange(workoutDetails.copy(notes = it)) },
-            label = { Text(stringResource(R.string.notes)) },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 3,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        )
+//        OutlinedTextField(
+//            value = workoutDetails.notes,
+//            onValueChange = { onValueChange(workoutDetails.copy(notes = it)) },
+//            label = { Text(stringResource(R.string.notes)) },
+//            modifier = Modifier.fillMaxWidth(),
+//            minLines = 3,
+//            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+//        )
 
     }
 }
