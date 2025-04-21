@@ -4,16 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,17 +21,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.built4life2.presentation.components.PRDialog
-import com.example.built4life2.presentation.components.WorkoutCard
-import com.example.built4life2.data.Workout
+import com.example.built4life2.presentation.ViewModelProvider
 import com.example.built4life2.presentation.components.B4LButton
 import com.example.built4life2.presentation.components.ButtonType
-import com.example.built4life2.presentation.ViewModelProvider
-import com.example.built4life2.presentation.daily.WorkoutFormUiState
+import com.example.built4life2.presentation.components.DailyDialog
+import com.example.built4life2.presentation.components.InfoDialog
+import com.example.built4life2.presentation.components.PRDialog
+import com.example.built4life2.presentation.components.WorkoutCard
+import com.example.built4life2.presentation.components.WorkoutFormDialog
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -57,25 +54,11 @@ fun ThursdayScreen(
 //        topBar = {
 //            CenterAlignedTopAppBar(
 //                title = {
-//                    Row(
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        horizontalArrangement = Arrangement.SpaceBetween
-//                    ) {
-//                        Text(
-//                            "THURSDAY",
-//                            fontWeight = FontWeight.SemiBold,
-//                            fontSize = 24.sp
-//                        )
-//                        IconButton(
-//                            onClick = { navController.navigate(Route.FridayScreen.route) }
-//
-//                        ) {
-//                            Icon(
-//                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-//                                contentDescription = "Arrow Forward"
-//                            )
-//                        }
-//                    }
+//                    Text(
+//                        LocalDate.now().dayOfWeek.name,
+//                        fontWeight = FontWeight.SemiBold,
+//                        fontSize = 24.sp
+//                    )
 //                },
 //                colors = TopAppBarDefaults.topAppBarColors(
 //                    containerColor = Color.Black,
@@ -99,6 +82,7 @@ fun ThursdayScreen(
             ) {
                 items(items = workoutListState.workoutList, key = { it.workoutId }) { workout ->
                     WorkoutCard(
+                        isDelete = false,
                         workout = workout,
                         onEditClick = {
                             openDialog.value = true
@@ -141,81 +125,36 @@ fun ThursdayScreen(
                     )
                 }
             }
-//            if (openDialog.value) {
-//                WorkoutFormDialog(
-//                    onDismiss = {
-//                        coroutineScope.launch {
-//                            viewModel.updateUiState(
-//                                Workout(
-//                                    title = "",
-//                                    description = "",
-//                                    firstSetReps = "",
-//                                    totalReps = "",
-//                                    weight = "",
-//                                    beginner = "",
-//                                    novice = "",
-//                                    intermediate = "",
-//                                    advanced = "",
-//                                    elite = "",
-//                                    favorite = false,
-//                                    notes = ""
-//                                )
-//                            )
-//                            openDialog.value = false
-//                            isEdit.value = false
-//                        }
-//                    },
-//                    onSaveClick = {
-//                        if (isEdit.value) {
-//                            coroutineScope.launch {
-//                                viewModel.updateWorkout()
-//                                viewModel.updateUiState(
-//                                    Workout(
-//                                        title = "",
-//                                        description = "",
-//                                        firstSetReps = "",
-//                                        totalReps = "",
-//                                        weight = "",
-//                                        beginner = "",
-//                                        novice = "",
-//                                        intermediate = "",
-//                                        advanced = "",
-//                                        elite = "",
-//                                        favorite = false,
-//                                        notes = ""
-//                                    )
-//                                )
-//                                openDialog.value = false
-//                                isEdit.value = true
-//                            }
-//                        } else
-//                            coroutineScope.launch {
-//                                viewModel.saveWorkout()
-//                                viewModel.updateUiState(
-//                                    Workout(
-//                                        title = "",
-//                                        description = "",
-//                                        firstSetReps = "",
-//                                        totalReps = "",
-//                                        weight = "",
-//                                        beginner = "",
-//                                        novice = "",
-//                                        intermediate = "",
-//                                        advanced = "",
-//                                        elite = "",
-//                                        favorite = false,
-//                                        notes = ""
-//                                    )
-//                                )
-//                                openDialog.value = false
-//                                isEdit.value = false
-//                            }
-//                    },
-//                    workoutFormUiState = workoutFormUiState,
-//                    onValueChange = viewModel::updateUiState,
-//                    isEdit = isEdit.value
-//                )
-//            }
+            if (openDialog.value) {
+                WorkoutFormDialog(
+                    onDismiss = {
+                        coroutineScope.launch {
+                            viewModel.refreshUiState()
+                            openDialog.value = false
+                            isEdit.value = false
+                        }
+                    },
+                    onSaveClick = {
+                        if (isEdit.value) {
+                            coroutineScope.launch {
+                                viewModel.updateWorkout()
+                                viewModel.refreshUiState()
+                                openDialog.value = false
+                                isEdit.value = true
+                            }
+                        } else
+                            coroutineScope.launch {
+                                viewModel.saveWorkout()
+                                viewModel.refreshUiState()
+                                openDialog.value = false
+                                isEdit.value = false
+                            }
+                    },
+                    workoutFormUiState = workoutFormUiState,
+                    onValueChange = viewModel::updateUiState,
+                    isEdit = isEdit.value
+                )
+            }
             if (showDeleteConfirmation.value) {
                 AlertDialog(
                     onDismissRequest = {
@@ -231,22 +170,7 @@ fun ThursdayScreen(
                     dismissButton = {
                         B4LButton(
                             onClick = {
-                                viewModel.updateUiState(
-                                    Workout(
-                                        title = "",
-                                        description = "",
-                                        firstSetReps = "",
-                                        totalReps = "",
-                                        weight = "",
-                                        beginner = "",
-                                        novice = "",
-                                        intermediate = "",
-                                        advanced = "",
-                                        elite = "",
-                                        favorite = false,
-                                        notes = ""
-                                    )
-                                )
+                                viewModel.refreshUiState()
                                 showDeleteConfirmation.value = false
                                 isEdit.value = false
                             },
@@ -259,22 +183,7 @@ fun ThursdayScreen(
                             onClick = {
                                 coroutineScope.launch {
                                     viewModel.deleteWorkout()
-                                    viewModel.updateUiState(
-                                        Workout(
-                                            title = "",
-                                            description = "",
-                                            firstSetReps = "",
-                                            totalReps = "",
-                                            weight = "",
-                                            beginner = "",
-                                            novice = "",
-                                            intermediate = "",
-                                            advanced = "",
-                                            elite = "",
-                                            favorite = false,
-                                            notes = ""
-                                        )
-                                    )
+                                    viewModel.refreshUiState()
                                     isEdit.value = false
                                     showDeleteConfirmation.value = false
                                 }
@@ -288,42 +197,14 @@ fun ThursdayScreen(
                 PRDialog(
                     onDismissRequest = {
                         showPRDialog.value = false
-                        workoutFormUiState.workout = Workout(
-                            title = "",
-                            description = "",
-                            firstSetReps = "",
-                            totalReps = "",
-                            weight = "",
-                            beginner = "",
-                            novice = "",
-                            intermediate = "",
-                            advanced = "",
-                            elite = "",
-                            favorite = false,
-                            notes = ""
-                        )
+                        viewModel.refreshUiState()
                     },
                     onValueChange = viewModel::updateUiState,
                     workoutDetails = workoutFormUiState.workout,
                     onClick = {
                         coroutineScope.launch {
                             viewModel.updateWorkout()
-                            viewModel.updateUiState(
-                                Workout(
-                                    title = "",
-                                    description = "",
-                                    firstSetReps = "",
-                                    totalReps = "",
-                                    weight = "",
-                                    beginner = "",
-                                    novice = "",
-                                    intermediate = "",
-                                    advanced = "",
-                                    elite = "",
-                                    favorite = false,
-                                    notes = ""
-                                )
-                            )
+                            viewModel.refreshUiState()
                             isEdit.value = true
                             showPRDialog.value = false
                         }
@@ -339,173 +220,21 @@ fun ThursdayScreen(
                     },
                 )
             }
-//            if (showDailyDialog.value) {
-//                DailyDialog(
-//                    onDismissRequest = {
-//                        showDailyDialog.value = false
-//                    },
-//                    workoutFormUiState = workoutFormUiState,
-//                    onValueChange = viewModel::updateUiState,
-//                    onConfirm = {
-//                        coroutineScope.launch {
-//                            viewModel.updateWorkout()
-//                            showDailyDialog.value = false
-//                        }
-//                    }
-//                )
-//            }
-        }
-    }
-}
-
-@Composable
-fun InfoDialog(
-    modifier: Modifier = Modifier,
-    description: String,
-    onDismissRequest: () -> Unit,
-) {
-    AlertDialog(
-        title = { Text(text = "Description") },
-        text = {
-            if (description.isEmpty()) {
-                Text(text = "No description added")
+            if (showDailyDialog.value) {
+                DailyDialog(
+                    onDismissRequest = {
+                        showDailyDialog.value = false
+                    },
+                    workoutFormUiState = workoutFormUiState,
+                    onValueChange = viewModel::updateUiState,
+                    onConfirm = {
+                        coroutineScope.launch {
+                            viewModel.updateWorkout()
+                            showDailyDialog.value = false
+                        }
+                    }
+                )
             }
-            Text(text = description)
-        },
-        onDismissRequest = onDismissRequest,
-        dismissButton = {
-            B4LButton(
-                onClick = onDismissRequest,
-                text = "Close",
-                type = ButtonType.OUTLINE
-            )
-        },
-        confirmButton = {
-
-        },
-        modifier = modifier
-    )
-}
-
-@Composable
-fun DailyDialog(
-    modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit,
-    workoutFormUiState: WorkoutFormUiState,
-    onValueChange: (Workout) -> Unit,
-    onConfirm: () -> Unit
-) {
-    AlertDialog(
-        text = {
-            DailyForm(
-                workoutDetails = workoutFormUiState.workout,
-                onValueChange = onValueChange,
-            )
-        },
-        onDismissRequest = onDismissRequest,
-        dismissButton = {
-            B4LButton(
-                onClick = onDismissRequest,
-                text = "Close",
-                type = ButtonType.OUTLINE
-            )
-        },
-        confirmButton = {
-            B4LButton(
-                onClick = onConfirm,
-                text = "Save"
-            )
-        },
-        modifier = modifier
-    )
-}
-
-@Composable
-fun DailyForm(
-    workoutDetails: Workout,
-    onValueChange: (Workout) -> Unit,
-) {
-    Column(
-    ) {
-        Row(
-            modifier = Modifier.width(120.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Monday")
-            Checkbox(
-                checked = workoutDetails.monday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(monday = it)) }
-            )
-        }
-        Row(
-            modifier = Modifier.width(120.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Tuesday")
-            Checkbox(
-                checked = workoutDetails.tuesday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(tuesday = it)) }
-            )
-        }
-        Row(
-            modifier = Modifier.width(120.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Wednesday")
-            Checkbox(
-                checked = workoutDetails.wednesday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(wednesday = it)) }
-            )
-        }
-        Row(
-            modifier = Modifier.width(120.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Thursday")
-            Checkbox(
-                checked = workoutDetails.thursday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(thursday = it)) }
-            )
-        }
-
-        Row(
-            modifier = Modifier.width(120.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Friday")
-            Checkbox(
-                checked = workoutDetails.friday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(friday = it)) }
-            )
-        }
-
-        Row(
-            modifier = Modifier.width(120.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Saturday")
-            Checkbox(
-                checked = workoutDetails.saturday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(saturday = it)) }
-            )
-        }
-
-        Row(
-            modifier = Modifier.width(120.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Sunday")
-            Checkbox(
-                checked = workoutDetails.sunday,
-                onCheckedChange = { onValueChange(workoutDetails.copy(sunday = it)) }
-            )
         }
     }
 }

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -31,8 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.built4life2.presentation.ViewModelProvider
-import com.example.built4life2.presentation.components.B4LButton
-import com.example.built4life2.presentation.components.ButtonType
 import com.example.built4life2.presentation.components.DailyDialog
 import com.example.built4life2.presentation.components.InfoDialog
 import com.example.built4life2.presentation.components.PRDialog
@@ -102,6 +99,7 @@ fun FavoriteScreen(
             ) {
                 items(items = workoutListState.workoutList, key = { it.workoutId }) { workout ->
                     WorkoutCard(
+                        isDelete = false,
                         workout = workout,
                         onEditClick = {
                             openDialog.value = true
@@ -168,44 +166,44 @@ fun FavoriteScreen(
                     isEdit = isEdit.value
                 )
             }
-            if (showDeleteConfirmation.value) {
-                AlertDialog(
-                    onDismissRequest = {
-                        showDeleteConfirmation.value = false
-                        isEdit.value = false
-                    },
-                    title = {
-                        Text(text = "Delete Workout")
-                    },
-                    text = {
-                        Text(text = "Are you sure you want to delete this workout?")
-                    },
-                    dismissButton = {
-                        B4LButton(
-                            onClick = {
-                                viewModel.refreshUiState()
-                                showDeleteConfirmation.value = false
-                                isEdit.value = false
-                            },
-                            text = "Cancel",
-                            type = ButtonType.OUTLINE
-                        )
-                    },
-                    confirmButton = {
-                        B4LButton(
-                            onClick = {
-                                coroutineScope.launch {
-                                    viewModel.deleteWorkout()
-                                    viewModel.refreshUiState()
-                                    isEdit.value = false
-                                    showDeleteConfirmation.value = false
-                                }
-                            },
-                            text = "Delete"
-                        )
-                    }
-                )
-            }
+//            if (showDeleteConfirmation.value) {
+//                AlertDialog(
+//                    onDismissRequest = {
+//                        showDeleteConfirmation.value = false
+//                        isEdit.value = false
+//                    },
+//                    title = {
+//                        Text(text = "Delete Workout")
+//                    },
+//                    text = {
+//                        Text(text = "Are you sure you want to delete this workout?")
+//                    },
+//                    dismissButton = {
+//                        B4LButton(
+//                            onClick = {
+//                                viewModel.refreshUiState()
+//                                showDeleteConfirmation.value = false
+//                                isEdit.value = false
+//                            },
+//                            text = "Cancel",
+//                            type = ButtonType.OUTLINE
+//                        )
+//                    },
+//                    confirmButton = {
+//                        B4LButton(
+//                            onClick = {
+//                                coroutineScope.launch {
+//                                    viewModel.deleteWorkout()
+//                                    viewModel.refreshUiState()
+//                                    isEdit.value = false
+//                                    showDeleteConfirmation.value = false
+//                                }
+//                            },
+//                            text = "Delete"
+//                        )
+//                    }
+//                )
+//            }
             if (showPRDialog.value) {
                 PRDialog(
                     onDismissRequest = {

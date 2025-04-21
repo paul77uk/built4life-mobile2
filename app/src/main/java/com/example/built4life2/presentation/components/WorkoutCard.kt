@@ -50,7 +50,8 @@ fun WorkoutCard(
     onPrClick: () -> Unit,
     onInfoClick: () -> Unit,
     onFavoriteClick: () -> Unit,
-    onDailyClick: () -> Unit
+    onDailyClick: () -> Unit,
+    isDelete: Boolean = true
 ) {
     Surface(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -81,7 +82,8 @@ fun WorkoutCard(
                     onInfoClick = onInfoClick,
                     onFavoriteClick = onFavoriteClick,
                     isFavorite = workout.favorite,
-                    onDailyClick = onDailyClick
+                    onDailyClick = onDailyClick,
+                    isDelete = isDelete
                 )
             }
             PRComposable(
@@ -102,6 +104,7 @@ fun BasicDropdownMenu(
     onFavoriteClick: () -> Unit,
     modifier: Modifier = Modifier,
     isFavorite: Boolean = false,
+    isDelete: Boolean = true,
     onDailyClick: () -> Unit,
     enabled: Boolean = true,
 ) {
@@ -110,7 +113,9 @@ fun BasicDropdownMenu(
     // Placeholder list of 100 strings for demonstration
     data class MenuItem(val title: String, val icon: ImageVector)
 
-    val menuItemData = listOf(
+    val menuItemData =
+        if (isDelete)
+        listOf(
         MenuItem("Edit", Icons.Outlined.Edit),
         MenuItem("Delete", Icons.Outlined.Delete),
         MenuItem("Description", Icons.Outlined.Info),
@@ -119,6 +124,15 @@ fun BasicDropdownMenu(
             if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
         ),
         MenuItem("Daily", Icons.Outlined.DateRange),
+    )
+    else listOf(
+            MenuItem("Edit", Icons.Outlined.Edit),
+            MenuItem("Description", Icons.Outlined.Info),
+            MenuItem(
+                "Favorite",
+                if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
+            ),
+            MenuItem("Daily", Icons.Outlined.DateRange),
     )
 
     Box(
@@ -210,11 +224,11 @@ fun PRComposable(
                                 text2 = "KG"
                             )
                     }
-                    if (workout.totalReps.isNotEmpty())
-                    PRRow(
-                        text1 = workout.totalReps,
-                        text2 = "TOTAL REPS"
-                    )
+//                    if (workout.totalReps.isNotEmpty())
+//                    PRRow(
+//                        text1 = workout.totalReps,
+//                        text2 = "TOTAL REPS"
+//                    )
                 }
             }
 //                if (workout.distance.isNotEmpty()) {

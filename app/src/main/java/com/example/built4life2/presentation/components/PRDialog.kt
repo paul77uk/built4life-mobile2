@@ -35,7 +35,7 @@ fun PRDialog(
                     Text("Enter a new PR for this workout.")
                 }
                 OutlinedTextField(
-                    label = { Text("First Set Reps") },
+                    label = { Text("Reps") },
                     value = workoutDetails.firstSetReps,
                     onValueChange = {
                         if (it.isDigitsOnly()) onValueChange(
@@ -47,19 +47,19 @@ fun PRDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                     modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(
-                    label = { Text("Total Reps") },
-                    value = workoutDetails.totalReps,
-                    onValueChange = {
-                        if (it.isDigitsOnly()) onValueChange(
-                            workoutDetails.copy(
-                                totalReps = it
-                            )
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-                    modifier = Modifier.fillMaxWidth()
-                )
+//                OutlinedTextField(
+//                    label = { Text("Total Reps") },
+//                    value = workoutDetails.totalReps,
+//                    onValueChange = {
+//                        if (it.isDigitsOnly()) onValueChange(
+//                            workoutDetails.copy(
+//                                totalReps = it
+//                            )
+//                        )
+//                    },
+//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+//                    modifier = Modifier.fillMaxWidth()
+//                )
                 OutlinedTextField(
                     label = { Text("Weight") },
                     value = workoutDetails.weight,

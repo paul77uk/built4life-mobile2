@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.built4life2.data.Workout
 import com.example.built4life2.data.WorkoutDao
+import com.example.built4life2.presentation.workout.WorkoutFormUiState
+import com.example.built4life2.presentation.workout.WorkoutListUiState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -32,6 +34,32 @@ class SaturdayViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
         )
     }
 
+    fun refreshUiState() {
+        workoutFormUiState = WorkoutFormUiState(
+            workout = Workout(
+                title = "",
+                description = "",
+                firstSetReps = "",
+                totalReps = "",
+                weight = "",
+                beginner = "",
+                novice = "",
+                intermediate = "",
+                advanced = "",
+                elite = "",
+                favorite = false,
+                monday = false,
+                tuesday = false,
+                wednesday = false,
+                thursday = false,
+                friday = false,
+                saturday = false,
+                notes = "",
+            ),
+            isEntryValid = false
+        )
+    }
+
     suspend fun saveWorkout() {
         if (validateInput()) {
             workoutDao.insert(workoutFormUiState.workout)
@@ -54,29 +82,3 @@ class SaturdayViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
         }
     }
 }
-
-data class WorkoutListUiState(val workoutList: List<Workout> = listOf())
-data class WorkoutFormUiState(
-    var workout: Workout = Workout(
-        title = "",
-        description = "",
-        firstSetReps = "",
-        totalReps = "",
-        weight = "",
-        beginner = "",
-        novice = "",
-        intermediate = "",
-        advanced = "",
-        elite = "",
-        favorite = false,
-        monday = false,
-        tuesday = false,
-        wednesday = false,
-        thursday = false,
-        friday = false,
-        saturday = false,
-        notes = "",
-    ),
-    val isEntryValid: Boolean = false
-)
-
