@@ -6,4 +6,5 @@ sealed class Route(val route: String) {
     data object FavoriteScreen : Route("favorites")
     data object ProgramScreen : Route("programs")
     data object DailyScreen : Route("daily")
+    data object CommunityScreen : Route("community")
 }

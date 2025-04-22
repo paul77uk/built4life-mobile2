@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.built4life2.presentation.community.CommunityScreen
 import com.example.built4life2.presentation.daily.DailyScreen
 import com.example.built4life2.presentation.favorite.FavoriteScreen
 import com.example.built4life2.presentation.program.ProgramScreen
@@ -42,6 +43,11 @@ fun NavGraph(
         composable(Route.DailyScreen.route) {
             DailyScreen(navController = navController)
         }
+
+        composable(Route.CommunityScreen.route) {
+            CommunityScreen()
+        }
+
 
     }
 }

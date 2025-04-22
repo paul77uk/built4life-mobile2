@@ -24,5 +24,10 @@ object NavBarItems {
             image = R.drawable.date_range,
             route = Route.DailyScreen.route
         ),
+        BarItem(
+            title = "Community",
+            image = R.drawable.groups,
+            route = Route.CommunityScreen.route
+        )
     )
 }
