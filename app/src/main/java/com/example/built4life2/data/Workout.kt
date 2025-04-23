@@ -19,11 +19,18 @@ data class Workout(
     val elite: String,
     val favorite: Boolean = false,
     val monday: Boolean = false,
+    val mondayOrder: String,
     val tuesday: Boolean = false,
+    val tuesdayOrder: String,
     val wednesday: Boolean = false,
+    val wednesdayOrder: String,
     val thursday: Boolean = false,
+    val thursdayOrder: String,
     val friday: Boolean = false,
+    val fridayOrder: String,
     val saturday: Boolean = false,
+    val saturdayOrder: String,
     val sunday: Boolean = false,
+    val sundayOrder: String,
     val notes: String
 )

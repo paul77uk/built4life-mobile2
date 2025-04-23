@@ -55,6 +55,13 @@ class TuesdayViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
                 friday = false,
                 saturday = false,
                 notes = "",
+                mondayOrder = "",
+                tuesdayOrder = "",
+                wednesdayOrder = "",
+                thursdayOrder = "",
+                fridayOrder = "",
+                saturdayOrder = "",
+                sundayOrder = "",
             ),
             isEntryValid = false
         )

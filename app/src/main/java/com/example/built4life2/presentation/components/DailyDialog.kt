@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.built4life2.data.Workout
 import com.example.built4life2.presentation.workout.WorkoutFormUiState
+import java.time.LocalDateTime
 
 @Composable
 fun DailyDialog(
@@ -58,37 +59,86 @@ fun DailyForm(
         DayCheckBox(
             text = "Monday",
             checked = workoutDetails.monday,
-            onCheckedChange = { onValueChange(workoutDetails.copy(monday = it)) }
+            onCheckedChange = {
+                onValueChange(
+                    workoutDetails.copy(
+                        monday = it,
+                        mondayOrder = LocalDateTime.now().toString()
+                    )
+                )
+            }
         )
         DayCheckBox(
             text = "Tuesday",
             checked = workoutDetails.tuesday,
-            onCheckedChange = { onValueChange(workoutDetails.copy(tuesday = it)) }
+            onCheckedChange = {
+                onValueChange(
+                    workoutDetails.copy(
+                        tuesday = it,
+                        tuesdayOrder = LocalDateTime.now().toString()
+                    )
+                )
+            }
         )
         DayCheckBox(
             text = "Wednesday",
             checked = workoutDetails.wednesday,
-            onCheckedChange = { onValueChange(workoutDetails.copy(wednesday = it)) }
+            onCheckedChange = {
+                onValueChange(
+                    workoutDetails.copy(
+                        wednesday = it,
+                        wednesdayOrder = LocalDateTime.now().toString()
+                    )
+                )
+            }
         )
         DayCheckBox(
             text = "Thursday",
             checked = workoutDetails.thursday,
-            onCheckedChange = { onValueChange(workoutDetails.copy(thursday = it)) }
+            onCheckedChange = {
+                onValueChange(
+                    workoutDetails.copy(
+                        thursday = it,
+                        thursdayOrder = LocalDateTime.now().toString()
+                    )
+                )
+            }
         )
         DayCheckBox(
             text = "Friday",
             checked = workoutDetails.friday,
-            onCheckedChange = { onValueChange(workoutDetails.copy(friday = it)) }
+            onCheckedChange = {
+                onValueChange(
+                    workoutDetails.copy(
+                        friday = it,
+                        fridayOrder = LocalDateTime.now().toString()
+                    )
+                )
+            }
         )
         DayCheckBox(
             text = "Saturday",
             checked = workoutDetails.saturday,
-            onCheckedChange = { onValueChange(workoutDetails.copy(saturday = it)) }
+            onCheckedChange = {
+                onValueChange(
+                    workoutDetails.copy(
+                        saturday = it,
+                        saturdayOrder = LocalDateTime.now().toString()
+                    )
+                )
+            }
         )
         DayCheckBox(
             text = "Sunday",
             checked = workoutDetails.sunday,
-            onCheckedChange = { onValueChange(workoutDetails.copy(sunday = it)) }
+            onCheckedChange = {
+                onValueChange(
+                    workoutDetails.copy(
+                        sunday = it,
+                        sundayOrder = LocalDateTime.now().toString()
+                    )
+                )
+            }
         )
     }
 }
