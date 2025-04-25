@@ -152,7 +152,7 @@ fun MondayScreen(
                     },
                     workoutFormUiState = workoutFormUiState,
                     onValueChange = viewModel::updateUiState,
-                    isEdit = isEdit.value
+                    isEdit = isEdit.value,
                 )
             }
             if (showDeleteConfirmation.value) {

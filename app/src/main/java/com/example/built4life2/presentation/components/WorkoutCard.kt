@@ -40,7 +40,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.built4life2.data.Workout
-import com.example.built4life2.presentation.workout.component.StrengthLevelCard
 
 @Composable
 fun WorkoutCard(
@@ -115,17 +114,17 @@ fun BasicDropdownMenu(
 
     val menuItemData =
         if (isDelete)
-        listOf(
-        MenuItem("Edit", Icons.Outlined.Edit),
-        MenuItem("Delete", Icons.Outlined.Delete),
-        MenuItem("Description", Icons.Outlined.Info),
-        MenuItem(
-            "Favorite",
-            if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
-        ),
-        MenuItem("Daily", Icons.Outlined.DateRange),
-    )
-    else listOf(
+            listOf(
+                MenuItem("Edit", Icons.Outlined.Edit),
+                MenuItem("Delete", Icons.Outlined.Delete),
+                MenuItem("Description", Icons.Outlined.Info),
+                MenuItem(
+                    "Favorite",
+                    if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
+                ),
+                MenuItem("Daily", Icons.Outlined.DateRange),
+            )
+        else listOf(
             MenuItem("Edit", Icons.Outlined.Edit),
             MenuItem("Description", Icons.Outlined.Info),
             MenuItem(
@@ -133,7 +132,7 @@ fun BasicDropdownMenu(
                 if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
             ),
             MenuItem("Daily", Icons.Outlined.DateRange),
-    )
+        )
 
     Box(
         modifier = modifier
@@ -209,14 +208,21 @@ fun PRComposable(
             if (workout.firstSetReps.isNotEmpty()) {
                 Column(
                     modifier = Modifier
-                        .padding(end = 8.dp).weight(2.6f)
+                        .padding(end = 8.dp)
+                        .weight(2.6f)
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         PRRow(
-                            text1 = workout.firstSetReps,
-                            text2 = "REPS ${if (workout.weight.isNotEmpty()) "X" else ""}"
+                            text1 = if (workout.prType == "Time") "${workout.firstSetReps}:${workout.totalReps}" else workout.firstSetReps,
+                            text2 =
+                                when (workout.prType) {
+                                    "Reps" -> "REPS ${if (workout.weight.isNotEmpty()) "X" else ""}"
+                                    "Distance" -> "METRES ${if (workout.weight.isNotEmpty()) "X" else ""}"
+                                    "Rounds" -> "ROUNDS"
+                                    else -> "MIN"
+                                }
                         )
                         if (workout.weight.isNotEmpty())
                             PRRow(
@@ -262,53 +268,114 @@ fun PRComposable(
                         repMax = max.toInt().toString(),
                         level = "",
                         weighted = weighted,
-                        eliteLevel = workout.elite
+                        eliteLevel = workout.elite,
+                        workout = workout
                     )
                 else if (workout.firstSetReps.isNotEmpty()) {
-                    when (max.toInt()) {
-                        in 0..<workout.novice.toInt() -> {
-                            RepMax(
-                                repMax = max.toInt().toString(),
-                                level = "BEGINNER",
-                                weighted = weighted,
-                                eliteLevel = workout.elite
-                            )
-                        }
+                    if (workout.prType == "Time") {
+                        when (max.toInt()) {
+                            in workout.elite.toInt() - 1 downTo 0 -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "ELITE",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
 
-                        in workout.novice.toInt()..<workout.intermediate.toInt() -> {
-                            RepMax(
-                                repMax = max.toInt().toString(),
-                                level = "NOVICE",
-                                weighted = weighted,
-                                eliteLevel = workout.elite
-                            )
-                        }
+                            in workout.advanced.toInt() - 1 downTo workout.elite.toInt() -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "ADVANCED",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
 
-                        in workout.intermediate.toInt()..<workout.advanced.toInt() -> {
-                            RepMax(
-                                repMax = max.toInt().toString(),
-                                level = "INTERMEDIATE",
-                                weighted = weighted,
-                                eliteLevel = workout.elite
-                            )
-                        }
+                            in workout.intermediate.toInt() - 1 downTo workout.advanced.toInt() -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "INTERMEDIATE",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
 
-                        in workout.advanced.toInt()..<workout.elite.toInt() -> {
-                            RepMax(
-                                repMax = max.toInt().toString(),
-                                level = "ADVANCED",
-                                weighted = weighted,
-                                eliteLevel = workout.elite
-                            )
-                        }
+                            in workout.novice.toInt() - 1 downTo workout.intermediate.toInt() -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "NOVICE",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
 
-                        else -> {
-                            RepMax(
-                                repMax = max.toInt().toString(),
-                                level = "ELITE",
-                                weighted = weighted,
-                                eliteLevel = workout.elite
-                            )
+                            else -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "BEGINNER",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
+
+                        }
+                    } else {
+                        when (max.toInt()) {
+                            in 0..<workout.novice.toInt() -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "BEGINNER",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
+
+                            in workout.novice.toInt()..<workout.intermediate.toInt() -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "NOVICE",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
+
+                            in workout.intermediate.toInt()..<workout.advanced.toInt() -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "INTERMEDIATE",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
+
+                            in workout.advanced.toInt()..<workout.elite.toInt() -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "ADVANCED",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
+
+                            else -> {
+                                RepMax(
+                                    repMax = max.toInt().toString(),
+                                    level = "ELITE",
+                                    weighted = weighted,
+                                    eliteLevel = workout.elite,
+                                    workout = workout
+                                )
+                            }
                         }
                     }
                 }
@@ -370,7 +437,8 @@ fun RepMax(
     repMax: String,
     level: String,
     eliteLevel: String,
-    weighted: Boolean = true
+    weighted: Boolean = true,
+    workout: Workout
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -387,6 +455,7 @@ fun RepMax(
             StrengthLevelCard(
                 repMax = repMax.toInt(),
                 eliteLevel = eliteLevel.toInt(),
+                beginnerLevel = if (workout.prType == "Time") workout.beginner.toInt() else 0
             )
         Text(
             level,

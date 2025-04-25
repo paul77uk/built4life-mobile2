@@ -17,14 +17,13 @@ import kotlinx.coroutines.flow.stateIn
 class MondayViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
 
 
-
     val workoutListUiState: StateFlow<WorkoutListUiState> =
         workoutDao.getMondayWorkouts().map { WorkoutListUiState(it) }
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5_000L),
-                    initialValue = WorkoutListUiState()
-                )
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000L),
+                initialValue = WorkoutListUiState()
+            )
 
 
     var workoutFormUiState by mutableStateOf(WorkoutFormUiState())
@@ -56,7 +55,7 @@ class MondayViewModel(private val workoutDao: WorkoutDao) : ViewModel() {
                 thursdayOrder = "",
                 fridayOrder = "",
                 saturdayOrder = "",
-
+                prType = "",
                 sundayOrder = "",
             ),
             isEntryValid = false

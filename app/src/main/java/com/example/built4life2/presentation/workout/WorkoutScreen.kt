@@ -26,16 +26,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.built4life2.presentation.components.PRDialog
-import com.example.built4life2.presentation.components.SearchField
-import com.example.built4life2.presentation.components.WorkoutCard
-import com.example.built4life2.presentation.components.WorkoutFormDialog
 import com.example.built4life2.presentation.ViewModelProvider
 import com.example.built4life2.presentation.components.B4LAppBar
 import com.example.built4life2.presentation.components.B4LButton
 import com.example.built4life2.presentation.components.ButtonType
 import com.example.built4life2.presentation.components.DailyDialog
 import com.example.built4life2.presentation.components.InfoDialog
+import com.example.built4life2.presentation.components.PRDialog
+import com.example.built4life2.presentation.components.SearchField
+import com.example.built4life2.presentation.components.WorkoutCard
+import com.example.built4life2.presentation.components.WorkoutFormDialog
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -162,7 +162,7 @@ fun WorkoutScreen(
                     },
                     workoutFormUiState = workoutFormUiState,
                     onValueChange = viewModel::updateUiState,
-                    isEdit = isEdit.value
+                    isEdit = isEdit.value,
                 )
             }
             if (showDeleteConfirmation.value) {

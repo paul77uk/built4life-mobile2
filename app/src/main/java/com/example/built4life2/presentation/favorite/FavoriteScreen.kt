@@ -36,16 +36,18 @@ import com.example.built4life2.presentation.components.PRDialog
 import com.example.built4life2.presentation.components.SearchField
 import com.example.built4life2.presentation.components.WorkoutCard
 import com.example.built4life2.presentation.components.WorkoutFormDialog
+import com.example.built4life2.presentation.workout.WorkoutViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun FavoriteScreen(
-    viewModel: FavoriteViewModel = viewModel(factory = ViewModelProvider.Factory)
+    viewModel: FavoriteViewModel = viewModel(factory = ViewModelProvider.Factory),
+    workoutViewModel: WorkoutViewModel = viewModel(factory = ViewModelProvider.Factory)
 ) {
     val workoutListState by viewModel.workoutListUiState.collectAsState()
     var searchText by remember { mutableStateOf("") }
-    val workoutFormUiState = viewModel.workoutFormUiState
+    val workoutFormUiState = workoutViewModel.workoutFormUiState
     val openDialog = remember { mutableStateOf(false) }
     val openInfoDialog = remember { mutableStateOf(false) }
     val isEdit = remember { mutableStateOf(false) }
@@ -106,38 +108,38 @@ fun FavoriteScreen(
                             isEdit.value = true
                             coroutineScope.launch {
                                 workoutFormUiState.workout = workout
-                                viewModel.updateUiState(workout)
+                                workoutViewModel.updateUiState(workout)
                             }
                         },
                         onDeleteClick = {
                             showDeleteConfirmation.value = true
                             workoutFormUiState.workout = workout
-                            viewModel.updateUiState(workout)
+                            workoutViewModel.updateUiState(workout)
                         },
                         onPrClick = {
                             showPRDialog.value = true
                             isEdit.value = true
                             coroutineScope.launch {
                                 workoutFormUiState.workout = workout
-                                viewModel.updateUiState(workout)
+                                workoutViewModel.updateUiState(workout)
                             }
                         },
                         onInfoClick = {
                             openInfoDialog.value = true
                             workoutFormUiState.workout = workout
-                            viewModel.updateUiState(workout)
+                            workoutViewModel.updateUiState(workout)
                         },
                         onFavoriteClick = {
                             coroutineScope.launch {
                                 workoutFormUiState.workout = workout
-                                viewModel.updateUiState(workout.copy(favorite = !workout.favorite))
-                                viewModel.updateWorkout()
+                                workoutViewModel.updateUiState(workout.copy(favorite = !workout.favorite))
+                                workoutViewModel.updateWorkout()
                             }
                         },
                         onDailyClick = {
                             showDailyDialog.value = true
                             workoutFormUiState.workout = workout
-                            viewModel.updateUiState(workout)
+                            workoutViewModel.updateUiState(workout)
                         }
                     )
                 }
@@ -146,7 +148,7 @@ fun FavoriteScreen(
                 WorkoutFormDialog(
                     onDismiss = {
                         coroutineScope.launch {
-                            viewModel.refreshUiState()
+                            workoutViewModel.refreshUiState()
                             openDialog.value = false
                             isEdit.value = false
                         }
@@ -154,15 +156,15 @@ fun FavoriteScreen(
                     onSaveClick = {
                         if (isEdit.value) {
                             coroutineScope.launch {
-                                viewModel.updateWorkout()
-                                viewModel.refreshUiState()
+                                workoutViewModel.updateWorkout()
+                                workoutViewModel.refreshUiState()
                                 openDialog.value = false
                                 isEdit.value = true
                             }
                         }
                     },
                     workoutFormUiState = workoutFormUiState,
-                    onValueChange = viewModel::updateUiState,
+                    onValueChange = workoutViewModel::updateUiState,
                     isEdit = isEdit.value
                 )
             }
@@ -208,14 +210,14 @@ fun FavoriteScreen(
                 PRDialog(
                     onDismissRequest = {
                         showPRDialog.value = false
-                        viewModel.refreshUiState()
+                        workoutViewModel.refreshUiState()
                     },
-                    onValueChange = viewModel::updateUiState,
+                    onValueChange = workoutViewModel::updateUiState,
                     workoutDetails = workoutFormUiState.workout,
                     onClick = {
                         coroutineScope.launch {
-                            viewModel.updateWorkout()
-                            viewModel.refreshUiState()
+                            workoutViewModel.updateWorkout()
+                            workoutViewModel.refreshUiState()
                             isEdit.value = true
                             showPRDialog.value = false
                         }
@@ -237,12 +239,12 @@ fun FavoriteScreen(
                         showDailyDialog.value = false
                     },
                     workoutFormUiState = workoutFormUiState,
-                    onValueChange = viewModel::updateUiState,
+                    onValueChange = workoutViewModel::updateUiState,
                     onConfirm = {
                         coroutineScope.launch {
-                            viewModel.updateWorkout()
+                            workoutViewModel.updateWorkout()
                             showDailyDialog.value = false
-                            viewModel.refreshUiState()
+                            workoutViewModel.refreshUiState()
                         }
                     }
                 )

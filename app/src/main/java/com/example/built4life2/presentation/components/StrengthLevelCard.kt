@@ -1,4 +1,4 @@
-package com.example.built4life2.presentation.workout.component
+package com.example.built4life2.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,8 +17,10 @@ fun StrengthLevelCard(
     modifier: Modifier = Modifier,
     repMax: Int,
     eliteLevel: Int,
+    beginnerLevel: Int = 0,
 ) {
-    val barProgress = if (eliteLevel > 0) repMax.toFloat() / eliteLevel else 0f
+    var barProgress = if (eliteLevel > 0) repMax.toFloat() / eliteLevel else 0f
+    if (beginnerLevel > 0) barProgress = 1f - ((repMax.toFloat() - (eliteLevel -1)) / beginnerLevel)
     ProgressBar(
         modifier = Modifier
             .height(10.dp),

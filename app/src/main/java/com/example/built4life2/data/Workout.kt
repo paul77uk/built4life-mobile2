@@ -32,5 +32,6 @@ data class Workout(
     val saturdayOrder: String,
     val sunday: Boolean = false,
     val sundayOrder: String,
+    val prType: String = "Reps",
     val notes: String
 )
