@@ -18,6 +18,7 @@ data class Workout(
     val advanced: String,
     val elite: String,
     val favorite: Boolean = false,
+    val favoriteOrder: String,
     val monday: Boolean = false,
     val mondayOrder: String,
     val tuesday: Boolean = false,

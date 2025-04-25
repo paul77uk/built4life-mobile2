@@ -13,7 +13,7 @@ interface WorkoutDao {
     @Query("SELECT * from workouts")
     fun getAllWorkouts(): Flow<List<Workout>>
 
-    @Query("SELECT * from workouts WHERE favorite = 1")
+    @Query("SELECT * from workouts WHERE favorite = 1 order by favoriteOrder")
     fun getFavoriteWorkouts(): Flow<List<Workout>>
 
     @Query("SELECT * from workouts WHERE monday = 1 order by mondayOrder")

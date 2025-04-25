@@ -37,6 +37,7 @@ import com.example.built4life2.presentation.components.SearchField
 import com.example.built4life2.presentation.components.WorkoutCard
 import com.example.built4life2.presentation.components.WorkoutFormDialog
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -122,7 +123,12 @@ fun WorkoutScreen(
                         onFavoriteClick = {
                             coroutineScope.launch {
                                 workoutFormUiState.workout = workout
-                                viewModel.updateUiState(workout.copy(favorite = !workout.favorite))
+                                viewModel.updateUiState(
+                                    workout.copy(
+                                        favorite = !workout.favorite,
+                                        favoriteOrder = LocalDateTime.now().toString()
+                                    )
+                                )
                                 viewModel.updateWorkout()
                                 viewModel.refreshUiState()
                             }

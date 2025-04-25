@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -176,6 +177,12 @@ fun RadioGroupSample(
 ) {
     val radioOptions = listOf("Reps", "Rounds", "Time", "Distance")
 
+    Text(
+        text = "PR Type",
+        style = MaterialTheme.typography.bodyLarge,
+        modifier = Modifier.padding(bottom = 8.dp),
+        fontWeight = FontWeight.Bold
+    )
     // Note that Modifier.selectableGroup() is essential to ensure correct accessibility behavior
     Row(
         Modifier.selectableGroup(),
