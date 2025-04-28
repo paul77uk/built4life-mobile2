@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.built4life2"
+    namespace = "com.built4life.built4life2"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.built4life2"
+        applicationId = "com.built4life.built4life2"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
@@ -22,7 +22,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
