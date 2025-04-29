@@ -22,10 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,9 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import com.built4life.built4life2.presentation.ViewModelProvider
 import com.built4life.built4life2.presentation.daily.days.friday.FridayScreen
 import com.built4life.built4life2.presentation.daily.days.monday.MondayScreen
 import com.built4life.built4life2.presentation.daily.days.saturday.SaturdayScreen
@@ -49,19 +42,8 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun DailyScreen(
-    viewModel: DailyViewModel = viewModel(factory = ViewModelProvider.Factory),
-    navController: NavHostController
-) {
+fun DailyScreen() {
     val days =  listOf("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")
-    val workoutListState by viewModel.workoutListUiState.collectAsState()
-    val workoutFormUiState = viewModel.workoutFormUiState
-    val openDialog = remember { mutableStateOf(false) }
-    val openInfoDialog = remember { mutableStateOf(false) }
-    val isEdit = remember { mutableStateOf(false) }
-    val showDeleteConfirmation = remember { mutableStateOf(false) }
-    val showPRDialog = remember { mutableStateOf(false) }
-    val showDailyDialog = remember { mutableStateOf(false) }
     val date = LocalDate.now().dayOfWeek.toString()
     val pagerState =
         rememberPagerState(initialPage = days.indexOf(date)) { days.size }

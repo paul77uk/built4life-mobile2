@@ -5,7 +5,6 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.built4life.built4life2.Built4LifeApplication
-import com.built4life.built4life2.presentation.daily.DailyViewModel
 import com.built4life.built4life2.presentation.daily.days.friday.FridayViewModel
 import com.built4life.built4life2.presentation.daily.days.monday.MondayViewModel
 import com.built4life.built4life2.presentation.daily.days.saturday.SaturdayViewModel
@@ -21,40 +20,37 @@ import com.built4life.built4life2.presentation.workout.WorkoutViewModel
 object ViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            WorkoutViewModel(built4LifeApplication().container.workoutDao)
+            WorkoutViewModel(built4LifeApplication().container.workout)
         }
         initializer {
-            FavoriteViewModel(built4LifeApplication().container.workoutDao)
+            FavoriteViewModel(built4LifeApplication().container.workout)
         }
         initializer {
             ProgramViewModel(
-                built4LifeApplication().container.programDao,
-                built4LifeApplication().container.dayDao
+                built4LifeApplication().container.program,
+                built4LifeApplication().container.day
             )
         }
         initializer {
-            DailyViewModel(built4LifeApplication().container.workoutDao)
+            MondayViewModel(built4LifeApplication().container.workout)
         }
         initializer {
-            MondayViewModel(built4LifeApplication().container.workoutDao)
+            TuesdayViewModel(built4LifeApplication().container.workout)
         }
         initializer {
-            TuesdayViewModel(built4LifeApplication().container.workoutDao)
+            WednesdayViewModel(built4LifeApplication().container.workout)
         }
         initializer {
-            WednesdayViewModel(built4LifeApplication().container.workoutDao)
+            ThursdayViewModel(built4LifeApplication().container.workout)
         }
         initializer {
-            ThursdayViewModel(built4LifeApplication().container.workoutDao)
+            FridayViewModel(built4LifeApplication().container.workout)
         }
         initializer {
-            FridayViewModel(built4LifeApplication().container.workoutDao)
+            SaturdayViewModel(built4LifeApplication().container.workout)
         }
         initializer {
-            SaturdayViewModel(built4LifeApplication().container.workoutDao)
-        }
-        initializer {
-            SundayViewModel(built4LifeApplication().container.workoutDao)
+            SundayViewModel(built4LifeApplication().container.workout)
         }
     }
 }

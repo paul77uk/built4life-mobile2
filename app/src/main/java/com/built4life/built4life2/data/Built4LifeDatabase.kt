@@ -12,15 +12,25 @@ abstract class Built4LifeDatabase : RoomDatabase() {
     abstract fun dayDao(): DayDao
 
     companion object {
+        private const val DATABASE_NAME = "built4life_database"
+        private const val DATABASE_ASSET_PATH = "database/built4life_database.db"
+
         @Volatile
-        private var Instance: Built4LifeDatabase? = null
-        fun getDatabase(context: Context): Built4LifeDatabase {
-            return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, Built4LifeDatabase::class.java, "built4life_database")
-                    .createFromAsset("database/built4life_database.db")
-                    .build()
-                    .also { Instance = it }
+        private var instance: Built4LifeDatabase? = null
+
+        fun getInstance(context: Context): Built4LifeDatabase {
+            return instance ?: synchronized(this) {
+                instance ?: buildDatabase(context).also { instance = it }
             }
+        }
+
+        private fun buildDatabase(context: Context): Built4LifeDatabase {
+            return Room.databaseBuilder(
+                context.applicationContext,
+                Built4LifeDatabase::class.java,
+                DATABASE_NAME
+            ).createFromAsset(DATABASE_ASSET_PATH)
+                .build()
         }
     }
 }

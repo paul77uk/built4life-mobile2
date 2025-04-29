@@ -36,7 +36,7 @@ fun NavGraph(
         }
 
         composable(Route.DailyScreen.route) {
-            DailyScreen(navController = navController)
+            DailyScreen()
         }
 
         composable(Route.CommunityScreen.route) {
