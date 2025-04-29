@@ -16,11 +16,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,147 +34,120 @@ import com.built4life.built4life2.presentation.components.InfoDialog
 import com.built4life.built4life2.presentation.components.PRDialog
 import com.built4life.built4life2.presentation.components.WorkoutCard
 import com.built4life.built4life2.presentation.components.WorkoutFormDialog
+import com.built4life.built4life2.presentation.workout.WorkoutViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun WednesdayScreen(
-    viewModel: WednesdayViewModel = viewModel(factory = ViewModelProvider.Factory)
+    viewModel: WednesdayViewModel = viewModel(factory = ViewModelProvider.Factory),
+    workoutViewModel: WorkoutViewModel = viewModel(factory = ViewModelProvider.Factory)
 ) {
     val workoutListState by viewModel.workoutListUiState.collectAsState()
-    val workoutFormUiState = viewModel.workoutFormUiState
-    val openDialog = remember { mutableStateOf(false) }
-    val openInfoDialog = remember { mutableStateOf(false) }
-    val isEdit = remember { mutableStateOf(false) }
-    val showDeleteConfirmation = remember { mutableStateOf(false) }
-    val showPRDialog = remember { mutableStateOf(false) }
-    val showDailyDialog = remember { mutableStateOf(false) }
+    val workoutFormUiState = workoutViewModel.workoutFormUiState
+    var isEditMode by remember { mutableStateOf(false) }
+    var showWorkoutFormDialog by remember { mutableStateOf(false) }
+    var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
+    var showPRDialog by remember { mutableStateOf(false) }
+    var showDailyDialog by remember { mutableStateOf(false) }
+    var showInfoDialog by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+
+    // Effect to refresh the dialogs' state
+    LaunchedEffect(showWorkoutFormDialog,showPRDialog,showDailyDialog,showInfoDialog,showDeleteConfirmationDialog) {
+        if (!showWorkoutFormDialog && !showPRDialog && !showDailyDialog && !showInfoDialog && !showDeleteConfirmationDialog)
+        {
+            workoutViewModel.refreshUiState()
+        }
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets.systemBarsIgnoringVisibility,
-//        topBar = {
-//            CenterAlignedTopAppBar(
-//                title = {
-//                    Text(
-//                        LocalDate.now().dayOfWeek.name,
-//                        fontWeight = FontWeight.SemiBold,
-//                        fontSize = 24.sp
-//                    )
-//                },
-//                colors = TopAppBarDefaults.topAppBarColors(
-//                    containerColor = Color.Black,
-//                    titleContentColor = Color.White
-//                )
-//            )
-//        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceContainer
-                ),
+                .background(color = MaterialTheme.colorScheme.surfaceContainer),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(items = workoutListState.workoutList, key = { it.workoutId }) { workout ->
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(
+                    items = workoutListState.workoutList,
+                    key = { it.workoutId }
+                ) { workout ->
                     WorkoutCard(
                         isDelete = false,
                         workout = workout,
                         onEditClick = {
-                            openDialog.value = true
-                            isEdit.value = true
-                            coroutineScope.launch {
-                                workoutFormUiState.workout = workout
-                                viewModel.updateUiState(workout)
-                            }
+                            showWorkoutFormDialog = true
+                            isEditMode = true
+                            workoutViewModel.updateUiState(workout)
                         },
                         onDeleteClick = {
-                            showDeleteConfirmation.value = true
-                            workoutFormUiState.workout = workout
-                            viewModel.updateUiState(workout)
+                            showDeleteConfirmationDialog = true
+                            workoutViewModel.updateUiState(workout)
                         },
                         onPrClick = {
-                            showPRDialog.value = true
-                            isEdit.value = true
-                            coroutineScope.launch {
-                                workoutFormUiState.workout = workout
-                                viewModel.updateUiState(workout)
-                            }
+                            showPRDialog = true
+                            isEditMode = true
+                            workoutViewModel.updateUiState(workout)
                         },
                         onInfoClick = {
-                            openInfoDialog.value = true
-                            workoutFormUiState.workout = workout
-                            viewModel.updateUiState(workout)
+                            showInfoDialog = true
+                            workoutViewModel.updateUiState(workout)
                         },
                         onFavoriteClick = {
+                            val updatedWorkout = workout.copy(favorite = !workout.favorite)
+                            workoutViewModel.updateUiState(updatedWorkout)
                             coroutineScope.launch {
-                                workoutFormUiState.workout = workout
-                                viewModel.updateUiState(workout.copy(favorite = !workout.favorite))
-                                viewModel.updateWorkout()
+                                workoutViewModel.updateWorkout()
                             }
                         },
                         onDailyClick = {
-                            showDailyDialog.value = true
-                            workoutFormUiState.workout = workout
-                            viewModel.updateUiState(workout)
+                            showDailyDialog = true
+                            workoutViewModel.updateUiState(workout)
                         }
                     )
                 }
             }
-            if (openDialog.value) {
+
+            // Workout Form Dialog
+            if (showWorkoutFormDialog) {
                 WorkoutFormDialog(
                     onDismiss = {
-                        coroutineScope.launch {
-                            viewModel.refreshUiState()
-                            openDialog.value = false
-                            isEdit.value = false
-                        }
+                        showWorkoutFormDialog = false
+                        isEditMode = false
                     },
                     onSaveClick = {
-                        if (isEdit.value) {
-                            coroutineScope.launch {
-                                viewModel.updateWorkout()
-                                viewModel.refreshUiState()
-                                openDialog.value = false
-                                isEdit.value = true
+                        coroutineScope.launch {
+                            if (isEditMode) {
+                                workoutViewModel.updateWorkout()
+                            } else {
+                                workoutViewModel.saveWorkout()
                             }
-                        } else
-                            coroutineScope.launch {
-                                viewModel.saveWorkout()
-                                viewModel.refreshUiState()
-                                openDialog.value = false
-                                isEdit.value = false
-                            }
+                            showWorkoutFormDialog = false
+                            isEditMode = false
+                        }
                     },
                     workoutFormUiState = workoutFormUiState,
-                    onValueChange = viewModel::updateUiState,
-                    isEdit = isEdit.value
+                    onValueChange = workoutViewModel::updateUiState,
+                    isEdit = isEditMode,
                 )
             }
-            if (showDeleteConfirmation.value) {
+            // Delete Confirmation Dialog
+            if (showDeleteConfirmationDialog) {
                 AlertDialog(
                     onDismissRequest = {
-                        showDeleteConfirmation.value = false
-                        isEdit.value = false
+                        showDeleteConfirmationDialog = false
+                        isEditMode = false
                     },
-                    title = {
-                        Text(text = "Delete Workout")
-                    },
-                    text = {
-                        Text(text = "Are you sure you want to delete this workout?")
-                    },
+                    title = { Text(text = "Delete Workout") },
+                    text = { Text(text = "Are you sure you want to delete this workout?") },
                     dismissButton = {
                         B4LButton(
                             onClick = {
-                                viewModel.refreshUiState()
-                                showDeleteConfirmation.value = false
-                                isEdit.value = false
+                                showDeleteConfirmationDialog = false
+                                isEditMode = false
                             },
                             text = "Cancel",
                             type = ButtonType.OUTLINE
@@ -182,10 +157,9 @@ fun WednesdayScreen(
                         B4LButton(
                             onClick = {
                                 coroutineScope.launch {
-                                    viewModel.deleteWorkout()
-                                    viewModel.refreshUiState()
-                                    isEdit.value = false
-                                    showDeleteConfirmation.value = false
+                                    workoutViewModel.deleteWorkout()
+                                    showDeleteConfirmationDialog = false
+                                    isEditMode = false
                                 }
                             },
                             text = "Delete"
@@ -193,44 +167,45 @@ fun WednesdayScreen(
                     }
                 )
             }
-            if (showPRDialog.value) {
+            // PR Dialog
+            if (showPRDialog) {
                 PRDialog(
                     onDismissRequest = {
-                        showPRDialog.value = false
-                        viewModel.refreshUiState()
+                        showPRDialog = false
+                        isEditMode = false
                     },
-                    onValueChange = viewModel::updateUiState,
+                    onValueChange = workoutViewModel::updateUiState,
                     workoutDetails = workoutFormUiState.workout,
                     onClick = {
                         coroutineScope.launch {
-                            viewModel.updateWorkout()
-                            viewModel.refreshUiState()
-                            isEdit.value = true
-                            showPRDialog.value = false
+                            workoutViewModel.updateWorkout()
+                            showPRDialog = false
+                            isEditMode = false
                         }
-
                     }
                 )
             }
-            if (openInfoDialog.value) {
+            // Info Dialog
+            if (showInfoDialog) {
                 InfoDialog(
                     description = workoutFormUiState.workout.description,
                     onDismissRequest = {
-                        openInfoDialog.value = false
+                        showInfoDialog = false
                     },
                 )
             }
-            if (showDailyDialog.value) {
+            // Daily Dialog
+            if (showDailyDialog) {
                 DailyDialog(
                     onDismissRequest = {
-                        showDailyDialog.value = false
+                        showDailyDialog = false
                     },
                     workoutFormUiState = workoutFormUiState,
-                    onValueChange = viewModel::updateUiState,
+                    onValueChange = workoutViewModel::updateUiState,
                     onConfirm = {
                         coroutineScope.launch {
-                            viewModel.updateWorkout()
-                            showDailyDialog.value = false
+                            workoutViewModel.updateWorkout()
+                            showDailyDialog = false
                         }
                     }
                 )
