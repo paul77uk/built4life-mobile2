@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,10 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.built4life.built4life2.presentation.navigation.BottomNavBar
-import com.built4life.built4life2.presentation.navigation.NavGraph
-import com.built4life.built4life2.presentation.theme.Built4Life2Theme
+import com.built4life.built4life2.ui.navigation.BottomNavBar
+import com.built4life.built4life2.ui.navigation.NavGraph
+import com.built4life.built4life2.ui.theme.Built4Life2Theme
+import com.built4life.built4life2.ui.viewmodel.WorkoutViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,24 +55,27 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainScreen() {
         Built4Life2Theme {
-            val navController: NavHostController = rememberNavController()
-            MainScaffold(navController = navController)
+            MainScaffold()
         }
     }
 
     @Composable
-    fun MainScaffold(navController: NavHostController) {
+    fun MainScaffold() {
+        val navController: NavHostController = rememberNavController()
+        val workoutViewModel: WorkoutViewModel by viewModels()
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = { BottomNavBar(navController = navController) },
         ) { paddingValues ->
             NavGraph(
                 navController = navController,
+                workoutViewModel = workoutViewModel,
                 modifier = Modifier
                     .padding(paddingValues) //apply padding directly to the graph.
                     .consumeWindowInsets(paddingValues)
             )
         }
+        // Keep screen on when app is in foreground
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

@@ -1,15 +1,15 @@
 [versions]
-agp = "8.9.2"
-kotlin = "2.1.10"
+agp = "8.10.0"
+kotlin = "2.1.20"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.7"
+lifecycleRuntimeKtx = "2.9.0"
 activityCompose = "1.10.1"
-composeBom = "2025.04.01"
-navigationCompose = "2.8.9"
-ksp = "2.1.10-1.0.30"
+composeBom = "2025.05.00"
+navigationCompose = "2.9.0"
+ksp = "2.1.20-2.0.0"
 roomRuntime = "2.7.1"
 #koinBom = "4.0.1"
 #koinCore = "4.0.1"
@@ -17,10 +17,12 @@ roomRuntime = "2.7.1"
 #koinAndroidxCompose = "4.0.1"
 #koinAndroidxComposeNavigation = "4.0.1"
 #koinComposeViewmodel = "4.0.1"
-kotlinxSerializationJson = "1.8.0"
+kotlinxSerializationJson = "1.8.1"
 #koinBomVersion = "4.0.1"
 coreSplashscreen = "1.0.1"
 material = "1.12.0"
+hiltAndroid = "2.56.2"
+hiltAndroidCompiler = "2.56.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,6 +52,8 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 #koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koinComposeViewmodel" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 #insert-koin-koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBomVersion" }
 
 [plugins]
@@ -58,4 +62,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 
