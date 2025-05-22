@@ -32,6 +32,7 @@ import com.built4life.built4life2.ui.components.ButtonType
 import com.built4life.built4life2.ui.components.DailyDialog
 import com.built4life.built4life2.ui.components.InfoDialog
 import com.built4life.built4life2.ui.components.PRDialog
+import com.built4life.built4life2.ui.components.PRTypeDialog
 import com.built4life.built4life2.ui.components.SearchField
 import com.built4life.built4life2.ui.components.WorkoutCard
 import com.built4life.built4life2.ui.components.WorkoutFormDialog
@@ -56,6 +57,8 @@ fun WorkoutScreen(
     val workoutFormUiState = workoutViewModel.workoutFormUiState
     val openDialog = remember { mutableStateOf(false) }
     val openInfoDialog = remember { mutableStateOf(false) }
+    val openPRTypeDialog = remember { mutableStateOf(false) }
+    val openLevelDialog = remember { mutableStateOf(false) }
     val isEdit = remember { mutableStateOf(false) }
     val showDeleteConfirmation = remember { mutableStateOf(false) }
     val showPRDialog = remember { mutableStateOf(false) }
@@ -142,6 +145,16 @@ fun WorkoutScreen(
                                 workoutViewModel.updateWorkout()
                                 workoutViewModel.refreshUiState()
                             }
+                        },
+                        onPrTypeClick = {
+                            openPRTypeDialog.value = true
+                            workoutFormUiState.workout = workout
+                            workoutViewModel.updateUiState(workout)
+                        },
+                        onLevelClick = {
+                            openLevelDialog.value = true
+                            workoutFormUiState.workout = workout
+                            workoutViewModel.updateUiState(workout)
                         },
                         onDailyClick = {
                             showDailyDialog.value = true
@@ -244,6 +257,21 @@ fun WorkoutScreen(
                     onDismissRequest = {
                         openInfoDialog.value = false
                     },
+                )
+            }
+            if (openPRTypeDialog.value) {
+                PRTypeDialog(
+                    onValueChange = workoutViewModel::updateUiState,
+                    workoutDetails = workoutFormUiState.workout,
+                    onDismissRequest = {
+                        openPRTypeDialog.value = false
+                    },
+                    onConfirm = {
+                        coroutineScope.launch {
+                            workoutViewModel.updateWorkout()
+                            openPRTypeDialog.value = false
+                        }
+                    }
                 )
             }
             if (showDailyDialog.value) {

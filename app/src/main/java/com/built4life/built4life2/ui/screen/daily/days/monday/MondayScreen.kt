@@ -30,6 +30,7 @@ import com.built4life.built4life2.ui.components.ButtonType
 import com.built4life.built4life2.ui.components.DailyDialog
 import com.built4life.built4life2.ui.components.InfoDialog
 import com.built4life.built4life2.ui.components.PRDialog
+import com.built4life.built4life2.ui.components.PRTypeDialog
 import com.built4life.built4life2.ui.components.WorkoutCard
 import com.built4life.built4life2.ui.components.WorkoutFormDialog
 import com.built4life.built4life2.ui.viewmodel.WorkoutViewModel
@@ -54,6 +55,8 @@ fun MondayScreen(
     var showDailyDialog by remember { mutableStateOf(false) }
     var showInfoDialog by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    val openPRTypeDialog = remember { mutableStateOf(false) }
+    val openLevelDialog = remember { mutableStateOf(false) }
 
     // Effect to refresh the dialogs' state
     LaunchedEffect(showWorkoutFormDialog,showPRDialog,showDailyDialog,showInfoDialog,showDeleteConfirmationDialog) {
@@ -104,6 +107,11 @@ fun MondayScreen(
                             coroutineScope.launch {
                                 workoutViewModel.updateWorkout()
                             }
+                        },onPrTypeClick = {
+                            openPRTypeDialog.value = true
+                        },
+                        onLevelClick = {
+                            openLevelDialog.value = true
                         },
                         onDailyClick = {
                             showDailyDialog = true
@@ -169,6 +177,23 @@ fun MondayScreen(
                     }
                 )
             }
+
+            if (openPRTypeDialog.value) {
+                PRTypeDialog(
+                    onValueChange = workoutViewModel::updateUiState,
+                    workoutDetails = workoutFormUiState.workout,
+                    onDismissRequest = {
+                        openPRTypeDialog.value = false
+                    },
+                    onConfirm = {
+                        coroutineScope.launch {
+                            workoutViewModel.updateWorkout()
+                            openPRTypeDialog.value = false
+                        }
+                    }
+                )
+            }
+
             // PR Dialog
             if (showPRDialog) {
                 PRDialog(

@@ -12,13 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -35,10 +29,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.built4life.built4life2.R
 import com.built4life.built4life2.data.entity.Workout
 
 @Composable
@@ -48,6 +43,8 @@ fun WorkoutCard(
     onDeleteClick: () -> Unit,
     onPrClick: () -> Unit,
     onInfoClick: () -> Unit,
+    onPrTypeClick: () -> Unit,
+    onLevelClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     onDailyClick: () -> Unit,
     isDelete: Boolean = true
@@ -80,6 +77,8 @@ fun WorkoutCard(
                     onDeleteClick = onDeleteClick,
                     onInfoClick = onInfoClick,
                     onFavoriteClick = onFavoriteClick,
+                    onPrTypeClick = onPrTypeClick,
+                    onLevelClick = onLevelClick,
                     isFavorite = workout.favorite,
                     onDailyClick = onDailyClick,
                     isDelete = isDelete
@@ -100,6 +99,8 @@ fun BasicDropdownMenu(
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onInfoClick: () -> Unit,
+    onPrTypeClick: () -> Unit,
+    onLevelClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     modifier: Modifier = Modifier,
     isFavorite: Boolean = false,
@@ -110,28 +111,32 @@ fun BasicDropdownMenu(
     var expanded by remember { mutableStateOf(false) }
 
     // Placeholder list of 100 strings for demonstration
-    data class MenuItem(val title: String, val icon: ImageVector)
+    data class MenuItem(val title: String, val icon: Int)
 
     val menuItemData =
         if (isDelete)
             listOf(
-                MenuItem("Edit", Icons.Outlined.Edit),
-                MenuItem("Delete", Icons.Outlined.Delete),
-                MenuItem("Description", Icons.Outlined.Info),
+                MenuItem("Edit", R.drawable.edit),
+                MenuItem("Delete", R.drawable.delete),
+                MenuItem("Description", R.drawable.info),
+                MenuItem("PR Type", R.drawable.trophy),
+                MenuItem("Strength Level", R.drawable.dumbbell),
                 MenuItem(
                     "Favorite",
-                    if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
+                    if (isFavorite) R.drawable.favorite else R.drawable.outline_favorite
                 ),
-                MenuItem("Daily", Icons.Outlined.DateRange),
+                MenuItem("Daily", R.drawable.date_range),
             )
         else listOf(
-            MenuItem("Edit", Icons.Outlined.Edit),
-            MenuItem("Description", Icons.Outlined.Info),
+            MenuItem("Edit", R.drawable.edit),
+            MenuItem("Description", R.drawable.info),
+            MenuItem("PR Type", R.drawable.trophy),
+            MenuItem("Strength Level", R.drawable.dumbbell),
             MenuItem(
                 "Favorite",
-                if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
+                if (isFavorite) R.drawable.favorite else R.drawable.outline_favorite
             ),
-            MenuItem("Daily", Icons.Outlined.DateRange),
+            MenuItem("Daily", R.drawable.date_range),
         )
 
     Box(
@@ -149,7 +154,12 @@ fun BasicDropdownMenu(
             menuItemData.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(option.title) },
-                    leadingIcon = { Icon(option.icon, contentDescription = null) },
+                    leadingIcon = {
+                        Icon(
+                            painterResource(option.icon),
+                            contentDescription = option.title
+                        )
+                    },
                     onClick = {
                         when (option.title) {
                             "Edit" -> {
@@ -164,6 +174,16 @@ fun BasicDropdownMenu(
 
                             "Description" -> {
                                 onInfoClick()
+                                expanded = false
+                            }
+
+                            "PR Type" -> {
+                                onPrTypeClick()
+                                expanded = false
+                            }
+
+                            "Strength Level" -> {
+                                onLevelClick()
                                 expanded = false
                             }
 
@@ -191,7 +211,7 @@ fun PRComposable(
     onPrClick: () -> Unit
 ) {
     HorizontalDivider()
-    if (workout.reps.isNotEmpty()) {
+    if (workout.reps.isNotEmpty() && workout.prType == "Reps") {
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -388,7 +408,7 @@ fun PRComposable(
                 )
             }
         }
-    } else if (workout.rounds.isNotEmpty()) {
+    } else if (workout.rounds.isNotEmpty() && workout.prType == "Rounds") {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -413,7 +433,7 @@ fun PRComposable(
                 )
             }
         }
-    } else if (workout.minutes.isNotEmpty()) {
+    } else if (workout.minutes.isNotEmpty() && workout.prType == "Time") {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -438,7 +458,7 @@ fun PRComposable(
                 )
             }
         }
-    } else if (workout.distance.isNotEmpty()) {
+    } else if (workout.distance.isNotEmpty() && workout.prType == "Distance") {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,

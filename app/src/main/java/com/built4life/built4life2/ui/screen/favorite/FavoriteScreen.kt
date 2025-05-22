@@ -61,6 +61,9 @@ fun FavoriteScreen(
     val showDailyDialog = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
+    val openPRTypeDialog = remember { mutableStateOf(false) }
+    val openLevelDialog = remember { mutableStateOf(false) }
+
 //    val onSearchTextChanged: (String) -> Unit = { query ->
 //        searchText = query
 //        viewModel.searchWorkout(query)
@@ -143,6 +146,11 @@ fun FavoriteScreen(
                                 workoutViewModel.updateUiState(workout.copy(favorite = !workout.favorite))
                                 workoutViewModel.updateWorkout()
                             }
+                        },onPrTypeClick = {
+                            openPRTypeDialog.value = true
+                        },
+                        onLevelClick = {
+                            openLevelDialog.value = true
                         },
                         onDailyClick = {
                             showDailyDialog.value = true

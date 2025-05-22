@@ -2,29 +2,19 @@ package com.built4life.built4life2.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -103,10 +93,6 @@ fun WorkoutFormInput(
             modifier = Modifier.fillMaxWidth(),
             minLines = 3,
         )
-        RadioGroupSample(
-            selectedOption = workoutDetails.prType,
-            onOptionSelected = { onValueChange(workoutDetails.copy(prType = it)) }
-        )
 
         if (workoutDetails.prType == "Reps") {
 
@@ -180,50 +166,3 @@ fun WorkoutFormInput(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun RadioGroupSample(
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit
-) {
-    val radioOptions = listOf("Reps", "Rounds", "Time", "Distance")
-
-    Text(
-        text = "PR Type",
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier.padding(bottom = 8.dp),
-        fontWeight = FontWeight.Bold
-    )
-    // Note that Modifier.selectableGroup() is essential to ensure correct accessibility behavior
-    FlowRow(
-        Modifier.selectableGroup(),
-        verticalArrangement = Arrangement.Center,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        radioOptions.forEach { text ->
-            Column(
-                Modifier
-                    .selectable(
-                        selected = (text == selectedOption),
-                        onClick = {
-                            onOptionSelected(text)
-                                  },
-                        role = Role.RadioButton
-                    )
-                    .weight(1f),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                RadioButton(
-                    selected = (text == selectedOption),
-                    onClick = null // null recommended for accessibility with screenreaders
-                )
-            }
-        }
-    }
-}

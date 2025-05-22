@@ -55,6 +55,9 @@ fun WednesdayScreen(
     var showInfoDialog by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
+    val openPRTypeDialog = remember { mutableStateOf(false) }
+    val openLevelDialog = remember { mutableStateOf(false) }
+
     // Effect to refresh the dialogs' state
     LaunchedEffect(showWorkoutFormDialog,showPRDialog,showDailyDialog,showInfoDialog,showDeleteConfirmationDialog) {
         if (!showWorkoutFormDialog && !showPRDialog && !showDailyDialog && !showInfoDialog && !showDeleteConfirmationDialog)
@@ -104,6 +107,11 @@ fun WednesdayScreen(
                             coroutineScope.launch {
                                 workoutViewModel.updateWorkout()
                             }
+                        },onPrTypeClick = {
+                            openPRTypeDialog.value = true
+                        },
+                        onLevelClick = {
+                            openLevelDialog.value = true
                         },
                         onDailyClick = {
                             showDailyDialog = true
