@@ -47,7 +47,8 @@ fun WorkoutCard(
     onLevelClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     onDailyClick: () -> Unit,
-    isDelete: Boolean = true
+    isDelete: Boolean = true,
+    isReps: Boolean = false
 ) {
     Surface(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -81,7 +82,8 @@ fun WorkoutCard(
                     onLevelClick = onLevelClick,
                     isFavorite = workout.favorite,
                     onDailyClick = onDailyClick,
-                    isDelete = isDelete
+                    isDelete = isDelete,
+                    isReps = isReps
                 )
             }
             PRComposable(
@@ -105,6 +107,7 @@ fun BasicDropdownMenu(
     modifier: Modifier = Modifier,
     isFavorite: Boolean = false,
     isDelete: Boolean = true,
+    isReps: Boolean = false,
     onDailyClick: () -> Unit,
     enabled: Boolean = true,
 ) {
@@ -113,31 +116,35 @@ fun BasicDropdownMenu(
     // Placeholder list of 100 strings for demonstration
     data class MenuItem(val title: String, val icon: Int)
 
-    val menuItemData =
-        if (isDelete)
-            listOf(
-                MenuItem("Edit", R.drawable.edit),
-                MenuItem("Delete", R.drawable.delete),
-                MenuItem("Description", R.drawable.info),
-                MenuItem("PR Type", R.drawable.trophy),
-                MenuItem("Strength Level", R.drawable.dumbbell),
-                MenuItem(
-                    "Favorite",
-                    if (isFavorite) R.drawable.favorite else R.drawable.outline_favorite
-                ),
-                MenuItem("Daily", R.drawable.date_range),
-            )
-        else listOf(
-            MenuItem("Edit", R.drawable.edit),
-            MenuItem("Description", R.drawable.info),
-            MenuItem("PR Type", R.drawable.trophy),
-            MenuItem("Strength Level", R.drawable.dumbbell),
-            MenuItem(
-                "Favorite",
-                if (isFavorite) R.drawable.favorite else R.drawable.outline_favorite
-            ),
-            MenuItem("Daily", R.drawable.date_range),
-        )
+    val commonMenuItems = listOf(
+        MenuItem("Edit", R.drawable.edit),
+        MenuItem("Description", R.drawable.info),
+        MenuItem("PR Type", R.drawable.trophy),
+        MenuItem(
+            "Favorite",
+            if (isFavorite) R.drawable.favorite else R.drawable.outline_favorite
+        ),
+        MenuItem("Daily", R.drawable.date_range)
+    )
+
+    val menuItemData = if (isDelete && isReps) {
+        // Create a new list with "Delete" item at the desired position
+        // (e.g., after "Edit")
+        commonMenuItems.toMutableList().apply {
+            add(1, MenuItem("Delete", R.drawable.delete)) // Assuming you want it after "Edit"
+            add(4, MenuItem("Strength Level", R.drawable.dumbbell))
+        }.toList() // Convert back to an immutable list
+    } else if (isReps) {
+        commonMenuItems.toMutableList().apply {
+            add(3, MenuItem("Strength Level", R.drawable.dumbbell))
+        }
+    } else if (isDelete) {
+        commonMenuItems.toMutableList().apply {
+            add(1, MenuItem("Delete", R.drawable.delete)) // Assuming you want it after "Edit"
+        }
+    } else {
+        commonMenuItems
+    }
 
     Box(
         modifier = modifier

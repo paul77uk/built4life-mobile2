@@ -34,6 +34,7 @@ import com.built4life.built4life2.ui.components.InfoDialog
 import com.built4life.built4life2.ui.components.PRDialog
 import com.built4life.built4life2.ui.components.PRTypeDialog
 import com.built4life.built4life2.ui.components.SearchField
+import com.built4life.built4life2.ui.components.StrengthLevelDialog
 import com.built4life.built4life2.ui.components.WorkoutCard
 import com.built4life.built4life2.ui.components.WorkoutFormDialog
 import com.built4life.built4life2.ui.viewmodel.WorkoutViewModel
@@ -107,6 +108,7 @@ fun WorkoutScreen(
                 items(items = allWorkouts, key = { it.workoutId }) { workout ->
                     WorkoutCard(
                         workout = workout,
+                        isReps = workout.prType == "Reps",
                         onEditClick = {
                             openDialog.value = true
                             isEdit.value = true
@@ -270,6 +272,22 @@ fun WorkoutScreen(
                         coroutineScope.launch {
                             workoutViewModel.updateWorkout()
                             openPRTypeDialog.value = false
+                        }
+                    }
+                )
+            }
+
+            if (openLevelDialog.value) {
+                StrengthLevelDialog(
+                    onValueChange = workoutViewModel::updateUiState,
+                    workoutDetails = workoutFormUiState.workout,
+                    onDismissRequest = {
+                        openLevelDialog.value = false
+                    },
+                    onConfirm = {
+                        coroutineScope.launch {
+                            workoutViewModel.updateWorkout()
+                            openLevelDialog.value = false
                         }
                     }
                 )

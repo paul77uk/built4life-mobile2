@@ -30,6 +30,8 @@ import com.built4life.built4life2.ui.components.ButtonType
 import com.built4life.built4life2.ui.components.DailyDialog
 import com.built4life.built4life2.ui.components.InfoDialog
 import com.built4life.built4life2.ui.components.PRDialog
+import com.built4life.built4life2.ui.components.PRTypeDialog
+import com.built4life.built4life2.ui.components.StrengthLevelDialog
 import com.built4life.built4life2.ui.components.WorkoutCard
 import com.built4life.built4life2.ui.components.WorkoutFormDialog
 import com.built4life.built4life2.ui.viewmodel.WorkoutViewModel
@@ -82,6 +84,7 @@ fun WednesdayScreen(
                 ) { workout ->
                     WorkoutCard(
                         isDelete = false,
+                        isReps = workout.prType == "Reps",
                         workout = workout,
                         onEditClick = {
                             showWorkoutFormDialog = true
@@ -109,9 +112,13 @@ fun WednesdayScreen(
                             }
                         },onPrTypeClick = {
                             openPRTypeDialog.value = true
+                            workoutFormUiState.workout = workout
+                            workoutViewModel.updateUiState(workout)
                         },
                         onLevelClick = {
                             openLevelDialog.value = true
+                            workoutFormUiState.workout = workout
+                            workoutViewModel.updateUiState(workout)
                         },
                         onDailyClick = {
                             showDailyDialog = true
@@ -177,6 +184,39 @@ fun WednesdayScreen(
                     }
                 )
             }
+
+            if (openPRTypeDialog.value) {
+                PRTypeDialog(
+                    onValueChange = workoutViewModel::updateUiState,
+                    workoutDetails = workoutFormUiState.workout,
+                    onDismissRequest = {
+                        openPRTypeDialog.value = false
+                    },
+                    onConfirm = {
+                        coroutineScope.launch {
+                            workoutViewModel.updateWorkout()
+                            openPRTypeDialog.value = false
+                        }
+                    }
+                )
+            }
+
+            if (openLevelDialog.value) {
+                StrengthLevelDialog(
+                    onValueChange = workoutViewModel::updateUiState,
+                    workoutDetails = workoutFormUiState.workout,
+                    onDismissRequest = {
+                        openLevelDialog.value = false
+                    },
+                    onConfirm = {
+                        coroutineScope.launch {
+                            workoutViewModel.updateWorkout()
+                            openLevelDialog.value = false
+                        }
+                    }
+                )
+            }
+
             // PR Dialog
             if (showPRDialog) {
                 PRDialog(

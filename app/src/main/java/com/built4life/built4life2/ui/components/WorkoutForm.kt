@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
@@ -15,10 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.core.text.isDigitsOnly
 import com.built4life.built4life2.R
 import com.built4life.built4life2.data.entity.Workout
 import com.built4life.built4life2.ui.screen.workout.WorkoutFormUiState
@@ -94,66 +90,66 @@ fun WorkoutFormInput(
             minLines = 3,
         )
 
-        if (workoutDetails.prType == "Reps") {
-
-            OutlinedTextField(
-                value = workoutDetails.beginner,
-                onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(beginner = it)) },
-                label = { Text(stringResource(R.string.beginner_level)) },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.NumberPassword
-                ),
-            )
-            OutlinedTextField(
-                value = workoutDetails.novice,
-                onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(novice = it)) },
-                label = { Text(stringResource(R.string.novice_level)) },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.NumberPassword
-                ),
-            )
-            OutlinedTextField(
-                value = workoutDetails.intermediate,
-                onValueChange = {
-                    if (it.isDigitsOnly()) onValueChange(
-                        workoutDetails.copy(
-                            intermediate = it
-                        )
-                    )
-                },
-                label = { Text(stringResource(R.string.intermediate_level)) },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.NumberPassword
-                ),
-            )
-            OutlinedTextField(
-                value = workoutDetails.advanced,
-                onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(advanced = it)) },
-                label = { Text(stringResource(R.string.advanced_level)) },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.NumberPassword
-                ),
-            )
-            OutlinedTextField(
-                value = workoutDetails.elite,
-                onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(elite = it)) },
-                label = { Text(stringResource(R.string.elite_level)) },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.NumberPassword
-                ),
-            )
-
-        }
+//        if (workoutDetails.prType == "Reps") {
+//
+//            OutlinedTextField(
+//                value = workoutDetails.beginner,
+//                onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(beginner = it)) },
+//                label = { Text(stringResource(R.string.beginner_level)) },
+//                modifier = Modifier.fillMaxWidth(),
+//                keyboardOptions = KeyboardOptions(
+//                    imeAction = ImeAction.Next,
+//                    keyboardType = KeyboardType.NumberPassword
+//                ),
+//            )
+//            OutlinedTextField(
+//                value = workoutDetails.novice,
+//                onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(novice = it)) },
+//                label = { Text(stringResource(R.string.novice_level)) },
+//                modifier = Modifier.fillMaxWidth(),
+//                keyboardOptions = KeyboardOptions(
+//                    imeAction = ImeAction.Next,
+//                    keyboardType = KeyboardType.NumberPassword
+//                ),
+//            )
+//            OutlinedTextField(
+//                value = workoutDetails.intermediate,
+//                onValueChange = {
+//                    if (it.isDigitsOnly()) onValueChange(
+//                        workoutDetails.copy(
+//                            intermediate = it
+//                        )
+//                    )
+//                },
+//                label = { Text(stringResource(R.string.intermediate_level)) },
+//                modifier = Modifier.fillMaxWidth(),
+//                keyboardOptions = KeyboardOptions(
+//                    imeAction = ImeAction.Next,
+//                    keyboardType = KeyboardType.NumberPassword
+//                ),
+//            )
+//            OutlinedTextField(
+//                value = workoutDetails.advanced,
+//                onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(advanced = it)) },
+//                label = { Text(stringResource(R.string.advanced_level)) },
+//                modifier = Modifier.fillMaxWidth(),
+//                keyboardOptions = KeyboardOptions(
+//                    imeAction = ImeAction.Next,
+//                    keyboardType = KeyboardType.NumberPassword
+//                ),
+//            )
+//            OutlinedTextField(
+//                value = workoutDetails.elite,
+//                onValueChange = { if (it.isDigitsOnly()) onValueChange(workoutDetails.copy(elite = it)) },
+//                label = { Text(stringResource(R.string.elite_level)) },
+//                modifier = Modifier.fillMaxWidth(),
+//                keyboardOptions = KeyboardOptions(
+//                    imeAction = ImeAction.Done,
+//                    keyboardType = KeyboardType.NumberPassword
+//                ),
+//            )
+//
+//        }
 //        OutlinedTextField(
 //            value = workoutDetails.notes,
 //            onValueChange = { onValueChange(workoutDetails.copy(notes = it)) },

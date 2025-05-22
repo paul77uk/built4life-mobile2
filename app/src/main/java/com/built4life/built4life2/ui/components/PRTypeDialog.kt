@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.built4life.built4life2.data.entity.Workout
 
@@ -65,7 +64,7 @@ fun RadioGroupSample(
             text = "PR Type",
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(bottom = 16.dp),
-            fontWeight = FontWeight.Bold
+//            fontWeight = FontWeight.Bold
         )
         // Note that Modifier.selectableGroup() is essential to ensure correct accessibility behavior
         FlowRow(
