@@ -30,6 +30,7 @@ data class WorkoutFormUiState(
         saturdayOrder = "",
         sundayOrder = "",
         prType = "Reps",
+        category = "",
         favoriteOrder = ""
     ),
     val isEntryValid: Boolean = false

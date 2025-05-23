@@ -56,4 +56,7 @@ interface WorkoutDao {
     @Query("SELECT * from workouts WHERE title LIKE :searchQuery AND favorite = 1 COLLATE NOCASE")
     fun searchFavoriteWorkoutsByTitle(searchQuery: String): Flow<List<Workout>>
 
+    @Query("SELECT * from workouts WHERE category = :category")
+    fun getWorkoutsByCategory(category: String): Flow<List<Workout>>
+
 }

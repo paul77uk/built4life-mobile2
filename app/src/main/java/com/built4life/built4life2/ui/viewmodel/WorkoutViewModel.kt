@@ -18,8 +18,20 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkoutViewModel @Inject constructor(private val workoutRepository: WorkoutRepository) :
     ViewModel() {
-    val searchTextState: MutableState<String> = mutableStateOf("")
+    private val _searchTextState: MutableState<String> = mutableStateOf("")
+    val searchTextState: MutableState<String> = _searchTextState
+    private val _categoryTextState: MutableState<String> = mutableStateOf("All Workouts")
+    val categoryTextState: MutableState<String> = _categoryTextState
     val favoriteTextState: MutableState<String> = mutableStateOf("")
+
+    fun setSearchTextState(searchText: String) {
+        _searchTextState.value = searchText
+    }
+
+    fun setCategoryTextState(categoryText: String) {
+        _categoryTextState.value = categoryText
+    }
+
 
 //    private val _searchedWorkouts = MutableStateFlow<List<Workout>>(emptyList())
 //    val searchedWorkouts: StateFlow<List<Workout>> = _searchedWorkouts
@@ -76,12 +88,25 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
 //        )
 
     fun getSearchedWorkouts() = viewModelScope.launch {
-        if (searchTextState.value.isBlank())
+        if (_searchTextState.value.isBlank() && _categoryTextState.value == "All Workouts")
             getAllWorkouts()
-        else
-            workoutRepository.searchWorkoutsByTitle(searchTextState.value).collect {
-                _allWorkouts.value = it
-            }
+        else if (_categoryTextState.value != "All Workouts")
+            getWorkoutsByCategory()
+        if (_searchTextState.value.isNotBlank() && _categoryTextState.value == "All Workouts")
+            getSearchedWorkoutsByTitle()
+    }
+
+    fun getWorkoutsByCategory() = viewModelScope.launch {
+        workoutRepository.getWorkoutsByCategory(categoryTextState.value).collect {
+            _allWorkouts.value = it
+        }
+
+    }
+
+    fun getSearchedWorkoutsByTitle() = viewModelScope.launch {
+        workoutRepository.searchWorkoutsByTitle(searchTextState.value).collect {
+            _allWorkouts.value = it
+        }
     }
 
     fun getFavoriteSearchedWorkouts() = viewModelScope.launch {
@@ -193,6 +218,7 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
                 saturdayOrder = "",
                 sundayOrder = "",
                 prType = "Reps",
+                category = "",
                 favoriteOrder = ""
             ),
             isEntryValid = false
@@ -209,6 +235,7 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
         if (validateInput(workoutFormUiState.workout)) {
             workoutRepository.updateWorkout(workoutFormUiState.workout)
         }
+        refreshUiState()
     }
 
     suspend fun deleteWorkout() {
@@ -218,6 +245,7 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
     private fun validateInput(workout: Workout = workoutFormUiState.workout): Boolean {
         return with(workout) {
             title.isNotBlank()
+            category.isNotBlank()
         }
     }
 }

@@ -44,9 +44,9 @@ fun SearchField(
             .padding(
                 horizontal = 16.dp
             )
-            .padding(
-                bottom = 16.dp
-            )
+//            .padding(
+//                bottom = 16.dp
+//            )
             .height(
                 52.dp
             )

@@ -6,13 +6,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,14 +54,14 @@ fun WorkoutScreen(
     workoutViewModel: WorkoutViewModel
 ) {
     LaunchedEffect(key1 = true) {
-        workoutViewModel.getAllWorkouts()
-        workoutViewModel.searchTextState.value = ""
+        workoutViewModel.getSearchedWorkouts()
     }
 //    val workoutListState by workoutViewModel.workoutListUiState.collectAsState()
     val allWorkouts by workoutViewModel.allWorkouts.collectAsStateWithLifecycle()
 //    val searchedWorkouts by workoutViewModel.searchedWorkouts.collectAsStateWithLifecycle()
     var searchText by remember { mutableStateOf("") }
     val searchTextState by workoutViewModel.searchTextState
+    val categoryTextState by workoutViewModel.categoryTextState
     val workoutFormUiState = workoutViewModel.workoutFormUiState
     val openDialog = remember { mutableStateOf(false) }
     val openInfoDialog = remember { mutableStateOf(false) }
@@ -65,6 +72,20 @@ fun WorkoutScreen(
     val showPRDialog = remember { mutableStateOf(false) }
     val showDailyDialog = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    val options = listOf(
+        "All Workouts",
+        "Bodyweight",
+        "Crossfit WOD",
+        "Legs",
+        "Back",
+        "Chest",
+        "Shoulders",
+        "Biceps",
+        "Triceps",
+        "Core"
+    )
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOptionText by remember { mutableStateOf(options[0]) }
 
 //    val onSearchTextChanged: (String) -> Unit = { query ->
 //        workoutViewModel.searchTextState.value = query
@@ -94,13 +115,55 @@ fun WorkoutScreen(
             SearchField(
                 searchText = searchTextState,
                 onSearchTextChanged = {
-                    workoutViewModel.searchTextState.value = it
+                    workoutViewModel.setSearchTextState(it)
                     workoutViewModel.getSearchedWorkouts()
                 },
                 modifier = Modifier.background(
                     color = Color.Black
                 )
             )
+
+            ExposedDropdownMenuBox(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded },
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.background
+                        )
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
+                        .fillMaxWidth(),
+                    readOnly = true,
+                    value = selectedOptionText,
+                    onValueChange = {},
+                    label = { Text("Category") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                    ),
+                )
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                ) {
+                    options.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            text = { Text(selectionOption) },
+                            onClick = {
+                                selectedOptionText = selectionOption
+                                workoutViewModel.setCategoryTextState(selectedOptionText)
+                                workoutViewModel.getSearchedWorkouts()
+                                expanded = false
+                            },
+                        )
+                    }
+                }
+            }
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize()

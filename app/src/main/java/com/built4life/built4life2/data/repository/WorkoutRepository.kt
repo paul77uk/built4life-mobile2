@@ -31,4 +31,6 @@ class WorkoutRepository @Inject constructor(private val workoutDao: WorkoutDao) 
 
     fun searchFavoriteWorkoutsByTitle(searchQuery: String): Flow<List<Workout>> =
         workoutDao.searchFavoriteWorkoutsByTitle("${searchQuery}%")
+
+    fun getWorkoutsByCategory(category: String): Flow<List<Workout>> = workoutDao.getWorkoutsByCategory(category)
 }
