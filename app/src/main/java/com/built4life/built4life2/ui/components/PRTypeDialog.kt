@@ -58,7 +58,7 @@ fun RadioGroupSample(
     selectedOption: String,
     onOptionSelected: (String) -> Unit
 ) {
-    val radioOptions = listOf("Reps", "Rounds", "Time", "Distance")
+    val radioOptions = listOf("Reps", "Rounds", "Time", "Distance", "Weight")
     Column {
         Text(
             text = "PR Type",
@@ -70,7 +70,8 @@ fun RadioGroupSample(
         FlowRow(
             Modifier.selectableGroup(),
             verticalArrangement = Arrangement.Center,
-            horizontalArrangement = Arrangement.SpaceBetween
+//            horizontalArrangement = Arrangement.SpaceBetween,
+            maxItemsInEachRow = 4
         ) {
             radioOptions.forEach { text ->
                 Column(
@@ -82,7 +83,8 @@ fun RadioGroupSample(
                             },
                             role = Role.RadioButton
                         )
-                        .weight(1f),
+                        .weight(1f)
+                        .padding(bottom = 16.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.Start
                 ) {

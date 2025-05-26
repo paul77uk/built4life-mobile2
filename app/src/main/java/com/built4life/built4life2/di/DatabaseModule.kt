@@ -3,6 +3,7 @@ package com.built4life.built4life2.di
 import android.content.Context
 import androidx.room.Room
 import com.built4life.built4life2.data.Built4LifeDatabase
+import com.built4life.built4life2.util.Constants.DATABASE_ASSET_PATH
 import com.built4life.built4life2.util.Constants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -25,7 +26,7 @@ object DatabaseModule {
         Built4LifeDatabase::class.java,
         DATABASE_NAME
     )
-//        .createFromAsset(DATABASE_ASSET_PATH)
+        .createFromAsset(DATABASE_ASSET_PATH)
         .build()
 
     @Singleton

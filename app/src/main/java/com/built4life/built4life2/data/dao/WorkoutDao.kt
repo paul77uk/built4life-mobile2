@@ -50,13 +50,13 @@ interface WorkoutDao {
     @Delete
     suspend fun delete(item: Workout)
 
-    @Query("SELECT * from workouts WHERE title LIKE :searchQuery COLLATE NOCASE")
+    @Query("SELECT * from workouts WHERE title LIKE :searchQuery COLLATE NOCASE order by title")
     fun searchWorkoutsByTitle(searchQuery: String): Flow<List<Workout>>
 
-    @Query("SELECT * from workouts WHERE title LIKE :searchQuery AND favorite = 1 COLLATE NOCASE")
+    @Query("SELECT * from workouts WHERE title LIKE :searchQuery AND favorite = 1 COLLATE NOCASE order by favoriteOrder")
     fun searchFavoriteWorkoutsByTitle(searchQuery: String): Flow<List<Workout>>
 
-    @Query("SELECT * from workouts WHERE category = :category")
+    @Query("SELECT * from workouts WHERE category = :category COLLATE NOCASE order by title")
     fun getWorkoutsByCategory(category: String): Flow<List<Workout>>
 
 }

@@ -490,6 +490,31 @@ fun PRComposable(
                 )
             }
         }
+    } else if (workout.weight.isNotEmpty() && workout.prType == "Weight") {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 10.dp)
+        ) {
+            PRRow(
+                text1 = workout.weight,
+                text2 = "KG"
+            )
+            IconButton(
+                onClick = onPrClick,
+                modifier = Modifier.width(25.dp)
+            ) {
+                Icon(
+                    Icons.Default.Edit,
+                    contentDescription = "Edit Icon",
+                    modifier = Modifier
+                        .size(20.dp)
+                        .fillMaxWidth()
+                )
+            }
+        }
     } else {
         B4LButton(
             onClick = onPrClick,

@@ -138,6 +138,22 @@ fun PRDialog(
                             modifier = Modifier.fillMaxWidth()
                         )
 
+                    "Weight" ->
+
+                        OutlinedTextField(
+                            label = { Text("Weight") },
+                            value = workoutDetails.weight,
+                            onValueChange = {
+                                if (it.isDigitsOnly()) onValueChange(
+                                    workoutDetails.copy(
+                                        weight = it
+                                    )
+                                )
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
 
 //                OutlinedTextField(
 //                    label = { Text("Total Reps") },

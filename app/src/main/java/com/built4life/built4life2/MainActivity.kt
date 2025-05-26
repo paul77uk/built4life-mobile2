@@ -43,11 +43,13 @@ class MainActivity : ComponentActivity() {
 
     private fun configureEdgeToEdge() {
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(
-                Color.TRANSPARENT, // Use transparent for status bar
+            statusBarStyle = SystemBarStyle.auto(
+                Color.BLACK, // Use black for status bar,
+                Color.BLACK, // Use transparent for status bar
             ),
-            navigationBarStyle = SystemBarStyle.dark(
-                Color.TRANSPARENT, // Use transparent for navigation bar
+            navigationBarStyle = SystemBarStyle.auto(
+                Color.BLACK, // Use black for navigation bar,
+                Color.BLACK, // Use black for navigation bar,, // Use transparent for navigation bar
             )
         )
     }

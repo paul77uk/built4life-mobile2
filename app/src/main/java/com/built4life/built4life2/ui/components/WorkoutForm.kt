@@ -115,7 +115,7 @@ fun WorkoutFormInput(
                     .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
                     .fillMaxWidth(),
                 readOnly = true,
-                value = if (isSelected) selectedOptionText else "Category",
+                value = if (workoutDetails.category != "") workoutDetails.category else if (isSelected) selectedOptionText else "Category",
                 onValueChange = { },
 //                label = { Text("Category") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },

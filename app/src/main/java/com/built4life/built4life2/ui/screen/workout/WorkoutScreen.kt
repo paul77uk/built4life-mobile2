@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -56,18 +57,16 @@ fun WorkoutScreen(
     LaunchedEffect(key1 = true) {
         workoutViewModel.getSearchedWorkouts()
     }
-//    val workoutListState by workoutViewModel.workoutListUiState.collectAsState()
     val allWorkouts by workoutViewModel.allWorkouts.collectAsStateWithLifecycle()
-//    val searchedWorkouts by workoutViewModel.searchedWorkouts.collectAsStateWithLifecycle()
+    val isWorkoutFormDialogOpen by workoutViewModel.isWorkoutFormDialogOpen.collectAsStateWithLifecycle()
+    val isEdit by workoutViewModel.isEditingWorkout.collectAsStateWithLifecycle()
     var searchText by remember { mutableStateOf("") }
     val searchTextState by workoutViewModel.searchTextState
-    val categoryTextState by workoutViewModel.categoryTextState
     val workoutFormUiState = workoutViewModel.workoutFormUiState
-    val openDialog = remember { mutableStateOf(false) }
     val openInfoDialog = remember { mutableStateOf(false) }
     val openPRTypeDialog = remember { mutableStateOf(false) }
     val openLevelDialog = remember { mutableStateOf(false) }
-    val isEdit = remember { mutableStateOf(false) }
+//    val isEdit = remember { mutableStateOf(false) }
     val showDeleteConfirmation = remember { mutableStateOf(false) }
     val showPRDialog = remember { mutableStateOf(false) }
     val showDailyDialog = remember { mutableStateOf(false) }
@@ -97,8 +96,7 @@ fun WorkoutScreen(
         topBar = {
             B4LAppBar(
                 onClick = {
-                    openDialog.value = true
-                    isEdit.value = false
+                    workoutViewModel.openWorkoutFormDialog()
                 },
             )
         },
@@ -112,55 +110,65 @@ fun WorkoutScreen(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            SearchField(
-                searchText = searchTextState,
-                onSearchTextChanged = {
-                    workoutViewModel.setSearchTextState(it)
-                    workoutViewModel.getSearchedWorkouts()
-                },
-                modifier = Modifier.background(
-                    color = Color.Black
-                )
-            )
-
-            ExposedDropdownMenuBox(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded },
+            Column(
+                modifier = Modifier.background(Color.Black).padding(bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.background
-                        )
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
-                        .fillMaxWidth(),
-                    readOnly = true,
-                    value = selectedOptionText,
-                    onValueChange = {},
-                    label = { Text("Category") },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                    ),
+                SearchField(
+                    searchText = searchTextState,
+                    onSearchTextChanged = {
+                        workoutViewModel.setSearchTextState(it)
+                        workoutViewModel.getSearchedWorkouts()
+                    },
+                    modifier = Modifier.background(
+                        color = Color.Black
+                    )
                 )
-                ExposedDropdownMenu(
+
+                ExposedDropdownMenuBox(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp).clip(
+                            shape = MaterialTheme.shapes.medium
+                        ),
                     expanded = expanded,
-                    onDismissRequest = { expanded = false },
+                    onExpandedChange = { expanded = !expanded },
                 ) {
-                    options.forEach { selectionOption ->
-                        DropdownMenuItem(
-                            text = { Text(selectionOption) },
-                            onClick = {
-                                selectedOptionText = selectionOption
-                                workoutViewModel.setCategoryTextState(selectedOptionText)
-                                workoutViewModel.getSearchedWorkouts()
-                                expanded = false
-                            },
-                        )
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .background(
+                                color = MaterialTheme.colorScheme.background
+                            )
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
+                            .fillMaxWidth(),
+                        readOnly = true,
+                        value = selectedOptionText,
+                        onValueChange = {},
+//                        label = { Text("Category") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                        ),
+                    )
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                    ) {
+                        options.forEach { selectionOption ->
+                            DropdownMenuItem(
+                                text = { Text(selectionOption) },
+                                onClick = {
+                                    selectedOptionText = selectionOption
+                                    workoutViewModel.setCategoryTextState(selectedOptionText)
+                                    workoutViewModel.getSearchedWorkouts()
+                                    expanded = false
+                                    searchText = ""
+                                    workoutViewModel.setSearchTextState("")
+                                    workoutViewModel.refreshUiState()
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -173,8 +181,7 @@ fun WorkoutScreen(
                         workout = workout,
                         isReps = workout.prType == "Reps",
                         onEditClick = {
-                            openDialog.value = true
-                            isEdit.value = true
+                            workoutViewModel.openWorkoutFormDialog(isEdit = true)
                             coroutineScope.launch {
                                 workoutFormUiState.workout = workout
                                 workoutViewModel.updateUiState(workout)
@@ -187,7 +194,7 @@ fun WorkoutScreen(
                         },
                         onPrClick = {
                             showPRDialog.value = true
-                            isEdit.value = true
+//                            isEdit.value = true
                             coroutineScope.launch {
                                 workoutFormUiState.workout = workout
                                 workoutViewModel.updateUiState(workout)
@@ -229,41 +236,39 @@ fun WorkoutScreen(
                     )
                 }
             }
-            if (openDialog.value) {
+            if (isWorkoutFormDialogOpen) {
                 WorkoutFormDialog(
                     onDismiss = {
                         coroutineScope.launch {
-                            workoutViewModel.refreshUiState()
-                            openDialog.value = false
-                            isEdit.value = false
+                            workoutViewModel.closeWorkoutFormDialog()
+//                            isEdit.value = false
                         }
                     },
                     onSaveClick = {
-                        if (isEdit.value) {
-                            coroutineScope.launch {
-                                workoutViewModel.updateWorkout()
-                                workoutViewModel.refreshUiState()
-                                openDialog.value = false
-                                isEdit.value = true
-                            }
-                        } else
-                            coroutineScope.launch {
-                                workoutViewModel.saveWorkout()
-                                workoutViewModel.refreshUiState()
-                                openDialog.value = false
-                                isEdit.value = false
-                            }
+//                        if (isEdit.value) {
+//                            coroutineScope.launch {
+//                                workoutViewModel.updateWorkout()
+//                                workoutViewModel.closeWorkoutFormDialog()
+//                                isEdit.value = true
+//                            }
+//                        } else
+//                            coroutineScope.launch {
+//                                workoutViewModel.saveWorkout()
+//                                workoutViewModel.closeWorkoutFormDialog()
+//                                isEdit.value = false
+//                            }
+                        workoutViewModel.onSave()
                     },
                     workoutFormUiState = workoutFormUiState,
                     onValueChange = workoutViewModel::updateUiState,
-                    isEdit = isEdit.value,
+                    isEdit = isEdit,
                 )
             }
             if (showDeleteConfirmation.value) {
                 AlertDialog(
                     onDismissRequest = {
                         showDeleteConfirmation.value = false
-                        isEdit.value = false
+//                        isEdit.value = false
                     },
                     title = {
                         Text(text = "Delete Workout")
@@ -276,7 +281,7 @@ fun WorkoutScreen(
                             onClick = {
                                 workoutViewModel.refreshUiState()
                                 showDeleteConfirmation.value = false
-                                isEdit.value = false
+//                                isEdit.value = false
                             },
                             text = "Cancel",
                             type = ButtonType.OUTLINE
@@ -288,7 +293,7 @@ fun WorkoutScreen(
                                 coroutineScope.launch {
                                     workoutViewModel.deleteWorkout()
                                     workoutViewModel.refreshUiState()
-                                    isEdit.value = false
+//                                    isEdit.value = false
                                     showDeleteConfirmation.value = false
                                 }
                             },
@@ -309,7 +314,7 @@ fun WorkoutScreen(
                         coroutineScope.launch {
                             workoutViewModel.updateWorkout()
                             workoutViewModel.refreshUiState()
-                            isEdit.value = true
+//                            isEdit.value = true
                             showPRDialog.value = false
                         }
 
@@ -321,6 +326,7 @@ fun WorkoutScreen(
                     description = workoutFormUiState.workout.description,
                     onDismissRequest = {
                         openInfoDialog.value = false
+                        workoutViewModel.refreshUiState()
                     },
                 )
             }
@@ -330,11 +336,14 @@ fun WorkoutScreen(
                     workoutDetails = workoutFormUiState.workout,
                     onDismissRequest = {
                         openPRTypeDialog.value = false
+                        workoutViewModel.refreshUiState()
                     },
                     onConfirm = {
                         coroutineScope.launch {
                             workoutViewModel.updateWorkout()
                             openPRTypeDialog.value = false
+                            workoutViewModel.refreshUiState()
+//                            isEdit.value = true
                         }
                     }
                 )
@@ -346,11 +355,14 @@ fun WorkoutScreen(
                     workoutDetails = workoutFormUiState.workout,
                     onDismissRequest = {
                         openLevelDialog.value = false
+                        workoutViewModel.refreshUiState()
                     },
                     onConfirm = {
                         coroutineScope.launch {
                             workoutViewModel.updateWorkout()
                             openLevelDialog.value = false
+                            workoutViewModel.refreshUiState()
+//                            isEdit.value = true
                         }
                     }
                 )

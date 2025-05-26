@@ -12,6 +12,7 @@ import com.built4life.built4life2.ui.screen.workout.WorkoutFormUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +24,33 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
     private val _categoryTextState: MutableState<String> = mutableStateOf("All Workouts")
     val categoryTextState: MutableState<String> = _categoryTextState
     val favoriteTextState: MutableState<String> = mutableStateOf("")
+
+    private val _isWorkoutFormDialogOpen = MutableStateFlow(false)
+    val isWorkoutFormDialogOpen: StateFlow<Boolean> = _isWorkoutFormDialogOpen.asStateFlow()
+
+    private val _isEditingWorkout = MutableStateFlow(false)
+    val isEditingWorkout: StateFlow<Boolean> = _isEditingWorkout.asStateFlow()
+
+    fun openWorkoutFormDialog(isEdit: Boolean = false) {
+        _isEditingWorkout.value = isEdit
+        _isWorkoutFormDialogOpen.value = true
+    }
+
+    fun closeWorkoutFormDialog() {
+        _isWorkoutFormDialogOpen.value = false
+        refreshUiState()
+    }
+
+    fun onSave() {
+        viewModelScope.launch {
+            if (isEditingWorkout.value) {
+                updateWorkout()
+            } else {
+                saveWorkout()
+            }
+            closeWorkoutFormDialog()
+        }
+    }
 
     fun setSearchTextState(searchText: String) {
         _searchTextState.value = searchText
@@ -235,7 +263,6 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
         if (validateInput(workoutFormUiState.workout)) {
             workoutRepository.updateWorkout(workoutFormUiState.workout)
         }
-        refreshUiState()
     }
 
     suspend fun deleteWorkout() {

@@ -27,10 +27,10 @@ class WorkoutRepository @Inject constructor(private val workoutDao: WorkoutDao) 
     suspend fun deleteWorkout(workout: Workout) = workoutDao.delete(workout)
 
     fun searchWorkoutsByTitle(searchQuery: String): Flow<List<Workout>> =
-        workoutDao.searchWorkoutsByTitle("${searchQuery}%")
+        workoutDao.searchWorkoutsByTitle("%${searchQuery}%")
 
     fun searchFavoriteWorkoutsByTitle(searchQuery: String): Flow<List<Workout>> =
-        workoutDao.searchFavoriteWorkoutsByTitle("${searchQuery}%")
+        workoutDao.searchFavoriteWorkoutsByTitle("%${searchQuery}%")
 
     fun getWorkoutsByCategory(category: String): Flow<List<Workout>> = workoutDao.getWorkoutsByCategory(category)
 }
