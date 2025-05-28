@@ -16,9 +16,26 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class WorkoutViewModel @Inject constructor(private val workoutRepository: WorkoutRepository) :
     ViewModel() {
+    val options = listOf<String>(
+        "All Workouts",
+        "Bodyweight",
+        "Crossfit WOD",
+        "Legs",
+        "Back",
+        "Chest",
+        "Shoulders",
+        "Biceps",
+        "Triceps",
+        "Core"
+    )
+
+    private val _selectedOption: MutableState<String> = mutableStateOf(options[0])
+    val selectedOption: MutableState<String> = _selectedOption
+
     private val _searchTextState: MutableState<String> = mutableStateOf("")
     val searchTextState: MutableState<String> = _searchTextState
     private val _categoryTextState: MutableState<String> = mutableStateOf("All Workouts")
@@ -31,7 +48,22 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
     private val _isEditingWorkout = MutableStateFlow(false)
     val isEditingWorkout: StateFlow<Boolean> = _isEditingWorkout.asStateFlow()
 
-    fun openWorkoutFormDialog(isEdit: Boolean = false) {
+    private val _expanded: MutableState<Boolean> = mutableStateOf(false)
+    val expanded: MutableState<Boolean> = _expanded
+
+    fun onOptionSelected(option: String) {
+        _selectedOption.value = option
+        getSearchedWorkouts()
+        changeExpandedState()
+        setSearchTextState("")
+//        refreshUiState()
+    }
+
+    fun changeExpandedState() {
+        _expanded.value = !_expanded.value
+    }
+
+    fun openWorkoutFormDialog(isEdit: Boolean) {
         _isEditingWorkout.value = isEdit
         _isWorkoutFormDialogOpen.value = true
     }
@@ -42,14 +74,12 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
     }
 
     fun onSave() {
-        viewModelScope.launch {
-            if (isEditingWorkout.value) {
+            if (isEditingWorkout.value == true) {
                 updateWorkout()
             } else {
                 saveWorkout()
             }
             closeWorkoutFormDialog()
-        }
     }
 
     fun setSearchTextState(searchText: String) {
@@ -116,16 +146,16 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
 //        )
 
     fun getSearchedWorkouts() = viewModelScope.launch {
-        if (_searchTextState.value.isBlank() && _categoryTextState.value == "All Workouts")
+        if (_searchTextState.value.isBlank() && _selectedOption.value == "All Workouts")
             getAllWorkouts()
-        else if (_categoryTextState.value != "All Workouts")
+        else if (_selectedOption.value != "All Workouts")
             getWorkoutsByCategory()
-        if (_searchTextState.value.isNotBlank() && _categoryTextState.value == "All Workouts")
+        if (_searchTextState.value.isNotBlank() && _selectedOption.value == "All Workouts")
             getSearchedWorkoutsByTitle()
     }
 
     fun getWorkoutsByCategory() = viewModelScope.launch {
-        workoutRepository.getWorkoutsByCategory(categoryTextState.value).collect {
+        workoutRepository.getWorkoutsByCategory(_selectedOption.value).collect {
             _allWorkouts.value = it
         }
 
@@ -253,20 +283,26 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
         )
     }
 
-    suspend fun saveWorkout() {
-        if (validateInput()) {
-            workoutRepository.insertWorkout(workoutFormUiState.workout)
+    fun saveWorkout() {
+        viewModelScope.launch {
+            if (validateInput()) {
+                workoutRepository.insertWorkout(workoutFormUiState.workout)
+            }
         }
     }
 
-    suspend fun updateWorkout() {
-        if (validateInput(workoutFormUiState.workout)) {
-            workoutRepository.updateWorkout(workoutFormUiState.workout)
+    fun updateWorkout() {
+        viewModelScope.launch {
+            if (validateInput(workoutFormUiState.workout)) {
+                workoutRepository.updateWorkout(workoutFormUiState.workout)
+            }
         }
     }
 
-    suspend fun deleteWorkout() {
-        workoutRepository.deleteWorkout(workoutFormUiState.workout)
+    fun deleteWorkout() {
+        viewModelScope.launch {
+            workoutRepository.deleteWorkout(workoutFormUiState.workout)
+        }
     }
 
     private fun validateInput(workout: Workout = workoutFormUiState.workout): Boolean {

@@ -35,7 +35,7 @@ fun WorkoutFormDialog(
     onSaveClick: () -> Unit,
     workoutFormUiState: WorkoutFormUiState,
     onValueChange: (Workout) -> Unit,
-    isEdit: Boolean = false,
+    isEdit: Boolean,
 ) {
     AlertDialog(
         title = {

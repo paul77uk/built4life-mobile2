@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 fun SearchField(
     searchText: String,
     onSearchTextChanged: (String) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     val controller = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
