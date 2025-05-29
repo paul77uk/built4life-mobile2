@@ -29,6 +29,7 @@ import com.built4life.built4life2.ui.components.B4LButton
 import com.built4life.built4life2.ui.components.ButtonType
 import com.built4life.built4life2.ui.components.DailyDialog
 import com.built4life.built4life2.ui.components.InfoDialog
+import com.built4life.built4life2.ui.components.MoreOptionsDropdown
 import com.built4life.built4life2.ui.components.PRDialog
 import com.built4life.built4life2.ui.components.PRTypeDialog
 import com.built4life.built4life2.ui.components.StrengthLevelDialog
@@ -40,7 +41,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun MondayScreen(
-   workoutViewModel: WorkoutViewModel
+    workoutViewModel: WorkoutViewModel
 ) {
 
     LaunchedEffect(key1 = true) {
@@ -60,9 +61,14 @@ fun MondayScreen(
     val openLevelDialog = remember { mutableStateOf(false) }
 
     // Effect to refresh the dialogs' state
-    LaunchedEffect(showWorkoutFormDialog,showPRDialog,showDailyDialog,showInfoDialog,showDeleteConfirmationDialog) {
-        if (!showWorkoutFormDialog && !showPRDialog && !showDailyDialog && !showInfoDialog && !showDeleteConfirmationDialog)
-        {
+    LaunchedEffect(
+        showWorkoutFormDialog,
+        showPRDialog,
+        showDailyDialog,
+        showInfoDialog,
+        showDeleteConfirmationDialog
+    ) {
+        if (!showWorkoutFormDialog && !showPRDialog && !showDailyDialog && !showInfoDialog && !showDeleteConfirmationDialog) {
             workoutViewModel.refreshUiState()
         }
     }
@@ -82,48 +88,32 @@ fun MondayScreen(
                     key = { it.workoutId }
                 ) { workout ->
                     WorkoutCard(
-                        isDelete = false,
-                        isReps = workout.prType == "Reps",
                         workout = workout,
-                        onEditClick = {
-                            showWorkoutFormDialog = true
-                            isEditMode = true
-                            workoutViewModel.updateUiState(workout)
+//                        onMoreVertClick = {
+//                            // open more options dropdown
+//                            workoutViewModel.changeMoreOptionsExpandedState()
+//                        },
+                        isLoggedScore =
+                            // whether a workout score has been entered
+                            false,
+                        onLogScoreClick = {
+                            // if score is not already lo
                         },
-                        onDeleteClick = {
-                            showDeleteConfirmationDialog = true
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onPrClick = {
-                            showPRDialog = true
-                            isEditMode = true
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onInfoClick = {
-                            showInfoDialog = true
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onFavoriteClick = {
-                            val updatedWorkout = workout.copy(favorite = !workout.favorite)
-                            workoutViewModel.updateUiState(updatedWorkout)
-                            coroutineScope.launch {
-                                workoutViewModel.updateWorkout()
-                            }
-                        },onPrTypeClick = {
-                            openPRTypeDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onLevelClick = {
-                            openLevelDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onDailyClick = {
-                            showDailyDialog = true
-                            workoutViewModel.updateUiState(workout)
-                        }
-                    )
+//                        expanded = moreOptionsExpanded,
+                    ){
+                        MoreOptionsDropdown(
+                            onEditClick = {},
+                            onDeleteClick = {},
+                            onInfoClick = {},
+                            onPrTypeClick = {},
+                            onLevelClick = {},
+                            onFavoriteClick = {},
+                            onDailyClick = {},
+                            isFavorite = true,
+                            isDelete = true,
+                            isReps = true,
+                        )
+                    }
                 }
             }
 

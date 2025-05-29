@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,10 +24,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.built4life.built4life2.ui.components.B4LAppBar
-import com.built4life.built4life2.ui.components.B4LButton
-import com.built4life.built4life2.ui.components.ButtonType
 import com.built4life.built4life2.ui.components.DailyDialog
+import com.built4life.built4life2.ui.components.DeleteConfirmationDialog
 import com.built4life.built4life2.ui.components.InfoDialog
+import com.built4life.built4life2.ui.components.MoreOptionsDropdown
 import com.built4life.built4life2.ui.components.PRDialog
 import com.built4life.built4life2.ui.components.PRTypeDialog
 import com.built4life.built4life2.ui.components.SearchField
@@ -56,6 +54,7 @@ fun WorkoutScreen(
     var expanded by workoutViewModel.expanded
     var selectedOption by workoutViewModel.selectedOption
     val options = workoutViewModel.options
+    val moreOptionsExpanded by workoutViewModel.moreOptionsExpanded
 
     val openInfoDialog = remember { mutableStateOf(false) }
     val openPRTypeDialog = remember { mutableStateOf(false) }
@@ -69,7 +68,7 @@ fun WorkoutScreen(
         topBar = {
             B4LAppBar(
                 onClick = {
-                    workoutViewModel.openWorkoutFormDialog(false)
+                    workoutViewModel.openWorkoutFormDialog(isEdit = false)
                 },
             )
         },
@@ -93,7 +92,7 @@ fun WorkoutScreen(
                     searchText = searchTextState,
                     onSearchTextChanged = {
                         workoutViewModel.setSearchTextState(it)
-                        workoutViewModel.getSearchedWorkouts()
+//                        workoutViewModel.getSearchedWorkouts()
                     },
                 )
 
@@ -113,61 +112,117 @@ fun WorkoutScreen(
                 items(items = allWorkouts, key = { it.workoutId }) { workout ->
                     WorkoutCard(
                         workout = workout,
-                        isReps = workout.prType == "Reps",
-                        onEditClick = {
-                            workoutViewModel.openWorkoutFormDialog(isEdit = true)
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
+                        isLoggedScore =
+                            // whether a workout score has been entered
+                            false,
+                        onLogScoreClick = {
+                            // open score dialog
                         },
-                        onDeleteClick = {
-                            showDeleteConfirmation.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onPrClick = {
-                            showPRDialog.value = true
-//                            isEdit.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-
-                        },
-                        onInfoClick = {
-                            openInfoDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onFavoriteClick = {
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(
-                                workout.copy(
-                                    favorite = !workout.favorite,
-                                    favoriteOrder = LocalDateTime.now().toString()
+                    ) {
+                        MoreOptionsDropdown(
+                            onEditClick = {
+                                workoutViewModel.openWorkoutFormDialog(isEdit = true)
+                                workoutFormUiState.workout = workout
+                                workoutViewModel.updateUiState(workout)
+                            },
+                            onDeleteClick = {
+                                showDeleteConfirmation.value = true
+                                workoutFormUiState.workout = workout
+                                workoutViewModel.updateUiState(workout)
+                            },
+                            onInfoClick = {
+                                openInfoDialog.value = true
+                                workoutFormUiState.workout = workout
+                                workoutViewModel.updateUiState(workout)
+                            },
+                            onPrTypeClick = {
+                                openPRTypeDialog.value = true
+                                workoutFormUiState.workout = workout
+                                workoutViewModel.updateUiState(workout)
+                            },
+                            onLevelClick = {
+                                openLevelDialog.value = true
+                                workoutFormUiState.workout = workout
+                                workoutViewModel.updateUiState(workout)
+                            },
+                            onFavoriteClick = {
+                                workoutFormUiState.workout = workout
+                                workoutViewModel.updateUiState(
+                                    workout.copy(
+                                        favorite = !workout.favorite,
+                                        favoriteOrder = LocalDateTime.now().toString()
+                                    )
                                 )
-                            )
-                            workoutViewModel.updateWorkout()
-                            workoutViewModel.refreshUiState()
-
-                        },
-                        onPrTypeClick = {
-                            openPRTypeDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onLevelClick = {
-                            openLevelDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onDailyClick = {
-                            showDailyDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        }
-                    )
+                                workoutViewModel.updateWorkout()
+                                workoutViewModel.refreshUiState()
+                            },
+                            onDailyClick = {
+                                showDailyDialog.value = true
+                                workoutFormUiState.workout = workout
+                                workoutViewModel.updateUiState(workout)
+                            },
+                            isFavorite = workout.favorite,
+                            isDelete = true,
+                            isReps = workout.prType == "Reps",
+                        )
+                    }
+//                        isReps = workout.prType == "Reps",
+//                        onEditClick = {
+//                            workoutViewModel.openWorkoutFormDialog(isEdit = true)
+//                            workoutFormUiState.workout = workout
+//                            workoutViewModel.updateUiState(workout)
+//                        },
+//                        onDeleteClick = {
+//                            showDeleteConfirmation.value = true
+//                            workoutFormUiState.workout = workout
+//                            workoutViewModel.updateUiState(workout)
+//                        },
+//                        onPrClick = {
+//                            showPRDialog.value = true
+////                            isEdit.value = true
+//                            workoutFormUiState.workout = workout
+//                            workoutViewModel.updateUiState(workout)
+//
+//                        },
+//                        onInfoClick = {
+//                            openInfoDialog.value = true
+//                            workoutFormUiState.workout = workout
+//                            workoutViewModel.updateUiState(workout)
+//                        },
+//                        onFavoriteClick = {
+//                            workoutFormUiState.workout = workout
+//                            workoutViewModel.updateUiState(
+//                                workout.copy(
+//                                    favorite = !workout.favorite,
+//                                    favoriteOrder = LocalDateTime.now().toString()
+//                                )
+//                            )
+//                            workoutViewModel.updateWorkout()
+//                            workoutViewModel.refreshUiState()
+//
+//                        },
+//                        onPrTypeClick = {
+//                            openPRTypeDialog.value = true
+//                            workoutFormUiState.workout = workout
+//                            workoutViewModel.updateUiState(workout)
+//                        },
+//                        onLevelClick = {
+//                            openLevelDialog.value = true
+//                            workoutFormUiState.workout = workout
+//                            workoutViewModel.updateUiState(workout)
+//                        },
+//                        onDailyClick = {
+//                            showDailyDialog.value = true
+//                            workoutFormUiState.workout = workout
+//                            workoutViewModel.updateUiState(workout)
+//                        }
+//                    )
                 }
             }
-            if (isWorkoutFormDialogOpen) {
+
+            if (isWorkoutFormDialogOpen)
                 WorkoutFormDialog(
+//                isOpen = isWorkoutFormDialogOpen,
                     onDismiss = {
                         workoutViewModel.closeWorkoutFormDialog()
                     },
@@ -178,43 +233,20 @@ fun WorkoutScreen(
                     onValueChange = workoutViewModel::updateUiState,
                     isEdit = isEdit,
                 )
-            }
-            if (showDeleteConfirmation.value) {
-                AlertDialog(
-                    onDismissRequest = {
-                        showDeleteConfirmation.value = false
-//                        isEdit.value = false
-                    },
-                    title = {
-                        Text(text = "Delete Workout")
-                    },
-                    text = {
-                        Text(text = "Are you sure you want to delete this workout?")
-                    },
-                    dismissButton = {
-                        B4LButton(
-                            onClick = {
-                                workoutViewModel.refreshUiState()
-                                showDeleteConfirmation.value = false
-//                                isEdit.value = false
-                            },
-                            text = "Cancel",
-                            type = ButtonType.OUTLINE
-                        )
-                    },
-                    confirmButton = {
-                        B4LButton(
-                            onClick = {
-                                workoutViewModel.deleteWorkout()
-                                workoutViewModel.refreshUiState()
-//                                    isEdit.value = false
-                                showDeleteConfirmation.value = false
-                            },
-                            text = "Delete"
-                        )
-                    }
-                )
-            }
+
+            DeleteConfirmationDialog(
+                isOpen = showDeleteConfirmation.value,
+                onDismissRequest = {
+                    showDeleteConfirmation.value = false
+                    workoutViewModel.refreshUiState()
+                },
+                onConfirmClick = {
+                    workoutViewModel.deleteWorkout()
+                    workoutViewModel.refreshUiState()
+                    showDeleteConfirmation.value = false
+                }
+            )
+
             if (showPRDialog.value) {
                 PRDialog(
                     onDismissRequest = {

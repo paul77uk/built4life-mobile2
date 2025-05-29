@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.built4life.built4life2.ui.components.DailyDialog
 import com.built4life.built4life2.ui.components.InfoDialog
+import com.built4life.built4life2.ui.components.MoreOptionsDropdown
 import com.built4life.built4life2.ui.components.PRDialog
 import com.built4life.built4life2.ui.components.PRTypeDialog
 import com.built4life.built4life2.ui.components.SearchField
@@ -114,59 +115,35 @@ fun FavoriteScreen(
             ) {
                 items(items = favoriteWorkouts, key = { it.workoutId }) { workout ->
                     WorkoutCard(
-                        isDelete = false,
-                        isReps = workout.prType == "Reps",
                         workout = workout,
-                        onEditClick = {
-                            openDialog.value = true
-                            isEdit.value = true
-                            coroutineScope.launch {
-                                workoutFormUiState.workout = workout
-                                workoutViewModel.updateUiState(workout)
-                            }
+//                        onMoreVertClick = {
+//                            // open more options dropdown
+//                            workoutViewModel.changeMoreOptionsExpandedState()
+//                        },
+                        isLoggedScore =
+                            // whether a workout score has been entered
+                            false,
+                        onLogScoreClick = {
+                            // if score is not already lo
                         },
-                        onDeleteClick = {
-                            showDeleteConfirmation.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onPrClick = {
-                            showPRDialog.value = true
-                            isEdit.value = true
-                            coroutineScope.launch {
-                                workoutFormUiState.workout = workout
-                                workoutViewModel.updateUiState(workout)
-                            }
-                        },
-                        onInfoClick = {
-                            openInfoDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onFavoriteClick = {
-                            coroutineScope.launch {
-                                workoutFormUiState.workout = workout
-                                workoutViewModel.updateUiState(workout.copy(favorite = !workout.favorite))
-                                workoutViewModel.updateWorkout()
-                            }
-                        },onPrTypeClick = {
-                            openPRTypeDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onLevelClick = {
-                            openLevelDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        },
-                        onDailyClick = {
-                            showDailyDialog.value = true
-                            workoutFormUiState.workout = workout
-                            workoutViewModel.updateUiState(workout)
-                        }
-                    )
+//                        expanded = moreOptionsExpanded,
+                    ){
+                        MoreOptionsDropdown(
+                            onEditClick = {},
+                            onDeleteClick ={},
+                            onInfoClick = {},
+                            onPrTypeClick = {},
+                            onLevelClick = {},
+                            onFavoriteClick = {},
+                            onDailyClick = {},
+                            isFavorite = true,
+                            isDelete = true,
+                            isReps = true,
+                        )
+                    }
                 }
             }
+
             if (openDialog.value) {
                 WorkoutFormDialog(
                     onDismiss = {

@@ -51,6 +51,13 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
     private val _expanded: MutableState<Boolean> = mutableStateOf(false)
     val expanded: MutableState<Boolean> = _expanded
 
+    private val _moreOptionsExpanded: MutableState<Boolean> = mutableStateOf(false)
+    val moreOptionsExpanded: MutableState<Boolean> = _moreOptionsExpanded
+
+    fun changeMoreOptionsExpandedState() {
+        _moreOptionsExpanded.value = !_moreOptionsExpanded.value
+    }
+
     fun onOptionSelected(option: String) {
         _selectedOption.value = option
         getSearchedWorkouts()
@@ -84,6 +91,7 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
 
     fun setSearchTextState(searchText: String) {
         _searchTextState.value = searchText
+        getSearchedWorkouts()
     }
 
     fun setCategoryTextState(categoryText: String) {

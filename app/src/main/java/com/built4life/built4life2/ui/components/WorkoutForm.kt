@@ -31,47 +31,49 @@ import com.built4life.built4life2.ui.screen.workout.WorkoutFormUiState
 @Composable
 fun WorkoutFormDialog(
     modifier: Modifier = Modifier,
+//    isOpen: Boolean,
     onDismiss: () -> Unit,
     onSaveClick: () -> Unit,
     workoutFormUiState: WorkoutFormUiState,
     onValueChange: (Workout) -> Unit,
     isEdit: Boolean,
 ) {
-    AlertDialog(
-        title = {
-            Text(
-                if (isEdit) stringResource(R.string.edit_workout) else
-                    stringResource(R.string.new_workout),
-            )
-        },
-        text = {
-            WorkoutFormInput(
-                workoutDetails = workoutFormUiState.workout,
-                onValueChange = onValueChange,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .verticalScroll(rememberScrollState()),
-            )
-        },
-        dismissButton = {
-            B4LButton(
-                onClick = onDismiss,
-                text = "Cancel",
-                type = ButtonType.OUTLINE
-            )
-        },
-        confirmButton = {
-            B4LButton(
-                onClick = onSaveClick,
-                text = "Save",
-                enabled = workoutFormUiState.isEntryValid,
-            )
-        },
-        onDismissRequest = onDismiss,
-        modifier = modifier
-            .clip(shape = RoundedCornerShape(5))
-    )
+//    if (isOpen)
+        AlertDialog(
+            title = {
+                Text(
+                    if (isEdit) stringResource(R.string.edit_workout) else
+                        stringResource(R.string.new_workout),
+                )
+            },
+            text = {
+                WorkoutFormInput(
+                    workoutDetails = workoutFormUiState.workout,
+                    onValueChange = onValueChange,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                        .verticalScroll(rememberScrollState()),
+                )
+            },
+            dismissButton = {
+                B4LButton(
+                    onClick = onDismiss,
+                    text = "Cancel",
+                    type = ButtonType.OUTLINE
+                )
+            },
+            confirmButton = {
+                B4LButton(
+                    onClick = onSaveClick,
+                    text = "Save",
+                    enabled = workoutFormUiState.isEntryValid,
+                )
+            },
+            onDismissRequest = onDismiss,
+            modifier = modifier
+                .clip(shape = RoundedCornerShape(5))
+        )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

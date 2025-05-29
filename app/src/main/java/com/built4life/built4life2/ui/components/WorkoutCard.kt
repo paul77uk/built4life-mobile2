@@ -2,7 +2,6 @@ package com.built4life.built4life2.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,9 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,33 +18,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.built4life.built4life2.R
 import com.built4life.built4life2.data.entity.Workout
 
 @Composable
 fun WorkoutCard(
     workout: Workout,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-    onPrClick: () -> Unit,
-    onInfoClick: () -> Unit,
-    onPrTypeClick: () -> Unit,
-    onLevelClick: () -> Unit,
-    onFavoriteClick: () -> Unit,
-    onDailyClick: () -> Unit,
-    isDelete: Boolean = true,
-    isReps: Boolean = false
+    isLoggedScore: Boolean,
+    onLogScoreClick: () -> Unit,
+    moreOptionsComposable: @Composable () -> Unit,
 ) {
     Surface(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -73,141 +56,22 @@ fun WorkoutCard(
                     fontSize = 14.sp,
                     modifier = Modifier.padding(start = 16.dp)
                 )
-                BasicDropdownMenu(
-                    onEditClick = onEditClick,
-                    onDeleteClick = onDeleteClick,
-                    onInfoClick = onInfoClick,
-                    onFavoriteClick = onFavoriteClick,
-                    onPrTypeClick = onPrTypeClick,
-                    onLevelClick = onLevelClick,
-                    isFavorite = workout.favorite,
-                    onDailyClick = onDailyClick,
-                    isDelete = isDelete,
-                    isReps = isReps
-                )
+                moreOptionsComposable()
             }
-            PRComposable(
-                workout = workout,
-                onPrClick = onPrClick
-            )
-
-
-        }
-    }
-}
-
-@Composable
-fun BasicDropdownMenu(
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-    onInfoClick: () -> Unit,
-    onPrTypeClick: () -> Unit,
-    onLevelClick: () -> Unit,
-    onFavoriteClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    isFavorite: Boolean = false,
-    isDelete: Boolean = true,
-    isReps: Boolean = false,
-    onDailyClick: () -> Unit,
-    enabled: Boolean = true,
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    // Placeholder list of 100 strings for demonstration
-    data class MenuItem(val title: String, val icon: Int)
-
-    val commonMenuItems = listOf(
-        MenuItem("Edit", R.drawable.edit),
-        MenuItem("Description", R.drawable.info),
-        MenuItem("PR Type", R.drawable.trophy),
-        MenuItem(
-            "Favorite",
-            if (isFavorite) R.drawable.favorite else R.drawable.outline_favorite
-        ),
-        MenuItem("Daily", R.drawable.date_range)
-    )
-
-    val menuItemData = if (isDelete && isReps) {
-        // Create a new list with "Delete" item at the desired position
-        // (e.g., after "Edit")
-        commonMenuItems.toMutableList().apply {
-            add(1, MenuItem("Delete", R.drawable.delete)) // Assuming you want it after "Edit"
-            add(4, MenuItem("Strength Level", R.drawable.dumbbell))
-        }.toList() // Convert back to an immutable list
-    } else if (isReps) {
-        commonMenuItems.toMutableList().apply {
-            add(3, MenuItem("Strength Level", R.drawable.dumbbell))
-        }
-    } else if (isDelete) {
-        commonMenuItems.toMutableList().apply {
-            add(1, MenuItem("Delete", R.drawable.delete)) // Assuming you want it after "Edit"
-        }
-    } else {
-        commonMenuItems
-    }
-
-    Box(
-        modifier = modifier
-    ) {
-        IconButton(
-            onClick = { expanded = !expanded },
-        ) {
-            Icon(Icons.Default.MoreVert, contentDescription = "More options")
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            menuItemData.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option.title) },
-                    leadingIcon = {
-                        Icon(
-                            painterResource(option.icon),
-                            contentDescription = option.title
-                        )
-                    },
-                    onClick = {
-                        when (option.title) {
-                            "Edit" -> {
-                                onEditClick()
-                                expanded = false
-                            }
-
-                            "Delete" -> {
-                                onDeleteClick()
-                                expanded = false
-                            }
-
-                            "Description" -> {
-                                onInfoClick()
-                                expanded = false
-                            }
-
-                            "PR Type" -> {
-                                onPrTypeClick()
-                                expanded = false
-                            }
-
-                            "Strength Level" -> {
-                                onLevelClick()
-                                expanded = false
-                            }
-
-                            "Favorite" -> {
-                                onFavoriteClick()
-                                expanded = false
-                            }
-
-                            "Daily" -> {
-                                onDailyClick()
-                                expanded = false
-                            }
-
-                        }
-                    }
+            if (isLoggedScore)
+                PRComposable(
+                    workout = workout,
+                    onPrClick = onLogScoreClick
                 )
-            }
+            else
+                B4LButton(
+                    onClick = onLogScoreClick,
+                    text = "LOG SCORE",
+                    type = ButtonType.OUTLINE,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                )
         }
     }
 }
@@ -515,16 +379,18 @@ fun PRComposable(
                 )
             }
         }
-    } else {
-        B4LButton(
-            onClick = onPrClick,
-            text = "LOG SCORE",
-            type = ButtonType.OUTLINE,
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-        )
     }
+//    }
+//    else {
+//        B4LButton(
+//            onClick = onPrClick,
+//            text = "LOG SCORE",
+//            type = ButtonType.OUTLINE,
+//            modifier = Modifier
+//                .padding(8.dp)
+//                .fillMaxWidth()
+//        )
+//    }
 
 }
 
