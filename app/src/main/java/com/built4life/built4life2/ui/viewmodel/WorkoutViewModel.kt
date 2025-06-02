@@ -45,6 +45,9 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
     private val _isWorkoutFormDialogOpen = MutableStateFlow(false)
     val isWorkoutFormDialogOpen: StateFlow<Boolean> = _isWorkoutFormDialogOpen.asStateFlow()
 
+    private val _isPRDialogOpen = MutableStateFlow(false)
+    val isPRDialogOpen: StateFlow<Boolean> = _isPRDialogOpen.asStateFlow()
+
     private val _isEditingWorkout = MutableStateFlow(false)
     val isEditingWorkout: StateFlow<Boolean> = _isEditingWorkout.asStateFlow()
 
@@ -56,6 +59,21 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
 
     fun changeMoreOptionsExpandedState() {
         _moreOptionsExpanded.value = !_moreOptionsExpanded.value
+    }
+
+    fun closePRDialog() {
+        _isPRDialogOpen.value = false
+        refreshUiState()
+    }
+
+    fun onPRSave() {
+        updateWorkout()
+        closePRDialog()
+    }
+
+    fun onLogScoreClick(workout: Workout) {
+        _isPRDialogOpen.value = true
+        updateUiState(workout)
     }
 
     fun onOptionSelected(option: String) {
@@ -81,12 +99,12 @@ class WorkoutViewModel @Inject constructor(private val workoutRepository: Workou
     }
 
     fun onSave() {
-            if (isEditingWorkout.value == true) {
-                updateWorkout()
-            } else {
-                saveWorkout()
-            }
-            closeWorkoutFormDialog()
+        if (isEditingWorkout.value == true) {
+            updateWorkout()
+        } else {
+            saveWorkout()
+        }
+        closeWorkoutFormDialog()
     }
 
     fun setSearchTextState(searchText: String) {

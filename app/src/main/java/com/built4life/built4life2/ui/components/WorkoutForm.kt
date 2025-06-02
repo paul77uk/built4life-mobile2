@@ -31,14 +31,14 @@ import com.built4life.built4life2.ui.screen.workout.WorkoutFormUiState
 @Composable
 fun WorkoutFormDialog(
     modifier: Modifier = Modifier,
-//    isOpen: Boolean,
+    isOpen: Boolean,
     onDismiss: () -> Unit,
     onSaveClick: () -> Unit,
     workoutFormUiState: WorkoutFormUiState,
     onValueChange: (Workout) -> Unit,
     isEdit: Boolean,
 ) {
-//    if (isOpen)
+    if (isOpen)
         AlertDialog(
             title = {
                 Text(

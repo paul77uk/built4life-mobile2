@@ -29,7 +29,6 @@ import com.built4life.built4life2.data.entity.Workout
 @Composable
 fun WorkoutCard(
     workout: Workout,
-    isLoggedScore: Boolean,
     onLogScoreClick: () -> Unit,
     moreOptionsComposable: @Composable () -> Unit,
 ) {
@@ -58,19 +57,9 @@ fun WorkoutCard(
                 )
                 moreOptionsComposable()
             }
-            if (isLoggedScore)
                 PRComposable(
                     workout = workout,
                     onPrClick = onLogScoreClick
-                )
-            else
-                B4LButton(
-                    onClick = onLogScoreClick,
-                    text = "LOG SCORE",
-                    type = ButtonType.OUTLINE,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
                 )
         }
     }
@@ -157,60 +146,6 @@ fun PRComposable(
                         workout = workout
                     )
                 else if (workout.reps.isNotEmpty()) {
-                    if (workout.prType == "Time") {
-                        when (max.toInt()) {
-                            in workout.elite.toInt() - 1 downTo 0 -> {
-                                RepMax(
-                                    repMax = max.toInt().toString(),
-                                    level = "ELITE",
-                                    weighted = weighted,
-                                    eliteLevel = workout.elite,
-                                    workout = workout
-                                )
-                            }
-
-                            in workout.advanced.toInt() - 1 downTo workout.elite.toInt() -> {
-                                RepMax(
-                                    repMax = max.toInt().toString(),
-                                    level = "ADVANCED",
-                                    weighted = weighted,
-                                    eliteLevel = workout.elite,
-                                    workout = workout
-                                )
-                            }
-
-                            in workout.intermediate.toInt() - 1 downTo workout.advanced.toInt() -> {
-                                RepMax(
-                                    repMax = max.toInt().toString(),
-                                    level = "INTERMEDIATE",
-                                    weighted = weighted,
-                                    eliteLevel = workout.elite,
-                                    workout = workout
-                                )
-                            }
-
-                            in workout.novice.toInt() - 1 downTo workout.intermediate.toInt() -> {
-                                RepMax(
-                                    repMax = max.toInt().toString(),
-                                    level = "NOVICE",
-                                    weighted = weighted,
-                                    eliteLevel = workout.elite,
-                                    workout = workout
-                                )
-                            }
-
-                            else -> {
-                                RepMax(
-                                    repMax = max.toInt().toString(),
-                                    level = "BEGINNER",
-                                    weighted = weighted,
-                                    eliteLevel = workout.elite,
-                                    workout = workout
-                                )
-                            }
-
-                        }
-                    } else {
                         when (max.toInt()) {
                             in 0..<workout.novice.toInt() -> {
                                 RepMax(
@@ -262,7 +197,6 @@ fun PRComposable(
                                 )
                             }
                         }
-                    }
                 }
             }
 
@@ -379,20 +313,72 @@ fun PRComposable(
                 )
             }
         }
+    }  else {
+        B4LButton(
+            onClick = onPrClick,
+            text = "LOG SCORE",
+            type = ButtonType.OUTLINE,
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        )
     }
-//    }
-//    else {
-//        B4LButton(
-//            onClick = onPrClick,
-//            text = "LOG SCORE",
-//            type = ButtonType.OUTLINE,
-//            modifier = Modifier
-//                .padding(8.dp)
-//                .fillMaxWidth()
-//        )
-//    }
-
 }
+
+//else if (workout.minutes.isNotEmpty()) {
+//    when (max.toInt()) {
+//        in workout.elite.toInt() - 1 downTo 0 -> {
+//            RepMax(
+//                repMax = max.toInt().toString(),
+//                level = "ELITE",
+//                weighted = weighted,
+//                eliteLevel = workout.elite,
+//                workout = workout
+//            )
+//        }
+//
+//        in workout.advanced.toInt() - 1 downTo workout.elite.toInt() -> {
+//            RepMax(
+//                repMax = max.toInt().toString(),
+//                level = "ADVANCED",
+//                weighted = weighted,
+//                eliteLevel = workout.elite,
+//                workout = workout
+//            )
+//        }
+//
+//        in workout.intermediate.toInt() - 1 downTo workout.advanced.toInt() -> {
+//            RepMax(
+//                repMax = max.toInt().toString(),
+//                level = "INTERMEDIATE",
+//                weighted = weighted,
+//                eliteLevel = workout.elite,
+//                workout = workout
+//            )
+//        }
+//
+//        in workout.novice.toInt() - 1 downTo workout.intermediate.toInt() -> {
+//            RepMax(
+//                repMax = max.toInt().toString(),
+//                level = "NOVICE",
+//                weighted = weighted,
+//                eliteLevel = workout.elite,
+//                workout = workout
+//            )
+//        }
+//
+//        else -> {
+//            RepMax(
+//                repMax = max.toInt().toString(),
+//                level = "BEGINNER",
+//                weighted = weighted,
+//                eliteLevel = workout.elite,
+//                workout = workout
+//            )
+//        }
+//
+//    }
+//}
 
 @Composable
 fun PRRow(

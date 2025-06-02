@@ -48,19 +48,19 @@ fun WorkoutScreen(
     }
     val allWorkouts by workoutViewModel.allWorkouts.collectAsStateWithLifecycle()
     val isWorkoutFormDialogOpen by workoutViewModel.isWorkoutFormDialogOpen.collectAsStateWithLifecycle()
+    val isPRDialogOpen by workoutViewModel.isPRDialogOpen.collectAsStateWithLifecycle()
     val isEdit by workoutViewModel.isEditingWorkout.collectAsStateWithLifecycle()
     val searchTextState by workoutViewModel.searchTextState
     val workoutFormUiState = workoutViewModel.workoutFormUiState
     var expanded by workoutViewModel.expanded
     var selectedOption by workoutViewModel.selectedOption
     val options = workoutViewModel.options
-    val moreOptionsExpanded by workoutViewModel.moreOptionsExpanded
+
 
     val openInfoDialog = remember { mutableStateOf(false) }
     val openPRTypeDialog = remember { mutableStateOf(false) }
     val openLevelDialog = remember { mutableStateOf(false) }
     val showDeleteConfirmation = remember { mutableStateOf(false) }
-    val showPRDialog = remember { mutableStateOf(false) }
     val showDailyDialog = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -90,10 +90,7 @@ fun WorkoutScreen(
             ) {
                 SearchField(
                     searchText = searchTextState,
-                    onSearchTextChanged = {
-                        workoutViewModel.setSearchTextState(it)
-//                        workoutViewModel.getSearchedWorkouts()
-                    },
+                    onSearchTextChanged = { workoutViewModel.setSearchTextState(it) },
                 )
 
                 WorkoutsDropdownMenu(
@@ -112,12 +109,7 @@ fun WorkoutScreen(
                 items(items = allWorkouts, key = { it.workoutId }) { workout ->
                     WorkoutCard(
                         workout = workout,
-                        isLoggedScore =
-                            // whether a workout score has been entered
-                            false,
-                        onLogScoreClick = {
-                            // open score dialog
-                        },
+                        onLogScoreClick = { workoutViewModel.onLogScoreClick(workout) },
                     ) {
                         MoreOptionsDropdown(
                             onEditClick = {
@@ -166,73 +158,17 @@ fun WorkoutScreen(
                             isReps = workout.prType == "Reps",
                         )
                     }
-//                        isReps = workout.prType == "Reps",
-//                        onEditClick = {
-//                            workoutViewModel.openWorkoutFormDialog(isEdit = true)
-//                            workoutFormUiState.workout = workout
-//                            workoutViewModel.updateUiState(workout)
-//                        },
-//                        onDeleteClick = {
-//                            showDeleteConfirmation.value = true
-//                            workoutFormUiState.workout = workout
-//                            workoutViewModel.updateUiState(workout)
-//                        },
-//                        onPrClick = {
-//                            showPRDialog.value = true
-////                            isEdit.value = true
-//                            workoutFormUiState.workout = workout
-//                            workoutViewModel.updateUiState(workout)
-//
-//                        },
-//                        onInfoClick = {
-//                            openInfoDialog.value = true
-//                            workoutFormUiState.workout = workout
-//                            workoutViewModel.updateUiState(workout)
-//                        },
-//                        onFavoriteClick = {
-//                            workoutFormUiState.workout = workout
-//                            workoutViewModel.updateUiState(
-//                                workout.copy(
-//                                    favorite = !workout.favorite,
-//                                    favoriteOrder = LocalDateTime.now().toString()
-//                                )
-//                            )
-//                            workoutViewModel.updateWorkout()
-//                            workoutViewModel.refreshUiState()
-//
-//                        },
-//                        onPrTypeClick = {
-//                            openPRTypeDialog.value = true
-//                            workoutFormUiState.workout = workout
-//                            workoutViewModel.updateUiState(workout)
-//                        },
-//                        onLevelClick = {
-//                            openLevelDialog.value = true
-//                            workoutFormUiState.workout = workout
-//                            workoutViewModel.updateUiState(workout)
-//                        },
-//                        onDailyClick = {
-//                            showDailyDialog.value = true
-//                            workoutFormUiState.workout = workout
-//                            workoutViewModel.updateUiState(workout)
-//                        }
-//                    )
                 }
             }
 
-            if (isWorkoutFormDialogOpen)
-                WorkoutFormDialog(
-//                isOpen = isWorkoutFormDialogOpen,
-                    onDismiss = {
-                        workoutViewModel.closeWorkoutFormDialog()
-                    },
-                    onSaveClick = {
-                        workoutViewModel.onSave()
-                    },
-                    workoutFormUiState = workoutFormUiState,
-                    onValueChange = workoutViewModel::updateUiState,
-                    isEdit = isEdit,
-                )
+            WorkoutFormDialog(
+                isOpen = isWorkoutFormDialogOpen,
+                onDismiss = { workoutViewModel.closeWorkoutFormDialog() },
+                onSaveClick = { workoutViewModel.onSave() },
+                workoutFormUiState = workoutFormUiState,
+                onValueChange = workoutViewModel::updateUiState,
+                isEdit = isEdit,
+            )
 
             DeleteConfirmationDialog(
                 isOpen = showDeleteConfirmation.value,
@@ -247,20 +183,12 @@ fun WorkoutScreen(
                 }
             )
 
-            if (showPRDialog.value) {
+            if (isPRDialogOpen) {
                 PRDialog(
-                    onDismissRequest = {
-                        showPRDialog.value = false
-                        workoutViewModel.refreshUiState()
-                    },
+                    onDismissRequest = { workoutViewModel.closePRDialog() },
                     onValueChange = workoutViewModel::updateUiState,
                     workoutDetails = workoutFormUiState.workout,
-                    onClick = {
-                        workoutViewModel.updateWorkout()
-                        workoutViewModel.refreshUiState()
-//                            isEdit.value = true
-                        showPRDialog.value = false
-                    }
+                    onClick = { workoutViewModel.onPRSave() }
                 )
             }
             if (openInfoDialog.value) {

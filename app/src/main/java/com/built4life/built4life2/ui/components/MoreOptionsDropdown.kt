@@ -21,14 +21,14 @@ import com.built4life.built4life2.R
 fun MoreOptionsDropdown(
     modifier: Modifier = Modifier,
     onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit,
+    onDeleteClick: () -> Unit = {},
     onInfoClick: () -> Unit,
     onPrTypeClick: () -> Unit,
     onLevelClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     onDailyClick: () -> Unit,
     isFavorite: Boolean = false,
-    isDelete: Boolean = true,
+    isDelete: Boolean = false,
     isReps: Boolean = false,
 //    enabled: Boolean = true,
 ) {

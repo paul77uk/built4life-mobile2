@@ -15,7 +15,7 @@ android {
         applicationId = "com.built4life.built4life2"
         minSdk = 26
         targetSdk = 35
-        versionCode = 5
+        versionCode = 7
         versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
